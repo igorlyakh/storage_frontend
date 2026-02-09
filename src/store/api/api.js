@@ -1,4 +1,4 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query';
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 export const api = createApi({
   reducerPath: 'api',
@@ -8,12 +8,17 @@ export const api = createApi({
       const token = getState().user.accessToken;
       if (token) {
         headers.set('authorization', `Bearer ${token}`);
-        return headers;
       }
+      return headers;
     },
   }),
   tagTypes: ['Users', 'Orders', 'Products'],
-  endpoints: builder => {
-    builder.query({ query: () => '/orders', providesTags: ['Orders'] });
-  },
+  endpoints: builder => ({
+    getAllOrders: builder.query({
+      query: () => '/orders/all',
+      providesTags: ['Orders'],
+    }),
+  }),
 });
+
+export const { useGetAllOrdersQuery } = api;
