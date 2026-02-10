@@ -18,7 +18,14 @@ export const api = createApi({
       query: () => '/orders/all',
       providesTags: ['Orders'],
     }),
+    login: builder.mutation({
+      query: data => ({
+        url: '/auth/login',
+        method: 'POST',
+        body: data,
+      }),
+    }),
   }),
 });
 
-export const { useGetAllOrdersQuery } = api;
+export const { useGetAllOrdersQuery, useLoginMutation } = api;
