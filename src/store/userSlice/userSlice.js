@@ -21,6 +21,8 @@ const userSlice = createSlice({
     logout: state => {
       state.name = null;
       state.accessToken = null;
+      state.role = null;
+      state.adminScopes = null;
     },
   },
 });
