@@ -14,6 +14,8 @@ const userSlice = createSlice({
   reducers: {
     setData: (state, action) => {
       state.name = action.payload.username;
+      state.role = action.payload.role;
+      state.adminScopes = action.payload.adminScopes;
       state.accessToken = action.payload.accessToken;
     },
     logout: state => {
