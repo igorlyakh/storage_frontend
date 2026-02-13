@@ -11,6 +11,10 @@ const App = () => {
         path="/"
       >
         <Route
+          element={<div>Home Page</div>}
+          index
+        />
+        <Route
           path="login"
           element={
             <RestrictedRouts redirectTo="/">
