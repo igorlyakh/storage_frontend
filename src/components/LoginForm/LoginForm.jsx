@@ -1,14 +1,17 @@
 import { useForm } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
 import { useLoginMutation } from '../../store/api/api';
+import { setData } from '../../store/userSlice/userSlice';
 import styles from './styles.module.scss';
 
 const LoginForm = () => {
   const [login] = useLoginMutation();
   const { register, handleSubmit, reset } = useForm();
+  const dispatch = useDispatch();
 
   const handler = async formData => {
     const { data } = await login(formData);
-    console.log(data);
+    dispatch(setData(data));
   };
 
   return (
