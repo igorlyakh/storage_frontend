@@ -61,7 +61,7 @@
   border-radius: 18px;
   border: none;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: background-color 300ms ease, box-shadow 300ms ease, transform 300ms ease;
 }
 
 .btn:hover {

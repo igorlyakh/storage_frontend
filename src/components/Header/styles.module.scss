@@ -1,5 +1,5 @@
 .header {
-  height: 50px;
+  height: 65px;
   background-color: #000000;
   display: flex;
   padding: 0 50px;
@@ -23,4 +23,5 @@
 .menu {
   display: flex;
   gap: 20px;
+  align-items: center;
 }

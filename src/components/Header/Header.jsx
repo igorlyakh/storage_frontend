@@ -1,6 +1,7 @@
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { tokenSelector } from '../../store/selectors/selectors';
+import Button from '../Button';
 import styles from './styles.module.scss';
 
 const Header = () => {
@@ -25,7 +26,7 @@ const Header = () => {
           </li>
           <li>
             {token ? (
-              <button>Logout</button>
+              <Button text={'Logout'} />
             ) : (
               <Link
                 className={styles.link}
