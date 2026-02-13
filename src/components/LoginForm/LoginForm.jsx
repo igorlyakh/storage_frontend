@@ -28,7 +28,6 @@ const LoginForm = () => {
           type="text"
           placeholder="Enter your username"
           className={styles.input}
-          name="username"
           {...register('username', {
             required: 'Username is required!',
           })}
@@ -40,7 +39,6 @@ const LoginForm = () => {
           type="password"
           placeholder="Enter your password"
           className={styles.input}
-          name="password"
           {...register('password', {
             required: 'Password is required!',
             minLength: {
