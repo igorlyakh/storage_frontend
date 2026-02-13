@@ -1,13 +1,19 @@
 import { Route, Routes } from 'react-router-dom';
+import Layout from './components/Layout';
 import LoginPage from './pages/LoginPage/LoginPage';
 
 const App = () => {
   return (
     <Routes>
       <Route
-        path="/login"
-        Component={LoginPage}
-      />
+        element={<Layout />}
+        path="/"
+      >
+        <Route
+          path="login"
+          element={<LoginPage />}
+        />
+      </Route>
     </Routes>
   );
 };
