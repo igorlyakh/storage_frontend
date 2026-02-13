@@ -1,12 +1,7 @@
-import Container from '../../components/Container/Container';
-import LoginForm from '../../components/LoginForm/LoginForm';
+import LoginForm from '../../components/LoginForm';
 
 const LoginPage = () => {
-  return (
-    <Container>
-      <LoginForm />
-    </Container>
-  );
+  return <LoginForm />;
 };
 
 export default LoginPage;
