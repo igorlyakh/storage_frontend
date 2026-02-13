@@ -1,6 +1,7 @@
 import 'modern-normalize';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
+import { Toaster } from 'react-hot-toast';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import { PersistGate } from 'redux-persist/integration/react';
@@ -16,6 +17,7 @@ createRoot(document.getElementById('root')).render(
       >
         <BrowserRouter>
           <App />
+          <Toaster position="top-right" />
         </BrowserRouter>
       </PersistGate>
     </Provider>
