@@ -29,7 +29,9 @@ const LoginForm = () => {
           placeholder="Enter your username"
           className={styles.input}
           name="username"
-          {...register('username')}
+          {...register('username', {
+            required: 'Username is required!',
+          })}
         />
       </label>
       <label className={styles.wrapper}>
@@ -39,7 +41,13 @@ const LoginForm = () => {
           placeholder="Enter your password"
           className={styles.input}
           name="password"
-          {...register('password')}
+          {...register('password', {
+            required: 'Password is required!',
+            minLength: {
+              value: 6,
+              message: 'Password must be longer than 6 characters!',
+            },
+          })}
         />
       </label>
       <button
