@@ -18,7 +18,7 @@ const userSlice = createSlice({
       state.adminScopes = action.payload.adminScopes;
       state.accessToken = action.payload.accessToken;
     },
-    logout: state => {
+    logoutAction: state => {
       state.username = null;
       state.accessToken = null;
       state.role = null;
@@ -27,6 +27,6 @@ const userSlice = createSlice({
   },
 });
 
-export const { setData } = userSlice.actions;
+export const { setData, logoutAction } = userSlice.actions;
 
 export const userReducer = userSlice.reducer;
