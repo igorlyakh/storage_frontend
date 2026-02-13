@@ -1,6 +1,7 @@
 import { Route, Routes } from 'react-router-dom';
 import Layout from './components/Layout';
 import LoginPage from './pages/LoginPage/LoginPage';
+import RestrictedRouts from './pages/RestrictedRoutes';
 
 const App = () => {
   return (
@@ -11,7 +12,11 @@ const App = () => {
       >
         <Route
           path="login"
-          element={<LoginPage />}
+          element={
+            <RestrictedRouts redirectTo="/">
+              <LoginPage />
+            </RestrictedRouts>
+          }
         />
       </Route>
     </Routes>
