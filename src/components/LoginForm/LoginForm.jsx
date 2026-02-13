@@ -1,4 +1,5 @@
 import { useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
 import { useDispatch } from 'react-redux';
 import { useLoginMutation } from '../../store/api/api';
 import { setData } from '../../store/userSlice/userSlice';
@@ -10,15 +11,21 @@ const LoginForm = () => {
   const dispatch = useDispatch();
 
   const handler = async formData => {
-    const { data } = await login(formData);
-    dispatch(setData(data));
+    try {
+      const data = await login(formData).unwrap();
+      dispatch(setData(data));
+      toast.success(`Welcome, ${data.username}!`);
+    } catch (error) {
+      toast.error(error.data?.message || error.message);
+    } finally {
+      reset();
+    }
   };
 
   return (
     <form
       onSubmit={handleSubmit(data => {
         handler(data);
-        reset();
       })}
       className={styles.form}
     >
