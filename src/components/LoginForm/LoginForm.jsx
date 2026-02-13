@@ -23,45 +23,47 @@ const LoginForm = () => {
   };
 
   return (
-    <form
-      onSubmit={handleSubmit(data => {
-        handler(data);
-      })}
-      className={styles.form}
-    >
-      <label className={styles.wrapper}>
-        <span>Username:</span>
-        <input
-          type="text"
-          placeholder="Enter your username"
-          className={styles.input}
-          {...register('username', {
-            required: 'Username is required!',
-          })}
-        />
-      </label>
-      <label className={styles.wrapper}>
-        <span>Password:</span>
-        <input
-          type="password"
-          placeholder="Enter your password"
-          className={styles.input}
-          {...register('password', {
-            required: 'Password is required!',
-            minLength: {
-              value: 6,
-              message: 'Password must be longer than 6 characters!',
-            },
-          })}
-        />
-      </label>
-      <button
-        className={styles.btn}
-        type="submit"
+    <div className={styles.form__wrapper}>
+      <form
+        onSubmit={handleSubmit(data => {
+          handler(data);
+        })}
+        className={styles.form}
       >
-        Login
-      </button>
-    </form>
+        <label className={styles.wrapper}>
+          <span>Username:</span>
+          <input
+            type="text"
+            placeholder="Enter your username"
+            className={styles.input}
+            {...register('username', {
+              required: 'Username is required!',
+            })}
+          />
+        </label>
+        <label className={styles.wrapper}>
+          <span>Password:</span>
+          <input
+            type="password"
+            placeholder="Enter your password"
+            className={styles.input}
+            {...register('password', {
+              required: 'Password is required!',
+              minLength: {
+                value: 6,
+                message: 'Password must be longer than 6 characters!',
+              },
+            })}
+          />
+        </label>
+        <button
+          className={styles.btn}
+          type="submit"
+        >
+          Login
+        </button>
+      </form>
+    </div>
   );
 };
 
