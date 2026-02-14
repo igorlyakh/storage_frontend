@@ -12,9 +12,13 @@ const Header = () => {
   const dispatch = useDispatch();
   const [logout] = useLogoutMutation();
   const handler = async () => {
-    await logout();
-    dispatch(logoutAction());
-    toast.success('You have successfully logged out!');
+    try {
+      await logout().unwrap();
+      dispatch(logoutAction());
+      toast.success('You have successfully logged out!');
+    } catch {
+      toast.error('Something went wrong! Try again.');
+    }
   };
   return (
     <header className={styles.header}>
