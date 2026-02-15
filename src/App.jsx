@@ -3,6 +3,7 @@ import { Route, Routes } from 'react-router-dom';
 import Layout from './components/Layout';
 import Loader from './components/Loader';
 import LoginPage from './pages/LoginPage/LoginPage';
+import MyOrdersPage from './pages/MyOrdersPage';
 import RestrictedRouts from './pages/RestrictedRoutes';
 import { isGlobalLoading } from './store/selectors/selectors';
 
@@ -28,6 +29,10 @@ const App = () => {
                 <LoginPage />
               </RestrictedRouts>
             }
+          />
+          <Route
+            path="orders"
+            element={<MyOrdersPage />}
           />
         </Route>
       </Routes>
