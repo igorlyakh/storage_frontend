@@ -39,6 +39,14 @@ const Header = () => {
             </Link>
           </li>
           <li>
+            <Link
+              className={styles.link}
+              to="/orders"
+            >
+              Orders
+            </Link>
+          </li>
+          <li>
             {token ? (
               <Button
                 text={'Logout'}

@@ -31,7 +31,16 @@ export const api = createApi({
         method: 'POST',
       }),
     }),
+    getMyOrders: builder.query({
+      query: () => '/orders',
+      providesTags: ['Orders'],
+    }),
   }),
 });
 
-export const { useGetAllOrdersQuery, useLoginMutation, useLogoutMutation } = api;
+export const {
+  useGetAllOrdersQuery,
+  useLoginMutation,
+  useLogoutMutation,
+  useGetMyOrdersQuery,
+} = api;
