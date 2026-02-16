@@ -31,7 +31,7 @@ const OrdersList = ({ data }) => {
             ))}
           </ul>
           <div>
-            <span>Sended:</span>{' '}
+            <span>Sended:</span>
             <span>{dayjs(order.createdAt).format('DD.MM.YYYY HH:mm:ss ')}</span>
           </div>
           <div>
