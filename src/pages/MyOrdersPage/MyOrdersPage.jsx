@@ -1,5 +1,9 @@
+import OrdersList from '../../components/OrdersList/OrdersList';
+import { useGetMyOrdersQuery } from '../../store/api/api';
+
 const MyOrdersPage = () => {
-  return <div>MyOrdersPage</div>;
+  const { data } = useGetMyOrdersQuery();
+  return <OrdersList data={data} />;
 };
 
 export default MyOrdersPage;
