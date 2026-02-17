@@ -1,6 +1,6 @@
 export const usernameSelector = state => state.user.username;
 export const tokenSelector = state => state.user.accessToken;
-export const userRole = state => state.user.role;
+export const userRoleSelector = state => state.user.role;
 
 export const isGlobalLoading = state => {
   const hasActiveMutation = Object.values(state.api.mutations).some(

@@ -2,14 +2,14 @@ import toast from 'react-hot-toast';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { useLogoutMutation } from '../../store/api/api';
-import { tokenSelector, userRole } from '../../store/selectors/selectors';
+import { tokenSelector, userRoleSelector } from '../../store/selectors/selectors';
 import { logoutAction } from '../../store/userSlice/userSlice';
 import Button from '../Button';
 import styles from './styles.module.scss';
 
 const Header = () => {
   const token = useSelector(tokenSelector);
-  const role = useSelector(userRole);
+  const role = useSelector(userRoleSelector);
   const dispatch = useDispatch();
   const [logout] = useLogoutMutation();
   const handler = async () => {
