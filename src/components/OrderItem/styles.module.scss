@@ -1,1 +1,41 @@
-.item {}
+.item {
+  border: 1px solid black;
+  padding: 10px;
+  border-radius: 10px;
+  width: 300px;
+}
+
+.from {
+  text-align: center;
+  display: flex;
+  gap: 5px;
+}
+
+.wrapper {
+  display: flex;
+  justify-content: space-between;
+}
+
+.status {
+  padding: 5px;
+  border-radius: 10px;
+}
+
+.completed {
+  background-color: #adff2f;
+}
+
+.new {
+  background-color: #02b8bf;
+}
+
+.inProgress {
+  background-color: #ffa500;
+}
+
+.link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  gap: 10px;
+}

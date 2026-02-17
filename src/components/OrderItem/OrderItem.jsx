@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import dayjs from 'dayjs';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -5,15 +6,25 @@ import styles from './styles.module.scss';
 
 const OrderItem = ({ store, status, sended, updated }) => {
   return (
-    <div className={styles.item}>
-      <p>
-        <span>From: </span>
-        <span>{store}</span>
-      </p>
-      <p>
-        <span>Status: </span>
-        <span>{status}</span>
-      </p>
+    <li className={styles.item}>
+      <div className={styles.wrapper}>
+        <p className={styles.from}>
+          <span>From:</span>
+          <span>{store}</span>
+        </p>
+        <p>
+          <span>Status: </span>
+          <span
+            className={clsx(styles.status, {
+              [styles.completed]: status === 'COMPLETED',
+              [styles.new]: status === 'NEW',
+              [styles.inProgress]: status === 'IN_PROGRESS',
+            })}
+          >
+            {status}
+          </span>
+        </p>
+      </div>
       <p>
         <span>Sended: </span>
         <span>{dayjs(sended).format('DD.MM.YYYY HH:mm:ss')}</span>
@@ -24,10 +35,10 @@ const OrderItem = ({ store, status, sended, updated }) => {
           <span>{dayjs(updated).format('DD.MM.YYYY HH:mm:ss')}</span>
         </p>
       )}
-      <Link>
-        To order <ArrowRight />
+      <Link className={styles.link}>
+        <span>To order</span> <ArrowRight />
       </Link>
-    </div>
+    </li>
   );
 };
 
