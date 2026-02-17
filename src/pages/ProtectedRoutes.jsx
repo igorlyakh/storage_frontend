@@ -2,7 +2,7 @@ import { useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
 import { tokenSelector, userRoleSelector } from '../store/selectors/selectors';
 
-const ProtectedRoutes = ({ children, redirectTo = '/', approvedRoles }) => {
+const ProtectedRoutes = ({ children, redirectTo = '/', allowedRoles }) => {
   const userRole = useSelector(userRoleSelector);
   const token = useSelector(tokenSelector);
 
@@ -15,16 +15,16 @@ const ProtectedRoutes = ({ children, redirectTo = '/', approvedRoles }) => {
     );
   }
 
-  if (approvedRoles.some(userRole)) {
-    return children;
+  if (!allowedRoles.includes(userRole)) {
+    return (
+      <Navigate
+        to={redirectTo}
+        replace={true}
+      />
+    );
   }
 
-  return (
-    <Navigate
-      to={redirectTo}
-      replace={true}
-    />
-  );
+  return children;
 };
 
 export default ProtectedRoutes;

@@ -4,6 +4,7 @@ import Layout from './components/Layout';
 import Loader from './components/Loader';
 import LoginPage from './pages/LoginPage/LoginPage';
 import MyOrdersPage from './pages/MyOrdersPage';
+import ProtectedRoutes from './pages/ProtectedRoutes';
 import RestrictedRouts from './pages/RestrictedRoutes';
 import { isGlobalLoading } from './store/selectors/selectors';
 
@@ -32,7 +33,11 @@ const App = () => {
           />
           <Route
             path="orders"
-            element={<MyOrdersPage />}
+            element={
+              <ProtectedRoutes allowedRoles={['STORE']}>
+                <MyOrdersPage />
+              </ProtectedRoutes>
+            }
           />
         </Route>
       </Routes>
