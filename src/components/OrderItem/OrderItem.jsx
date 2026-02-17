@@ -18,10 +18,12 @@ const OrderItem = ({ store, status, sended, updated }) => {
         <span>Sended: </span>
         <span>{dayjs(sended).format('DD.MM.YYYY HH:mm:ss')}</span>
       </p>
-      <p>
-        <span>Updated: </span>
-        <span>{dayjs(updated).format('DD.MM.YYYY HH:mm:ss')}</span>
-      </p>
+      {updated !== sended && (
+        <p>
+          <span>Updated: </span>
+          <span>{dayjs(updated).format('DD.MM.YYYY HH:mm:ss')}</span>
+        </p>
+      )}
       <Link>
         To order <ArrowRight />
       </Link>
