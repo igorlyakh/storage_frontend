@@ -4,6 +4,7 @@ import Layout from './components/Layout';
 import Loader from './components/Loader';
 import LoginPage from './pages/LoginPage/LoginPage';
 import MyOrdersPage from './pages/MyOrdersPage';
+import ProductsPage from './pages/ProductsPage/ProductsPage';
 import ProtectedRoutes from './pages/ProtectedRoutes';
 import RestrictedRouts from './pages/RestrictedRoutes';
 import { isGlobalLoading } from './store/selectors/selectors';
@@ -43,7 +44,7 @@ const App = () => {
             path="products"
             element={
               <ProtectedRoutes allowedRoles={['ADMIN']}>
-                <div>Products...</div>
+                <ProductsPage />
               </ProtectedRoutes>
             }
           />
