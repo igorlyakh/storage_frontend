@@ -39,6 +39,14 @@ const App = () => {
               </ProtectedRoutes>
             }
           />
+          <Route
+            path="products"
+            element={
+              <ProtectedRoutes allowedRoles={['ADMIN']}>
+                <div>Products...</div>
+              </ProtectedRoutes>
+            }
+          />
         </Route>
       </Routes>
     </>

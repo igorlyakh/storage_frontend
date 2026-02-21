@@ -49,6 +49,16 @@ const Header = () => {
               </Link>
             </li>
           )}
+          {role === 'ADMIN' && (
+            <li>
+              <Link
+                className={styles.link}
+                to="/products"
+              >
+                Products
+              </Link>
+            </li>
+          )}
           <li>
             {token ? (
               <Button
