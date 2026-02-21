@@ -12,7 +12,7 @@
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
     "@reduxjs/toolkit": "^2.11.2",
-    "@tanstack/react-table": "^8.21.3",
+    "ag-grid-react": "^35.1.0",
     "clsx": "^2.1.1",
     "dayjs": "^1.11.19",
     "lucide-react": "^0.563.0",
