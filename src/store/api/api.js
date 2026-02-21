@@ -35,6 +35,10 @@ export const api = createApi({
       query: () => '/orders',
       providesTags: ['Orders'],
     }),
+    getAllProducts: builder.query({
+      query: () => '/product',
+      providesTags: ['Products'],
+    }),
   }),
 });
 
@@ -43,4 +47,5 @@ export const {
   useLoginMutation,
   useLogoutMutation,
   useGetMyOrdersQuery,
+  useGetAllProductsQuery,
 } = api;
