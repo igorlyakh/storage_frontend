@@ -35,6 +35,11 @@ export const api = createApi({
       query: () => '/orders',
       providesTags: ['Orders'],
     }),
+    getOrderById: builder.query({
+      query: id => ({
+        url: `/orders/${id}`,
+      }),
+    }),
     getAllProducts: builder.query({
       query: () => '/product',
       providesTags: ['Products'],
@@ -48,4 +53,5 @@ export const {
   useLogoutMutation,
   useGetMyOrdersQuery,
   useGetAllProductsQuery,
+  useGetOrderByIdQuery,
 } = api;

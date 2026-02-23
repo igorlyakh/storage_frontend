@@ -4,7 +4,7 @@ import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import styles from './styles.module.scss';
 
-const OrderItem = ({ store, status, sended, updated }) => {
+const OrderItem = ({ store, status, sended, updated, id }) => {
   return (
     <li className={styles.item}>
       <div className={styles.wrapper}>
@@ -35,7 +35,10 @@ const OrderItem = ({ store, status, sended, updated }) => {
           <span>{dayjs(updated).format('DD.MM.YYYY HH:mm:ss')}</span>
         </p>
       )}
-      <Link className={styles.link}>
+      <Link
+        className={styles.link}
+        to={`${id}`}
+      >
         <span>To order</span> <ArrowRight />
       </Link>
     </li>

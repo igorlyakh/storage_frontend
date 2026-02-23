@@ -11,6 +11,7 @@ const OrdersList = ({ data }) => {
           status={order.status}
           sended={order.createdAt}
           updated={order.updatedAt}
+          id={order.id}
         />
       ))}
     </ul>
