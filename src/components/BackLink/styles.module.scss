@@ -1,0 +1,56 @@
+$accent-color: #6366f1;
+$text-color: #374151;
+$transition-speed: 0.3s;
+
+.backLink {
+  display: inline-flex;
+  align-items: center;
+  margin: 10px 0;
+  gap: 8px;
+  text-decoration: none;
+  color: $text-color;
+  font-weight: 500;
+  font-size: 1rem;
+  padding: 4px 0;
+  position: relative;
+  transition: color $transition-speed ease;
+
+  .icon {
+    transition: transform $transition-speed cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  .text {
+    position: relative;
+    
+    // Эффект красивого подчеркивания
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background-color: $accent-color;
+      transition: width $transition-speed ease;
+    }
+  }
+
+  // Состояния при наведении
+  &:hover {
+    color: $accent-color;
+
+    .icon {
+      // Иконка немного отлетает влево
+      transform: translateX(-5px);
+    }
+
+    .text::after {
+      width: 100%;
+    }
+  }
+
+  // Эффект при нажатии
+  &:active {
+    transform: scale(0.95);
+  }
+}
