@@ -42,6 +42,12 @@ const ProductsTable = ({ data }) => {
         flex: 1,
         valueFormatter: params => new Date(params.value).toLocaleDateString(),
       },
+      {
+        field: 'limitPerOrder',
+        headerName: 'Limit',
+        flex: 1,
+        cellRenderer: params => <span>{params.value ? params.value : 'No limit'}</span>,
+      },
     ],
     [],
   );
