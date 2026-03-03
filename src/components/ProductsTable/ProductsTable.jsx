@@ -2,11 +2,10 @@ import { AgGridReact } from 'ag-grid-react';
 import { useMemo } from 'react';
 
 import { AllCommunityModule, ModuleRegistry, themeQuartz } from 'ag-grid-community';
+import dayjs from 'dayjs';
 import { useUpdateProductsMutation } from '../../store/api/api';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
-
-// TODO: Fix update for limit per order value.
 
 const ProductsTable = ({ data }) => {
   const [updateProducts] = useUpdateProductsMutation();
@@ -54,7 +53,7 @@ const ProductsTable = ({ data }) => {
         field: 'updatedAt',
         headerName: 'Updated',
         flex: 1,
-        valueFormatter: params => new Date(params.value).toLocaleDateString(),
+        valueFormatter: params => new dayjs(params.value).format('DD.MM.YY HH:mm'),
       },
       {
         field: 'limitPerOrder',
@@ -62,6 +61,7 @@ const ProductsTable = ({ data }) => {
         editable: true,
         flex: 1,
         cellRenderer: params => <span>{params.value ? params.value : 'No limit'}</span>,
+        valueParser: params => (params.newValue === '0' ? null : Number(params.newValue)),
       },
     ],
     [],
