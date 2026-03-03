@@ -2,10 +2,23 @@ import { AgGridReact } from 'ag-grid-react';
 import { useMemo } from 'react';
 
 import { AllCommunityModule, ModuleRegistry, themeQuartz } from 'ag-grid-community';
+import { useUpdateProductsMutation } from '../../store/api/api';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
+// TODO: Fix update for limit per order value.
+
 const ProductsTable = ({ data }) => {
+  const [updateProducts] = useUpdateProductsMutation();
+
+  const onUpdatedProduct = async e => {
+    const data = await updateProducts({
+      ...e.data,
+      [e.colDef.field]: e.newValue,
+    }).unwrap();
+    e.node.setData(data);
+  };
+
   const columnDefs = useMemo(
     () => [
       {
@@ -34,6 +47,7 @@ const ProductsTable = ({ data }) => {
         field: 'isEnabled',
         headerName: 'Available',
         flex: 1,
+        editable: true,
         cellRenderer: params => <span>{params.value ? '🟢 Yes' : '🔴 No'}</span>,
       },
       {
@@ -45,6 +59,7 @@ const ProductsTable = ({ data }) => {
       {
         field: 'limitPerOrder',
         headerName: 'Limit',
+        editable: true,
         flex: 1,
         cellRenderer: params => <span>{params.value ? params.value : 'No limit'}</span>,
       },
@@ -67,12 +82,14 @@ const ProductsTable = ({ data }) => {
       style={{ height: 500, width: '100%' }}
     >
       <AgGridReact
+        onCellEditRequest={onUpdatedProduct}
         rowData={data}
         columnDefs={columnDefs}
         defaultColDef={defaultColDef}
         animateRows={true}
         rowSelection="multiple"
         theme={themeQuartz}
+        readOnlyEdit={true}
       />
     </div>
   );
