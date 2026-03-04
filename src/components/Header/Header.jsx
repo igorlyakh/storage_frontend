@@ -39,6 +39,16 @@ const Header = () => {
               Home
             </Link>
           </li>
+          {['ADMIN', 'WAREHOUSE'].includes(role) && (
+            <li>
+              <Link
+                className={styles.link}
+                to="/all-orders"
+              >
+                All order
+              </Link>
+            </li>
+          )}
           {role === 'STORE' && (
             <li>
               <Link

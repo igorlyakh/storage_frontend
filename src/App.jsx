@@ -2,6 +2,7 @@ import { useSelector } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
 import Layout from './components/Layout';
 import Loader from './components/Loader';
+import AllOrdersPage from './pages/AllOrdersPage/AllOrdersPage';
 import LoginPage from './pages/LoginPage/LoginPage';
 import MyOrdersPage from './pages/MyOrdersPage';
 import OrderPage from './pages/OrderPage/OrderPage';
@@ -46,6 +47,14 @@ const App = () => {
             element={
               <ProtectedRoutes allowedRoles={['STORE', 'ADMIN', 'WAREHOUSE']}>
                 <OrderPage />
+              </ProtectedRoutes>
+            }
+          />
+          <Route
+            path="/all-orders"
+            element={
+              <ProtectedRoutes allowedRoles={['ADMIN', 'WAREHOUSE']}>
+                <AllOrdersPage />
               </ProtectedRoutes>
             }
           />
