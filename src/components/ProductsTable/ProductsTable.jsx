@@ -1,5 +1,5 @@
 import { AgGridReact } from 'ag-grid-react';
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 
 import { AllCommunityModule, ModuleRegistry, themeQuartz } from 'ag-grid-community';
 import dayjs from 'dayjs';
@@ -11,13 +11,21 @@ ModuleRegistry.registerModules([AllCommunityModule]);
 const ProductsTable = ({ data }) => {
   const [updateProducts] = useUpdateProductsMutation();
 
-  const onUpdatedProduct = async e => {
-    await updateProducts({
-      ...e.data,
-      [e.colDef.field]: e.newValue,
-    }).unwrap();
-    toast.success('Product is updated!');
-  };
+  const onUpdatedProduct = useCallback(
+    async e => {
+      try {
+        await updateProducts({
+          ...e.data,
+          [e.colDef.field]: e.newValue,
+        }).unwrap();
+        toast.success('Product is updated!');
+      } catch (error) {
+        toast.error('Failed to update product');
+        console.error('Update product error:', error);
+      }
+    },
+    [updateProducts],
+  );
 
   const columnDefs = useMemo(
     () => [
@@ -41,27 +49,27 @@ const ProductsTable = ({ data }) => {
           if (params.value < 0) return { color: '#ef4444', fontWeight: 'bold' };
           return null;
         },
-        valueFormatter: params => `${params.value}`,
+        valueFormatter: params => params.value ?? '',
       },
       {
         field: 'isEnabled',
         headerName: 'Available',
         flex: 1,
         editable: true,
-        cellRenderer: params => <span>{params.value ? '🟢 Yes' : '🔴 No'}</span>,
+        valueFormatter: params => (params.value ? '🟢 Yes' : '🔴 No'),
       },
       {
         field: 'updatedAt',
         headerName: 'Updated',
         flex: 1,
-        valueFormatter: params => new dayjs(params.value).format('DD.MM.YY HH:mm'),
+        valueFormatter: params => dayjs(params.value).format('DD.MM.YY HH:mm'),
       },
       {
         field: 'limitPerOrder',
         headerName: 'Limit',
         editable: true,
         flex: 1,
-        cellRenderer: params => <span>{params.value ? params.value : 'No limit'}</span>,
+        valueFormatter: params => params.value || 'No limit',
         valueParser: params => (params.newValue === '0' ? null : Number(params.newValue)),
       },
     ],
@@ -78,10 +86,7 @@ const ProductsTable = ({ data }) => {
   );
 
   return (
-    <div
-      className="ag-theme-quartz"
-      style={{ height: 500, width: '100%' }}
-    >
+    <div style={{ height: 500, width: '100%' }}>
       <AgGridReact
         onCellEditRequest={onUpdatedProduct}
         rowData={data}
