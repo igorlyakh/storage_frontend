@@ -37,7 +37,7 @@ const OrderItem = ({ store, status, sended, updated, id }) => {
       )}
       <Link
         className={styles.link}
-        to={`${id}`}
+        to={`/orders/${id}`}
       >
         <span>To order</span> <ArrowRight />
       </Link>
