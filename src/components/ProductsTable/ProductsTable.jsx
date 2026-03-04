@@ -56,7 +56,7 @@ const ProductsTable = ({ data }) => {
         headerName: 'Available',
         flex: 1,
         editable: true,
-        valueFormatter: params => (params.value ? '🟢 Yes' : '🔴 No'),
+        cellRenderer: params => (params.value ? '🟢 Yes' : '🔴 No'),
       },
       {
         field: 'updatedAt',
