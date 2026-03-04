@@ -49,8 +49,8 @@ export const api = createApi({
         url: `/product/${data.id}`,
         method: 'PATCH',
         body: data,
-        invalidateTags: ['Products'],
       }),
+      invalidatesTags: ['Products'],
     }),
   }),
 });

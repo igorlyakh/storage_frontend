@@ -3,6 +3,7 @@ import { useMemo } from 'react';
 
 import { AllCommunityModule, ModuleRegistry, themeQuartz } from 'ag-grid-community';
 import dayjs from 'dayjs';
+import toast from 'react-hot-toast';
 import { useUpdateProductsMutation } from '../../store/api/api';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
@@ -11,11 +12,11 @@ const ProductsTable = ({ data }) => {
   const [updateProducts] = useUpdateProductsMutation();
 
   const onUpdatedProduct = async e => {
-    const data = await updateProducts({
+    await updateProducts({
       ...e.data,
       [e.colDef.field]: e.newValue,
     }).unwrap();
-    e.node.setData(data);
+    toast.success('Product is updated!');
   };
 
   const columnDefs = useMemo(
