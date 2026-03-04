@@ -45,7 +45,7 @@ const Header = () => {
                 className={styles.link}
                 to="/all-orders"
               >
-                All order
+                All orders
               </Link>
             </li>
           )}
