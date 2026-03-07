@@ -1,8 +1,12 @@
 import { useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
+import { useAddProductMutation } from '../../store/api/api';
 import { productCategories } from './config';
 import styles from './styles.module.scss';
 
 const AddProductForm = () => {
+  const [addProduct] = useAddProductMutation();
+
   const {
     register,
     handleSubmit,
@@ -10,9 +14,21 @@ const AddProductForm = () => {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = data => {
-    console.log(data);
-    reset();
+  const onSubmit = async data => {
+    const { limitPerOrder } = data;
+    if (limitPerOrder === '0' || limitPerOrder === '')
+      data = {
+        ...data,
+        limitPerOrder: null,
+        initialQuantity: Number(data.initialQuantity),
+      };
+    try {
+      await addProduct(data).unwrap();
+      reset();
+      toast.success('Product added!');
+    } catch (error) {
+      toast.error(error.data?.message[0] || error.message);
+    }
   };
 
   return (
@@ -63,12 +79,12 @@ const AddProductForm = () => {
         </label>
 
         <label className={styles.labelGroup}>
-          <span>Initial Quantity (optional)</span>
+          <span>Initial Quantity</span>
           <input
             className={styles.inputField}
             type="number"
             placeholder="Enter quantity"
-            defaultValue={0}
+            defaultValue={1}
             {...register('initialQuantity')}
           />
         </label>

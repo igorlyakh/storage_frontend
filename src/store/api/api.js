@@ -52,6 +52,14 @@ export const api = createApi({
       }),
       invalidatesTags: ['Products'],
     }),
+    addProduct: builder.mutation({
+      query: data => ({
+        url: '/product',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['Products'],
+    }),
   }),
 });
 
@@ -63,4 +71,5 @@ export const {
   useGetAllProductsQuery,
   useGetOrderByIdQuery,
   useUpdateProductsMutation,
+  useAddProductMutation,
 } = api;
