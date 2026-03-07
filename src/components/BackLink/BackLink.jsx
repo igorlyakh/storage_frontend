@@ -2,11 +2,10 @@ import { ArrowLeft } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import styles from './styles.module.scss';
 
-const BackLink = () => {
+const BackLink = ({ redirectTo }) => {
   return (
     <Link
-      to=".."
-      relative="path"
+      to={redirectTo}
       className={styles.backLink}
     >
       <ArrowLeft

@@ -1,10 +1,12 @@
 import clsx from 'clsx';
 import dayjs from 'dayjs';
 import { ArrowRight } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import styles from './styles.module.scss';
 
 const OrderItem = ({ store, status, sended, updated, id }) => {
+  const location = useLocation();
+
   return (
     <li className={styles.item}>
       <div className={styles.wrapper}>
@@ -38,6 +40,7 @@ const OrderItem = ({ store, status, sended, updated, id }) => {
       <Link
         className={styles.link}
         to={`/orders/${id}`}
+        state={{ from: location }}
       >
         <span>To order</span> <ArrowRight />
       </Link>
