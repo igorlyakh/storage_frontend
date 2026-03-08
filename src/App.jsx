@@ -3,6 +3,7 @@ import { Route, Routes } from 'react-router-dom';
 import Layout from './components/Layout';
 import Loader from './components/Loader';
 import AllOrdersPage from './pages/AllOrdersPage/AllOrdersPage';
+import AllUsersPage from './pages/AllUsersPage';
 import CreateProductPage from './pages/CreateProductPage';
 import LoginPage from './pages/LoginPage/LoginPage';
 import MyOrdersPage from './pages/MyOrdersPage';
@@ -79,7 +80,7 @@ const App = () => {
             path="users"
             element={
               <ProtectedRoutes allowedRoles={['ADMIN']}>
-                <div>All Users Page</div>
+                <AllUsersPage />
               </ProtectedRoutes>
             }
           />
