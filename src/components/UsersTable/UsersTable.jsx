@@ -1,9 +1,9 @@
 import { themeQuartz } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
-import { useMemo, useRef } from 'react';
+import { useMemo } from 'react';
 
 const UsersTable = ({ data }) => {
-  const columnDefs = useRef(
+  const columnDefs = useMemo(
     () => [
       {
         field: 'username',
@@ -26,7 +26,7 @@ const UsersTable = ({ data }) => {
     () => ({
       sortable: true,
       resizable: true,
-      filter: false,
+      filter: true,
     }),
     [],
   );

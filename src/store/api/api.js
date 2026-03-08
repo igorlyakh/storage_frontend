@@ -60,6 +60,10 @@ export const api = createApi({
       }),
       invalidatesTags: ['Products'],
     }),
+    getAllUsers: builder.query({
+      query: () => '/users',
+      providesTags: ['Users'],
+    }),
   }),
 });
 
@@ -72,4 +76,5 @@ export const {
   useGetOrderByIdQuery,
   useUpdateProductsMutation,
   useAddProductMutation,
+  useGetAllUsersQuery,
 } = api;

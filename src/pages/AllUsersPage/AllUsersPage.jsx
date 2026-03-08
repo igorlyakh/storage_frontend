@@ -1,7 +1,10 @@
 import UsersTable from '../../components/UsersTable/UsersTable';
+import { useGetAllUsersQuery } from '../../store/api/api';
 
 const AllUsersPage = () => {
-  return <UsersTable />;
+  const { data } = useGetAllUsersQuery();
+
+  return <UsersTable data={data} />;
 };
 
 export default AllUsersPage;
