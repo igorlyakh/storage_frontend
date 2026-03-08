@@ -1,3 +1,4 @@
+import { ArrowDown } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styles from './styles.module.scss';
@@ -26,7 +27,12 @@ const DropdownMenu = ({ title, items }) => {
         type="button"
       >
         {title}
-        <span className={`${styles.arrow} ${isOpen ? styles.open : ''}`}>▾</span>
+        <span className={`${styles.arrow} ${isOpen ? styles.open : ''}`}>
+          <ArrowDown
+            size={18}
+            strokeWidth={2}
+          />
+        </span>
       </button>
 
       {isOpen && (

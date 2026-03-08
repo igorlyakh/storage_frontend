@@ -8,7 +8,7 @@
   border: none;
   color: #ffffff;
   font-family: inherit;
-  font-size: inherit; // Наследует размер из li хедера
+  font-size: inherit;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -16,14 +16,15 @@
   padding: 0;
   transition: 250ms color ease;
 
+
   &:hover {
     color: #c2c2c2;
   }
 }
 
 .arrow {
-  font-size: 10px;
   transition: transform 0.2s ease;
+  padding-top: 5px;
   &.open {
     transform: rotate(180deg);
   }
@@ -31,7 +32,7 @@
 
 .dropdown {
   position: absolute;
-  top: calc(100% + 20px); // Чтобы меню было чуть ниже хедера
+  top: calc(100% + 20px); 
   right: 0;
   background-color: #1a1a1a;
   border: 1px solid #333;
@@ -42,7 +43,6 @@
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
   z-index: 1000;
 
-  // Небольшой "хвостик" сверху меню (опционально)
   &::before {
     content: '';
     position: absolute;
