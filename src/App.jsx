@@ -75,6 +75,22 @@ const App = () => {
               </ProtectedRoutes>
             }
           />
+          <Route
+            path="users"
+            element={
+              <ProtectedRoutes allowedRoles={['ADMIN']}>
+                <div>All Users Page</div>
+              </ProtectedRoutes>
+            }
+          />
+          <Route
+            path="users/create"
+            element={
+              <ProtectedRoutes allowedRoles={['ADMIN']}>
+                <div>Create user page</div>
+              </ProtectedRoutes>
+            }
+          />
         </Route>
       </Routes>
     </>
