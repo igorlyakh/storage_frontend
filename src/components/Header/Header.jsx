@@ -71,6 +71,17 @@ const Header = () => {
               />
             </li>
           )}
+          {role === 'ADMIN' && (
+            <li>
+              <DropdownMenu
+                title="Users"
+                items={[
+                  { label: 'All Users', to: '/users' },
+                  { label: 'Create User', to: '/users/create' },
+                ]}
+              />
+            </li>
+          )}
           <li>
             {token ? (
               <Button
