@@ -86,7 +86,7 @@ const ProductsTable = ({ data }) => {
   );
 
   return (
-    <div style={{ height: 500, width: '100%' }}>
+    <div style={{ height: 500, width: '100%', marginTop: 10 }}>
       <AgGridReact
         onCellEditRequest={onUpdatedProduct}
         rowData={data}
