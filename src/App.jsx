@@ -3,6 +3,7 @@ import { Route, Routes } from 'react-router-dom';
 import Layout from './components/Layout';
 import Loader from './components/Loader';
 import AllOrdersPage from './pages/AllOrdersPage/AllOrdersPage';
+import CreateProductPage from './pages/CreateProductPage';
 import LoginPage from './pages/LoginPage/LoginPage';
 import MyOrdersPage from './pages/MyOrdersPage';
 import OrderPage from './pages/OrderPage/OrderPage';
@@ -63,6 +64,14 @@ const App = () => {
             element={
               <ProtectedRoutes allowedRoles={['ADMIN']}>
                 <ProductsPage />
+              </ProtectedRoutes>
+            }
+          />
+          <Route
+            path="products/add"
+            element={
+              <ProtectedRoutes allowedRoles={['ADMIN']}>
+                <CreateProductPage />
               </ProtectedRoutes>
             }
           />
