@@ -68,7 +68,7 @@ const App = () => {
             }
           />
           <Route
-            path="products/add"
+            path="products/create"
             element={
               <ProtectedRoutes allowedRoles={['ADMIN']}>
                 <CreateProductPage />

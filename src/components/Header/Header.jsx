@@ -5,6 +5,7 @@ import { useLogoutMutation } from '../../store/api/api';
 import { tokenSelector, userRoleSelector } from '../../store/selectors/selectors';
 import { logoutAction } from '../../store/userSlice/userSlice';
 import Button from '../Button';
+import DropdownMenu from '../DropDownMenu';
 import styles from './styles.module.scss';
 
 const Header = () => {
@@ -61,12 +62,13 @@ const Header = () => {
           )}
           {role === 'ADMIN' && (
             <li>
-              <Link
-                className={styles.link}
-                to="/products"
-              >
-                Products
-              </Link>
+              <DropdownMenu
+                title="Products"
+                items={[
+                  { label: 'All Products', to: '/products' },
+                  { label: 'Create Product', to: '/products/create' },
+                ]}
+              />
             </li>
           )}
           <li>
