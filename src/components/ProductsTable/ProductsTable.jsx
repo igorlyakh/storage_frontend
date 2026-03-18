@@ -4,12 +4,13 @@ import { useCallback, useMemo } from 'react';
 import { AllCommunityModule, ModuleRegistry, themeQuartz } from 'ag-grid-community';
 import dayjs from 'dayjs';
 import toast from 'react-hot-toast';
-import { useUpdateProductsMutation } from '../../store/api/api';
+import { useDeleteProductMutation, useUpdateProductsMutation } from '../../store/api/api';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
 const ProductsTable = ({ data }) => {
   const [updateProducts] = useUpdateProductsMutation();
+  const [deleteProduct] = useDeleteProductMutation();
 
   const onUpdatedProduct = useCallback(
     async e => {
@@ -25,6 +26,16 @@ const ProductsTable = ({ data }) => {
       }
     },
     [updateProducts],
+  );
+
+  const handleDelete = useCallback(
+    async id => {
+      if (window.confirm('Delete?')) {
+        await deleteProduct({ id }).unwrap();
+        toast.success('Deleted');
+      }
+    },
+    [deleteProduct],
   );
 
   const columnDefs = useMemo(
@@ -72,8 +83,34 @@ const ProductsTable = ({ data }) => {
         valueFormatter: params => params.value || 'No limit',
         valueParser: params => (params.newValue === '0' ? null : Number(params.newValue)),
       },
+      {
+        headerName: 'Delete',
+        field: 'id',
+        flex: 1,
+        sortable: false,
+        filter: false,
+        cellRendererParams: {
+          onDelete: handleDelete,
+        },
+        cellRenderer: params => (
+          <button
+            onClick={() => params.onDelete(params.data.id)}
+            style={{
+              backgroundColor: '#ef4444',
+              color: 'white',
+              border: 'none',
+              padding: '4px 12px',
+              borderRadius: '4px',
+              cursor: 'pointer',
+              fontSize: '12px',
+            }}
+          >
+            Delete
+          </button>
+        ),
+      },
     ],
-    [],
+    [handleDelete],
   );
 
   const defaultColDef = useMemo(
