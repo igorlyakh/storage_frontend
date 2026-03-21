@@ -42,11 +42,11 @@ const CreateUserForm = () => {
     };
 
     try {
-      await createUser(payload);
+      await createUser(payload).unwrap();
       reset();
       toast.success('User created!');
     } catch (error) {
-      toast.error(error.data?.message[0] || error.message);
+      toast.error(error.data?.message || error.message);
     }
   };
 

@@ -22,7 +22,7 @@ const CreateStoreForm = () => {
       reset();
       toast.success('Store created!');
     } catch (error) {
-      toast.error(error.data?.message[0] || error.message);
+      toast.error(error.data?.message || error.message);
     }
   };
 
