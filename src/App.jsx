@@ -12,6 +12,7 @@ import OrderPage from './pages/OrderPage/OrderPage';
 import ProductsPage from './pages/ProductsPage/ProductsPage';
 import ProtectedRoutes from './pages/ProtectedRoutes';
 import RestrictedRouts from './pages/RestrictedRoutes';
+import StoresPage from './pages/StoresPage';
 import { isGlobalLoading } from './store/selectors/selectors';
 
 const App = () => {
@@ -90,6 +91,14 @@ const App = () => {
             element={
               <ProtectedRoutes allowedRoles={['ADMIN']}>
                 <CreateUserPage />
+              </ProtectedRoutes>
+            }
+          />
+          <Route
+            path="stores"
+            element={
+              <ProtectedRoutes allowedRoles={['ADMIN']}>
+                <StoresPage />
               </ProtectedRoutes>
             }
           />

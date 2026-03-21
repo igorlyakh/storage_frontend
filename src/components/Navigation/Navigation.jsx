@@ -77,6 +77,17 @@ const Navigation = () => {
             />
           </li>
         )}
+        {role === 'ADMIN' && (
+          <li>
+            <DropdownMenu
+              title="Stores"
+              items={[
+                { label: 'All Stores', to: '/stores' },
+                { label: 'Create Store', to: '/stores/create' },
+              ]}
+            />
+          </li>
+        )}
         <li>
           {token ? (
             <Button
