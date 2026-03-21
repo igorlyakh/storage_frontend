@@ -5,6 +5,7 @@ import Loader from './components/Loader';
 import AllOrdersPage from './pages/AllOrdersPage/AllOrdersPage';
 import AllUsersPage from './pages/AllUsersPage';
 import CreateProductPage from './pages/CreateProductPage';
+import CreateStorePage from './pages/CreateStorePage';
 import CreateUserPage from './pages/CreateUserPage';
 import LoginPage from './pages/LoginPage/LoginPage';
 import MyOrdersPage from './pages/MyOrdersPage';
@@ -99,6 +100,14 @@ const App = () => {
             element={
               <ProtectedRoutes allowedRoles={['ADMIN']}>
                 <StoresPage />
+              </ProtectedRoutes>
+            }
+          />
+          <Route
+            path="stores/create"
+            element={
+              <ProtectedRoutes allowedRoles={['ADMIN']}>
+                <CreateStorePage />
               </ProtectedRoutes>
             }
           />

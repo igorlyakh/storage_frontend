@@ -84,6 +84,14 @@ export const api = createApi({
       query: () => '/stores',
       providesTags: ['Stores'],
     }),
+    createStore: builder.mutation({
+      query: data => ({
+        url: '/stores',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['Stores'],
+    }),
   }),
 });
 
@@ -100,4 +108,5 @@ export const {
   useDeleteProductMutation,
   useGetAllStoresQuery,
   useCreateUserMutation,
+  useCreateStoreMutation,
 } = api;
