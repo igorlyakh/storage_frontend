@@ -5,6 +5,7 @@ import Loader from './components/Loader';
 import AllOrdersPage from './pages/AllOrdersPage/AllOrdersPage';
 import AllUsersPage from './pages/AllUsersPage';
 import CreateProductPage from './pages/CreateProductPage';
+import CreateUserPage from './pages/CreateUserPage';
 import LoginPage from './pages/LoginPage/LoginPage';
 import MyOrdersPage from './pages/MyOrdersPage';
 import OrderPage from './pages/OrderPage/OrderPage';
@@ -88,7 +89,7 @@ const App = () => {
             path="users/create"
             element={
               <ProtectedRoutes allowedRoles={['ADMIN']}>
-                <div>Create user page</div>
+                <CreateUserPage />
               </ProtectedRoutes>
             }
           />

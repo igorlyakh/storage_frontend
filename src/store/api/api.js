@@ -12,7 +12,7 @@ export const api = createApi({
       return headers;
     },
   }),
-  tagTypes: ['Users', 'Orders', 'Products'],
+  tagTypes: ['Users', 'Orders', 'Products', 'Stores'],
   endpoints: builder => ({
     getAllOrders: builder.query({
       query: () => '/orders/all',
@@ -72,6 +72,10 @@ export const api = createApi({
       }),
       invalidatesTags: ['Products'],
     }),
+    getAllStores: builder.query({
+      query: () => '/stores',
+      providesTags: ['Stores'],
+    }),
   }),
 });
 
@@ -86,4 +90,5 @@ export const {
   useAddProductMutation,
   useGetAllUsersQuery,
   useDeleteProductMutation,
+  useGetAllStoresQuery,
 } = api;
