@@ -34,6 +34,14 @@ export const api = createApi({
       }),
       invalidatesTags: ['Orders'],
     }),
+    sendOrder: builder.mutation({
+      query: data => ({
+        url: '/orders/send',
+        method: 'PATCH',
+        body: data,
+      }),
+      invalidatesTags: ['Orders'],
+    }),
     login: builder.mutation({
       query: data => ({
         url: '/auth/login',
@@ -127,4 +135,5 @@ export const {
   useCreateStoreMutation,
   useCreateOrderMutation,
   useProcessOrderMutation,
+  useSendOrderMutation,
 } = api;
