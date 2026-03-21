@@ -4,6 +4,7 @@ import Layout from './components/Layout';
 import Loader from './components/Loader';
 import AllOrdersPage from './pages/AllOrdersPage/AllOrdersPage';
 import AllUsersPage from './pages/AllUsersPage';
+import CreateOrderPage from './pages/CreateOrderPage/CreateOrderPage';
 import CreateProductPage from './pages/CreateProductPage';
 import CreateStorePage from './pages/CreateStorePage';
 import CreateUserPage from './pages/CreateUserPage';
@@ -44,6 +45,14 @@ const App = () => {
             element={
               <ProtectedRoutes allowedRoles={['STORE']}>
                 <MyOrdersPage />
+              </ProtectedRoutes>
+            }
+          />
+          <Route
+            path="orders/create"
+            element={
+              <ProtectedRoutes allowedRoles={['STORE']}>
+                <CreateOrderPage />
               </ProtectedRoutes>
             }
           />

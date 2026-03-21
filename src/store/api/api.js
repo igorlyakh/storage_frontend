@@ -18,6 +18,14 @@ export const api = createApi({
       query: () => '/orders/all',
       providesTags: ['Orders'],
     }),
+    createOrder: builder.mutation({
+      query: data => ({
+        url: '/orders',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['Orders'],
+    }),
     login: builder.mutation({
       query: data => ({
         url: '/auth/login',
@@ -109,4 +117,5 @@ export const {
   useGetAllStoresQuery,
   useCreateUserMutation,
   useCreateStoreMutation,
+  useCreateOrderMutation,
 } = api;
