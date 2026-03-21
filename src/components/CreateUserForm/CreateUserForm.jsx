@@ -1,10 +1,12 @@
 import { useEffect } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
-import { useGetAllStoresQuery } from '../../store/api/api';
+import toast from 'react-hot-toast';
+import { useCreateUserMutation, useGetAllStoresQuery } from '../../store/api/api';
 import styles from './styles.module.scss';
 
 const CreateUserForm = () => {
   const { data: stores = [], isLoading, isError } = useGetAllStoresQuery();
+  const [createUser] = useCreateUserMutation();
 
   const {
     register,
@@ -12,7 +14,7 @@ const CreateUserForm = () => {
     reset,
     control,
     setValue,
-    formState: { errors, isSubmitting, isSubmitSuccessful },
+    formState: { errors, isSubmitting },
   } = useForm({
     defaultValues: {
       username: '',
@@ -28,12 +30,6 @@ const CreateUserForm = () => {
   });
 
   useEffect(() => {
-    if (isSubmitSuccessful) {
-      reset();
-    }
-  }, [isSubmitSuccessful, reset]);
-
-  useEffect(() => {
     if (selectedRole !== 'STORE') {
       setValue('storeId', '');
     }
@@ -45,7 +41,13 @@ const CreateUserForm = () => {
       storeId: data.role === 'STORE' ? data.storeId : null,
     };
 
-    console.log('Sending Data:', payload);
+    try {
+      await createUser(payload);
+      reset();
+      toast.success('User created!');
+    } catch (error) {
+      toast.error(error.data?.message[0] || error.message);
+    }
   };
 
   return (

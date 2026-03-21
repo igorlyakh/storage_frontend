@@ -64,6 +64,14 @@ export const api = createApi({
       query: () => '/users',
       providesTags: ['Users'],
     }),
+    createUser: builder.mutation({
+      query: data => ({
+        url: '/users',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['Users'],
+    }),
     deleteProduct: builder.mutation({
       query: id => ({
         url: '/product',
@@ -91,4 +99,5 @@ export const {
   useGetAllUsersQuery,
   useDeleteProductMutation,
   useGetAllStoresQuery,
+  useCreateUserMutation,
 } = api;
