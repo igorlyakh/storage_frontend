@@ -47,12 +47,13 @@ const Navigation = () => {
         )}
         {role === 'STORE' && (
           <li>
-            <Link
-              className={styles.link}
-              to="/orders"
-            >
-              Orders
-            </Link>
+            <DropdownMenu
+              title="Order"
+              items={[
+                { label: 'My Orders', to: '/orders' },
+                { label: 'Create Order', to: '/orders/create' },
+              ]}
+            />
           </li>
         )}
         {role === 'ADMIN' && (
