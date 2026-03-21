@@ -7,6 +7,7 @@ const AllOrdersPage = () => {
     {
       pollingInterval: 10 * 60 * 1000,
       skipPollingIfUnfocused: true,
+      refetchOnFocus: true,
     },
   );
   return <OrdersList data={data} />;
