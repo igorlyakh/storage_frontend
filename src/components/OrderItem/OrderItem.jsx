@@ -1,11 +1,22 @@
 import clsx from 'clsx';
 import dayjs from 'dayjs';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Loader2, Play } from 'lucide-react'; // Добавил иконки
 import { Link, useLocation } from 'react-router-dom';
+import { useProcessOrderMutation } from '../../store/api/api';
 import styles from './styles.module.scss';
 
 const OrderItem = ({ store, status, sended, updated, id }) => {
   const location = useLocation();
+
+  const [processOrder, { isLoading }] = useProcessOrderMutation();
+
+  const handleAccept = async () => {
+    try {
+      await processOrder({ orderId: id }).unwrap();
+    } catch (err) {
+      console.error('Failed to accept order:', err);
+    }
+  };
 
   return (
     <li className={styles.item}>
@@ -37,13 +48,39 @@ const OrderItem = ({ store, status, sended, updated, id }) => {
           <span>{dayjs(updated).format('DD.MM.YYYY HH:mm:ss')}</span>
         </p>
       )}
-      <Link
-        className={styles.link}
-        to={`/orders/${id}`}
-        state={{ from: location }}
-      >
-        <span>To order</span> <ArrowRight />
-      </Link>
+
+      <div className={styles.footer}>
+        {status === 'NEW' && (
+          <button
+            className={styles.acceptBtn}
+            onClick={handleAccept}
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <Loader2
+                className={styles.spinner}
+                size={16}
+              />
+            ) : (
+              <>
+                <span>Accept order</span>
+                <Play
+                  size={16}
+                  fill="currentColor"
+                />
+              </>
+            )}
+          </button>
+        )}
+
+        <Link
+          className={styles.link}
+          to={`/orders/${id}`}
+          state={{ from: location }}
+        >
+          <span>To order</span> <ArrowRight />
+        </Link>
+      </div>
     </li>
   );
 };
