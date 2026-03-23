@@ -1,6 +1,7 @@
 import { themeQuartz } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import { useMemo, useRef } from 'react';
+import toast from 'react-hot-toast';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { useSendOrderMutation } from '../../store/api/api';
@@ -72,9 +73,9 @@ const OrderItemsTable = ({ data }) => {
 
     try {
       await sendOrder({ orderId, items }).unwrap();
-      console.log('Order sent successfully!');
+      toast.success('Order sended!');
     } catch (error) {
-      console.error('Failed to send order:', error);
+      toast.error(error.data?.message || error.message);
     }
   };
 
@@ -83,7 +84,7 @@ const OrderItemsTable = ({ data }) => {
       <div style={{ height: 500, width: '100%', marginTop: 10 }}>
         <AgGridReact
           ref={gridRef}
-          rowData={gridData} // <--- ПЕРЕДАЕМ СКОПИРОВАННЫЕ ДАННЫЕ СЮДА
+          rowData={gridData}
           columnDefs={columnDefs}
           defaultColDef={defaultColDef}
           animateRows={true}
@@ -95,7 +96,6 @@ const OrderItemsTable = ({ data }) => {
 
       {hasAccess && (
         <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-          {/* ... кнопка ... */}
           <button
             onClick={handleSendOrder}
             disabled={isLoading}
