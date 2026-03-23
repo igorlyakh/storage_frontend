@@ -1,20 +1,25 @@
 import clsx from 'clsx';
 import dayjs from 'dayjs';
 import { ArrowRight, Loader2, Play } from 'lucide-react'; // Добавил иконки
+import toast from 'react-hot-toast';
+import { useSelector } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
 import { useProcessOrderMutation } from '../../store/api/api';
+import { userRoleSelector } from '../../store/selectors/selectors';
 import styles from './styles.module.scss';
 
 const OrderItem = ({ store, status, sended, updated, id }) => {
   const location = useLocation();
+  const userRole = useSelector(userRoleSelector);
 
   const [processOrder, { isLoading }] = useProcessOrderMutation();
 
   const handleAccept = async () => {
     try {
       await processOrder({ orderId: id }).unwrap();
-    } catch (err) {
-      console.error('Failed to accept order:', err);
+      toast.success('Order processed!');
+    } catch (error) {
+      toast.error(error.data?.message[0] || error.message);
     }
   };
 
@@ -50,7 +55,7 @@ const OrderItem = ({ store, status, sended, updated, id }) => {
       )}
 
       <div className={styles.footer}>
-        {status === 'NEW' && (
+        {status === 'NEW' && ['ADMIN', 'WAREHOUSE'].includes(userRole) && (
           <button
             className={styles.acceptBtn}
             onClick={handleAccept}
