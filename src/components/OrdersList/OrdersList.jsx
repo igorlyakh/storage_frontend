@@ -2,7 +2,6 @@ import OrderItem from '../OrderItem/OrderItem';
 import styles from './styles.module.scss';
 
 const OrdersList = ({ data }) => {
-  console.log(data);
   return (
     <ul className={styles.list}>
       {data?.map(order => (
