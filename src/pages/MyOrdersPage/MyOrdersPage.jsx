@@ -6,11 +6,7 @@ import styles from './styles.module.scss';
 const MyOrdersPage = () => {
   const [page, setPage] = useState(1);
 
-  const { data, isFetching } = useGetMyOrdersQuery(page, {
-    pollingInterval: 10 * 60 * 1000,
-    skipPollingIfUnfocused: true,
-    refetchOnFocus: true,
-  });
+  const { data, isFetching } = useGetMyOrdersQuery(page);
 
   const orders = data?.data || [];
   const meta = data?.meta;
