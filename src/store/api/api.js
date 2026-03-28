@@ -56,7 +56,7 @@ export const api = createApi({
       }),
     }),
     getMyOrders: builder.query({
-      query: () => '/orders',
+      query: (page = 1) => `/orders?page=${page}`,
       providesTags: ['Orders'],
     }),
     getOrderById: builder.query({
