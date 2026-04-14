@@ -13,6 +13,7 @@ import MyOrdersPage from './pages/MyOrdersPage';
 import OrderPage from './pages/OrderPage/OrderPage';
 import ProductsPage from './pages/ProductsPage/ProductsPage';
 import ProtectedRoutes from './pages/ProtectedRoutes';
+import RequestsPage from './pages/RequestsPage/RequestsPage';
 import RestrictedRouts from './pages/RestrictedRoutes';
 import StoresPage from './pages/StoresPage';
 import { isGlobalLoading } from './store/selectors/selectors';
@@ -77,6 +78,14 @@ const App = () => {
             element={
               <ProtectedRoutes allowedRoles={['ADMIN', 'WAREHOUSE']}>
                 <ProductsPage />
+              </ProtectedRoutes>
+            }
+          />
+          <Route
+            path="products"
+            element={
+              <ProtectedRoutes allowedRoles={['ADMIN']}>
+                <RequestsPage />
               </ProtectedRoutes>
             }
           />

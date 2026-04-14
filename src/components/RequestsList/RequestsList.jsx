@@ -1,4 +1,4 @@
-import RequestItem from './RequestItem';
+import RequestItem from '../RequestItem/RequestItem';
 import styles from './styles.module.scss';
 
 const RequestsList = ({ requests }) => {

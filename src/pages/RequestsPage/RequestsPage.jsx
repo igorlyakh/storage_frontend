@@ -1,7 +1,7 @@
 import RequestsList from '../../components/RequestsList';
 import { useGetAdminWarehouseRequestsQuery } from '../../store/api/api';
 
-const AdminRequestsPage = () => {
+const RequestsPage = () => {
   const { data: requests } = useGetAdminWarehouseRequestsQuery();
 
   return (
@@ -12,4 +12,4 @@ const AdminRequestsPage = () => {
   );
 };
 
-export default AdminRequestsPage;
+export default RequestsPage;
