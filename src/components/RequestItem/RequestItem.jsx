@@ -33,7 +33,7 @@ const RequestItem = ({ request }) => {
 
       <div className={styles.body}>
         <p className={styles.date}>
-          Создан: <strong>{formattedDate}</strong>
+          Created At: <strong>{formattedDate}</strong>
         </p>
         <p className={styles.info}>Products in order: {request.items?.length || 0}</p>
       </div>

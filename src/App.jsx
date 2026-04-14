@@ -82,7 +82,7 @@ const App = () => {
             }
           />
           <Route
-            path="products"
+            path="requests"
             element={
               <ProtectedRoutes allowedRoles={['ADMIN']}>
                 <RequestsPage />
