@@ -1,19 +1,53 @@
 import { AgGridReact } from 'ag-grid-react';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 import { AllCommunityModule, ModuleRegistry, themeQuartz } from 'ag-grid-community';
 import dayjs from 'dayjs';
 import toast from 'react-hot-toast';
-import { useDeleteProductMutation, useUpdateProductsMutation } from '../../store/api/api';
+import { useSelector } from 'react-redux';
+import {
+  useCreateWarehouseRequestMutation,
+  useDeleteProductMutation,
+  useUpdateProductsMutation,
+} from '../../store/api/api';
+import { userRoleSelector } from '../../store/selectors/selectors';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
 const ProductsTable = ({ data }) => {
+  const userRole = useSelector(userRoleSelector);
   const [updateProducts] = useUpdateProductsMutation();
   const [deleteProduct] = useDeleteProductMutation();
+  const [createWarehouseRequest, { isLoading: isSending }] =
+    useCreateWarehouseRequestMutation();
+
+  const [orderQuantities, setOrderQuantities] = useState({});
+
+  const isWarehouse = userRole === 'WAREHOUSE';
+
+  const tableData = useMemo(() => {
+    return data?.map(item => ({
+      ...item,
+      orderQuantity: orderQuantities[item.id] || null,
+    }));
+  }, [data, orderQuantities]);
 
   const onUpdatedProduct = useCallback(
     async e => {
+      if (e.colDef.field === 'orderQuantity') {
+        const newValue = parseInt(e.newValue, 10);
+        setOrderQuantities(prev => {
+          const nextState = { ...prev };
+          if (!isNaN(newValue) && newValue > 0) {
+            nextState[e.data.id] = newValue;
+          } else {
+            delete nextState[e.data.id];
+          }
+          return nextState;
+        });
+        return;
+      }
+
       try {
         await updateProducts({
           ...e.data,
@@ -38,8 +72,29 @@ const ProductsTable = ({ data }) => {
     [deleteProduct],
   );
 
-  const columnDefs = useMemo(
-    () => [
+  const handleSendOrder = async () => {
+    const items = Object.entries(orderQuantities).map(([productId, quantity]) => ({
+      productId,
+      quantity,
+    }));
+
+    if (items.length === 0) {
+      return toast.error('Please specify quantity for at least one product');
+    }
+
+    try {
+      await createWarehouseRequest({ items }).unwrap();
+      toast.success('Request sent to admin successfully!');
+      setOrderQuantities({});
+    } catch (error) {
+      toast.error('Failed to send request');
+      console.error(error);
+    }
+  };
+
+  // ДИНАМИЧЕСКИЕ КОЛОНКИ
+  const columnDefs = useMemo(() => {
+    const baseColumns = [
       {
         field: 'name',
         headerName: 'Product name',
@@ -54,7 +109,7 @@ const ProductsTable = ({ data }) => {
       },
       {
         field: 'stock.quantity',
-        headerName: 'Quantity',
+        headerName: 'Stock',
         flex: 1,
         cellStyle: params => {
           if (params.value < 0) return { color: '#ef4444', fontWeight: 'bold' };
@@ -62,6 +117,22 @@ const ProductsTable = ({ data }) => {
         },
         valueFormatter: params => params.value ?? '',
       },
+    ];
+
+    // Добавляем колонку для заказа ТОЛЬКО если это склад
+    if (isWarehouse) {
+      baseColumns.push({
+        field: 'orderQuantity',
+        headerName: 'To Order (Qty)',
+        flex: 1,
+        editable: true,
+        cellStyle: { backgroundColor: '#f0fdf4', fontWeight: 'bold' },
+        valueParser: params => params.newValue,
+      });
+    }
+
+    // Добавляем остальные общие колонки
+    baseColumns.push(
       {
         field: 'isEnabled',
         headerName: 'Available',
@@ -109,9 +180,10 @@ const ProductsTable = ({ data }) => {
           </button>
         ),
       },
-    ],
-    [handleDelete],
-  );
+    );
+
+    return baseColumns;
+  }, [handleDelete, isWarehouse]);
 
   const defaultColDef = useMemo(
     () => ({
@@ -122,18 +194,57 @@ const ProductsTable = ({ data }) => {
     [],
   );
 
+  const totalItemsToOrder = Object.keys(orderQuantities).length;
+
   return (
-    <div style={{ height: 500, width: '100%', marginTop: 10 }}>
-      <AgGridReact
-        onCellEditRequest={onUpdatedProduct}
-        rowData={data}
-        columnDefs={columnDefs}
-        defaultColDef={defaultColDef}
-        animateRows={true}
-        rowSelection="multiple"
-        theme={themeQuartz}
-        readOnlyEdit={true}
-      />
+    <div>
+      {/* ПАНЕЛЬ ЗАКАЗА ВИДНА ТОЛЬКО СКЛАДУ */}
+      {isWarehouse && (
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginTop: 10,
+          }}
+        >
+          <div>
+            {totalItemsToOrder > 0 && (
+              <span style={{ fontSize: '14px', fontWeight: 'bold', color: '#16a34a' }}>
+                Selected products: {totalItemsToOrder}
+              </span>
+            )}
+          </div>
+          <button
+            onClick={handleSendOrder}
+            disabled={isSending || totalItemsToOrder === 0}
+            style={{
+              backgroundColor: totalItemsToOrder > 0 ? '#16a34a' : '#d1d5db',
+              color: 'white',
+              border: 'none',
+              padding: '8px 16px',
+              borderRadius: '6px',
+              cursor: totalItemsToOrder > 0 ? 'pointer' : 'not-allowed',
+              fontWeight: 'bold',
+            }}
+          >
+            {isSending ? 'Sending...' : 'Send Request'}
+          </button>
+        </div>
+      )}
+
+      <div style={{ height: 500, width: '100%', marginTop: 10 }}>
+        <AgGridReact
+          onCellEditRequest={onUpdatedProduct}
+          rowData={tableData}
+          columnDefs={columnDefs}
+          defaultColDef={defaultColDef}
+          animateRows={true}
+          rowSelection="multiple"
+          theme={themeQuartz}
+          readOnlyEdit={true}
+        />
+      </div>
     </div>
   );
 };

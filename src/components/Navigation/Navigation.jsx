@@ -56,7 +56,7 @@ const Navigation = () => {
             />
           </li>
         )}
-        {role === 'ADMIN' && (
+        {['ADMIN', 'WAREHOUSE'].includes(role) && (
           <li>
             <DropdownMenu
               title="Products"

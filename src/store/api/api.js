@@ -135,7 +135,7 @@ export const api = createApi({
     }),
     createWarehouseRequest: builder.mutation({
       query: data => ({
-        url: '/warehouse/requests',
+        url: '/warehouse',
         method: 'POST',
         body: data,
       }),
