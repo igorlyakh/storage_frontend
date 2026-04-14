@@ -143,7 +143,7 @@ export const api = createApi({
     }),
     updateWarehouseRequestStatus: builder.mutation({
       query: ({ id, status }) => ({
-        url: `/warehouse/requests/${id}/status`,
+        url: `/warehouse/${id}/status`,
         method: 'PATCH',
         body: { status },
       }),

@@ -69,6 +69,16 @@ const Navigation = () => {
         )}
         {role === 'ADMIN' && (
           <li>
+            <Link
+              className={styles.link}
+              to="/requests"
+            >
+              Requests
+            </Link>
+          </li>
+        )}
+        {role === 'ADMIN' && (
+          <li>
             <DropdownMenu
               title="Users"
               items={[
