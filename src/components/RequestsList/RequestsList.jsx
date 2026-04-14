@@ -3,7 +3,7 @@ import styles from './styles.module.scss';
 
 const RequestsList = ({ requests }) => {
   if (!requests || requests.length === 0) {
-    return <div className={styles.emptyState}>Нет активных заявок</div>;
+    return <div className={styles.emptyState}>List is empty!</div>;
   }
 
   return (
