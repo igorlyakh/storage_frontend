@@ -12,7 +12,7 @@ export const api = createApi({
       return headers;
     },
   }),
-  tagTypes: ['Users', 'Orders', 'Products', 'Stores'],
+  tagTypes: ['Users', 'Orders', 'Products', 'Stores', 'WarehouseRequests'],
   endpoints: builder => ({
     getAllOrders: builder.query({
       query: ({ page = 1, statuses, storeIds, date }) => ({
@@ -125,6 +125,30 @@ export const api = createApi({
       }),
       invalidatesTags: ['Stores'],
     }),
+    getWarehouseRequests: builder.query({
+      query: () => '/warehouse/requests',
+      providesTags: ['WarehouseRequests'],
+    }),
+    getAdminWarehouseRequests: builder.query({
+      query: () => '/warehouse/orders',
+      providesTags: ['WarehouseRequests'],
+    }),
+    createWarehouseRequest: builder.mutation({
+      query: data => ({
+        url: '/warehouse/requests',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['WarehouseRequests'],
+    }),
+    updateWarehouseRequestStatus: builder.mutation({
+      query: ({ id, status }) => ({
+        url: `/warehouse/requests/${id}/status`,
+        method: 'PATCH',
+        body: { status },
+      }),
+      invalidatesTags: ['WarehouseRequests'],
+    }),
   }),
 });
 
@@ -145,4 +169,8 @@ export const {
   useCreateOrderMutation,
   useProcessOrderMutation,
   useSendOrderMutation,
+  useGetWarehouseRequestsQuery,
+  useGetAdminWarehouseRequestsQuery,
+  useCreateWarehouseRequestMutation,
+  useUpdateWarehouseRequestStatusMutation,
 } = api;
