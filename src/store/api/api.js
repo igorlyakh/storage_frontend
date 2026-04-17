@@ -149,6 +149,10 @@ export const api = createApi({
       }),
       invalidatesTags: ['WarehouseRequests'],
     }),
+    getWarehouseRequestById: builder.query({
+      query: id => `/warehouse/${id}`,
+      providesTags: ['WarehouseRequests'],
+    }),
   }),
 });
 
@@ -173,4 +177,5 @@ export const {
   useGetAdminWarehouseRequestsQuery,
   useCreateWarehouseRequestMutation,
   useUpdateWarehouseRequestStatusMutation,
+  useGetWarehouseRequestByIdQuery,
 } = api;
