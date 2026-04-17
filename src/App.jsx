@@ -13,6 +13,7 @@ import MyOrdersPage from './pages/MyOrdersPage';
 import OrderPage from './pages/OrderPage/OrderPage';
 import ProductsPage from './pages/ProductsPage/ProductsPage';
 import ProtectedRoutes from './pages/ProtectedRoutes';
+import RequestPage from './pages/RequestPage/RequestPage';
 import RequestsPage from './pages/RequestsPage/RequestsPage';
 import RestrictedRouts from './pages/RestrictedRoutes';
 import StoresPage from './pages/StoresPage';
@@ -86,6 +87,14 @@ const App = () => {
             element={
               <ProtectedRoutes allowedRoles={['ADMIN']}>
                 <RequestsPage />
+              </ProtectedRoutes>
+            }
+          />
+          <Route
+            path="requests/:id"
+            element={
+              <ProtectedRoutes allowedRoles={['ADMIN']}>
+                <RequestPage />
               </ProtectedRoutes>
             }
           />
