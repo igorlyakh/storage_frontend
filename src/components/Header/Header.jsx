@@ -23,7 +23,7 @@ const Header = () => {
           c="blue.4"
           style={{ textDecoration: 'none' }}
         >
-          Stock Control
+          Stock Assistant
         </Title>
 
         <Navigation />
