@@ -147,7 +147,7 @@ export const api = createApi({
         method: 'PATCH',
         body: { status },
       }),
-      invalidatesTags: ['WarehouseRequests'],
+      invalidatesTags: ['WarehouseRequests', 'Products'],
     }),
     getWarehouseRequestById: builder.query({
       query: id => `/warehouse/${id}`,
