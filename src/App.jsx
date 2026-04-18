@@ -85,7 +85,7 @@ const App = () => {
           <Route
             path="requests"
             element={
-              <ProtectedRoutes allowedRoles={['ADMIN']}>
+              <ProtectedRoutes allowedRoles={['ADMIN', 'WAREHOUSE']}>
                 <RequestsPage />
               </ProtectedRoutes>
             }
@@ -93,7 +93,7 @@ const App = () => {
           <Route
             path="requests/:id"
             element={
-              <ProtectedRoutes allowedRoles={['ADMIN']}>
+              <ProtectedRoutes allowedRoles={['ADMIN', 'WAREHOUSE']}>
                 <RequestPage />
               </ProtectedRoutes>
             }
