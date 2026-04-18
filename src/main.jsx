@@ -1,6 +1,5 @@
 import { MantineProvider } from '@mantine/core';
 import '@mantine/core/styles.css';
-import 'modern-normalize';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Toaster } from 'react-hot-toast';

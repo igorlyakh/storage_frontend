@@ -8,6 +8,7 @@ import CreateOrderPage from './pages/CreateOrderPage/CreateOrderPage';
 import CreateProductPage from './pages/CreateProductPage';
 import CreateStorePage from './pages/CreateStorePage';
 import CreateUserPage from './pages/CreateUserPage';
+import HomePage from './pages/HomePage/HomePage';
 import LoginPage from './pages/LoginPage/LoginPage';
 import MyOrdersPage from './pages/MyOrdersPage';
 import OrderPage from './pages/OrderPage/OrderPage';
@@ -31,7 +32,7 @@ const App = () => {
           path="/"
         >
           <Route
-            element={<div>Home Page</div>}
+            element={<HomePage />}
             index
           />
           <Route
