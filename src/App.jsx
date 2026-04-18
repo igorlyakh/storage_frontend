@@ -2,6 +2,7 @@ import { useSelector } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
 import Layout from './components/Layout';
 import Loader from './components/Loader';
+import NotFoundPage from './pages/404/NotFound';
 import AllOrdersPage from './pages/AllOrdersPage/AllOrdersPage';
 import AllUsersPage from './pages/AllUsersPage';
 import CreateOrderPage from './pages/CreateOrderPage/CreateOrderPage';
@@ -140,6 +141,10 @@ const App = () => {
             }
           />
         </Route>
+        <Route
+          path="*"
+          element={<NotFoundPage />}
+        />
       </Routes>
     </>
   );
