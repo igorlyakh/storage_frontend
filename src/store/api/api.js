@@ -64,7 +64,10 @@ export const api = createApi({
       }),
     }),
     getMyOrders: builder.query({
-      query: (page = 1) => `/orders?page=${page}`,
+      query: ({ page = 1, statuses, date }) => ({
+        url: '/orders',
+        params: { page, statuses, date },
+      }),
       providesTags: ['Orders'],
     }),
     getOrderById: builder.query({
