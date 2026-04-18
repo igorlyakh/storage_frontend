@@ -67,7 +67,7 @@ const RequestItem = ({ request }) => {
             span
             c="dimmed"
           >
-            Created At:
+            Created At:{' '}
           </Text>
           <Text
             span
@@ -81,7 +81,7 @@ const RequestItem = ({ request }) => {
             span
             c="dimmed"
           >
-            Products in order:
+            Products in order:{' '}
           </Text>
           <Text
             span
