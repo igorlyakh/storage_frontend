@@ -1,19 +1,131 @@
+import {
+  Box,
+  Button,
+  Checkbox,
+  CloseButton,
+  Divider,
+  Group,
+  LoadingOverlay,
+  Pagination,
+  Popover,
+  ScrollArea,
+  Stack,
+  TextInput,
+  Title,
+} from '@mantine/core';
 import { useState } from 'react';
 import OrdersList from '../../components/OrdersList/OrdersList';
 import { useGetAllOrdersQuery, useGetAllStoresQuery } from '../../store/api/api';
-import styles from './styles.module.scss';
 
+// 1. Обновленный FilterPopover с кнопками "Select All" и "Clear"
+const FilterPopover = ({ label, options, values, onChange }) => {
+  // Обработчик клика по одному чекбоксу
+  const handleToggle = val => {
+    const newValues = values.includes(val)
+      ? values.filter(v => v !== val)
+      : [...values, val];
+    onChange(newValues);
+  };
+
+  // Обработчик "Выбрать всё"
+  const handleSelectAll = () => {
+    const allValues = options.map(opt => opt.value);
+    onChange(allValues);
+  };
+
+  // Обработчик "Снять всё"
+  const handleClearAll = () => {
+    onChange([]);
+  };
+
+  return (
+    <Popover
+      width={250}
+      position="bottom-start"
+      shadow="md"
+      withArrow
+    >
+      <Popover.Target>
+        <Button
+          variant="default"
+          w={{ base: '100%', sm: 200 }}
+          style={{ fontWeight: 500 }}
+        >
+          {values.length > 0 ? `${label} (${values.length})` : `All ${label}`}
+        </Button>
+      </Popover.Target>
+
+      <Popover.Dropdown p="sm">
+        <Stack gap="xs">
+          {/* Панель массовых действий */}
+          <Group
+            grow
+            gap="xs"
+          >
+            <Button
+              size="xs"
+              variant="light"
+              color="blue"
+              onClick={handleSelectAll}
+            >
+              Select All
+            </Button>
+            <Button
+              size="xs"
+              variant="light"
+              color="gray"
+              onClick={handleClearAll}
+              disabled={values.length === 0}
+            >
+              Clear
+            </Button>
+          </Group>
+
+          <Divider my="xs" />
+
+          {/* Список чекбоксов */}
+          <ScrollArea.Autosize
+            mah={220}
+            type="scroll"
+          >
+            <Stack gap="sm">
+              {options.map(opt => (
+                <Checkbox
+                  key={opt.value}
+                  label={opt.label}
+                  checked={values.includes(opt.value)}
+                  onChange={() => handleToggle(opt.value)}
+                />
+              ))}
+            </Stack>
+          </ScrollArea.Autosize>
+        </Stack>
+      </Popover.Dropdown>
+    </Popover>
+  );
+};
+
+// 2. Главная страница
 const AllOrdersPage = () => {
   const [page, setPage] = useState(1);
   const [statuses, setStatuses] = useState(['NEW', 'IN_PROGRESS']);
   const [storeIds, setStoreIds] = useState([]);
   const [date, setDate] = useState('');
 
-  const [isStatusOpen, setIsStatusOpen] = useState(false);
-  const [isStoreOpen, setIsStoreOpen] = useState(false);
-
   const { data: storesData } = useGetAllStoresQuery();
   const stores = storesData || [];
+
+  const storeOptions = stores.map(store => ({
+    value: store.id,
+    label: store.name || `Store #${store.id}`,
+  }));
+
+  const statusOptions = [
+    { value: 'NEW', label: 'NEW' },
+    { value: 'IN_PROGRESS', label: 'IN_PROGRESS' },
+    { value: 'COMPLETED', label: 'COMPLETED' },
+    { value: 'SENT', label: 'SENT' },
+  ];
 
   const { data, isFetching } = useGetAllOrdersQuery(
     {
@@ -31,207 +143,98 @@ const AllOrdersPage = () => {
 
   const orders = data?.data || [];
   const meta = data?.meta;
-  const showPagination = meta && meta.lastPage > 1;
 
-  const toggleStatus = value => {
-    setStatuses(prev => {
-      const newStatuses = prev.includes(value)
-        ? prev.filter(s => s !== value)
-        : [...prev, value];
-      return newStatuses;
-    });
+  // Обновленные обработчики (теперь принимают готовый массив)
+  const handleStatusesChange = newStatuses => {
+    setStatuses(newStatuses);
     setPage(1);
   };
 
-  const toggleStore = value => {
-    setStoreIds(prev => {
-      const newStores = prev.includes(value)
-        ? prev.filter(s => s !== value)
-        : [...prev, value];
-      return newStores;
-    });
+  const handleStoresChange = newStores => {
+    setStoreIds(newStores);
     setPage(1);
   };
-
-  const handleDateChange = e => {
-    setDate(e.target.value);
-    setPage(1);
-  };
-
-  const handleNext = () => setPage(prev => prev + 1);
-  const handlePrev = () => setPage(prev => Math.max(prev - 1, 1));
 
   return (
-    <div className={styles.container}>
-      <div
-        className={styles.filters}
-        style={{
-          display: 'flex',
-          gap: '20px',
-          marginBottom: '20px',
-          alignItems: 'flex-start',
-        }}
+    <Stack
+      gap="lg"
+      p="md"
+    >
+      <Title order={2}>All Orders</Title>
+
+      <Group
+        align="center"
+        gap="md"
       >
-        <div
-          className={styles.filterItem}
-          style={{ position: 'relative' }}
+        <FilterPopover
+          label="Statuses"
+          options={statusOptions}
+          values={statuses}
+          onChange={handleStatusesChange}
+        />
+
+        <FilterPopover
+          label="Stores"
+          options={storeOptions}
+          values={storeIds}
+          onChange={handleStoresChange}
+        />
+
+        <Group
+          gap="xs"
+          align="center"
         >
-          <label style={{ display: 'block', marginBottom: '5px' }}>Statuses:</label>
-          <button
-            onClick={() => setIsStatusOpen(!isStatusOpen)}
-            style={{
-              width: '200px',
-              padding: '8px',
-              textAlign: 'left',
-              cursor: 'pointer',
+          <TextInput
+            type="date"
+            value={date}
+            onChange={e => {
+              setDate(e.target.value);
+              setPage(1);
             }}
-          >
-            {statuses.length > 0 ? `Selected (${statuses.length})` : 'All Statuses'}
-          </button>
-
-          {isStatusOpen && (
-            <div
-              style={{
-                position: 'absolute',
-                top: '100%',
-                left: 0,
-                right: 0,
-                background: '#fff',
-                border: '1px solid #ccc',
-                zIndex: 10,
-                maxHeight: '200px',
-                overflowY: 'auto',
+            w={{ base: '100%', sm: 180 }}
+          />
+          {date && (
+            <CloseButton
+              size="lg"
+              onClick={() => {
+                setDate('');
+                setPage(1);
               }}
-            >
-              {['NEW', 'IN_PROGRESS', 'COMPLETED'].map(status => (
-                <label
-                  key={status}
-                  style={{
-                    display: 'block',
-                    padding: '8px',
-                    cursor: 'pointer',
-                    borderBottom: '1px solid #eee',
-                  }}
-                >
-                  <input
-                    type="checkbox"
-                    checked={statuses.includes(status)}
-                    onChange={() => toggleStatus(status)}
-                    style={{ marginRight: '8px' }}
-                  />
-                  {status}
-                </label>
-              ))}
-            </div>
-          )}
-        </div>
-
-        <div
-          className={styles.filterItem}
-          style={{ position: 'relative' }}
-        >
-          <label style={{ display: 'block', marginBottom: '5px' }}>Stores:</label>
-          <button
-            onClick={() => setIsStoreOpen(!isStoreOpen)}
-            style={{
-              width: '200px',
-              padding: '8px',
-              textAlign: 'left',
-              cursor: 'pointer',
-            }}
-          >
-            {storeIds.length > 0 ? `Selected (${storeIds.length})` : 'All Stores'}
-          </button>
-
-          {isStoreOpen && (
-            <div
-              style={{
-                position: 'absolute',
-                top: '100%',
-                left: 0,
-                right: 0,
-                background: '#fff',
-                border: '1px solid #ccc',
-                zIndex: 10,
-                maxHeight: '200px',
-                overflowY: 'auto',
-              }}
-            >
-              {stores.map(store => (
-                <label
-                  key={store.id}
-                  style={{
-                    display: 'block',
-                    padding: '8px',
-                    cursor: 'pointer',
-                    borderBottom: '1px solid #eee',
-                  }}
-                >
-                  <input
-                    type="checkbox"
-                    checked={storeIds.includes(store.id)}
-                    onChange={() => toggleStore(store.id)}
-                    style={{ marginRight: '8px' }}
-                  />
-                  {store.name || store.id}
-                </label>
-              ))}
-            </div>
-          )}
-        </div>
-
-        <div className={styles.filterItem}>
-          <label style={{ display: 'block', marginBottom: '5px' }}>Date:</label>
-          <div style={{ display: 'flex', gap: '10px' }}>
-            <input
-              type="date"
-              value={date}
-              onChange={handleDateChange}
-              style={{ padding: '8px' }}
+              title="Clear date"
             />
-            {date && (
-              <button
-                onClick={() => {
-                  setDate('');
-                  setPage(1);
-                }}
-                style={{ padding: '8px', cursor: 'pointer' }}
-              >
-                Clear
-              </button>
-            )}
-          </div>
-        </div>
-      </div>
+          )}
+        </Group>
+      </Group>
 
-      <div className={isFetching ? styles.loadingOverlay : ''}>
+      <Box
+        pos="relative"
+        minHeight={200}
+      >
+        <LoadingOverlay
+          visible={isFetching}
+          zIndex={1000}
+          overlayProps={{ radius: 'sm', blur: 2 }}
+        />
         <OrdersList data={orders} />
-      </div>
+      </Box>
 
-      {showPagination && (
-        <div className={styles.pagination}>
-          <button
-            className={styles.pageBtn}
-            onClick={handlePrev}
-            disabled={page === 1 || isFetching}
-          >
-            Back
-          </button>
-
-          <span className={styles.pageInfo}>
-            Page {page}/{meta.lastPage}
-          </span>
-
-          <button
-            className={styles.pageBtn}
-            onClick={handleNext}
-            disabled={page === meta.lastPage || isFetching}
-          >
-            Next
-          </button>
-        </div>
+      {meta && meta.lastPage > 1 && (
+        <Group
+          justify="center"
+          mt="md"
+        >
+          <Pagination
+            value={page}
+            onChange={setPage}
+            total={meta.lastPage}
+            disabled={isFetching}
+            color="blue"
+            radius="md"
+            withEdges
+          />
+        </Group>
       )}
-    </div>
+    </Stack>
   );
 };
 
