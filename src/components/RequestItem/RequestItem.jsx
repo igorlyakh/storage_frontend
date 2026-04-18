@@ -1,8 +1,8 @@
+import { Badge, Button, Card, Group, Stack, Text } from '@mantine/core';
 import dayjs from 'dayjs';
 import toast from 'react-hot-toast';
 import { Link } from 'react-router-dom';
 import { useUpdateWarehouseRequestStatusMutation } from '../../store/api/api';
-import styles from './styles.module.scss';
 
 const RequestItem = ({ request }) => {
   const [updateStatus, { isLoading }] = useUpdateWarehouseRequestStatusMutation();
@@ -18,45 +18,105 @@ const RequestItem = ({ request }) => {
   };
 
   const formattedDate = dayjs(request.createdAt).format('DD.MM.YYYY HH:mm:ss');
-
   const showProcessButton = request.status === 'NEW';
 
+  const getStatusColor = status => {
+    switch (status) {
+      case 'NEW':
+        return 'blue';
+      case 'APPROVED':
+        return 'yellow';
+      case 'SENT':
+        return 'orange';
+      case 'COMPLETED':
+        return 'green';
+      default:
+        return 'gray';
+    }
+  };
+
   return (
-    <div className={styles.requestItem}>
-      <div className={styles.header}>
-        <span className={styles.tag}>{request.category}</span>
+    <Card
+      withBorder
+      shadow="sm"
+      radius="md"
+      padding="md"
+      display="flex"
+      style={{ flexDirection: 'column' }}
+    >
+      <Group
+        justify="space-between"
+        mb="sm"
+      >
+        <Badge
+          variant="light"
+          color="pink"
+        >
+          {request.category}
+        </Badge>
+        <Badge color={getStatusColor(request.status)}>{request.status}</Badge>
+      </Group>
 
-        <span className={`${styles.statusBadge} ${styles[request.status.toLowerCase()]}`}>
-          {request.status}
-        </span>
-      </div>
+      <Stack
+        gap="xs"
+        mb="lg"
+        style={{ flexGrow: 1 }}
+      >
+        <Text size="sm">
+          <Text
+            span
+            c="dimmed"
+          >
+            Created At:
+          </Text>
+          <Text
+            span
+            fw={500}
+          >
+            {formattedDate}
+          </Text>
+        </Text>
+        <Text size="sm">
+          <Text
+            span
+            c="dimmed"
+          >
+            Products in order:
+          </Text>
+          <Text
+            span
+            fw={500}
+          >
+            {request.items?.length || 0}
+          </Text>
+        </Text>
+      </Stack>
 
-      <div className={styles.body}>
-        <p className={styles.date}>
-          Created At: <strong>{formattedDate}</strong>
-        </p>
-        <p className={styles.info}>Products in order: {request.items?.length || 0}</p>
-      </div>
-
-      <div className={styles.actions}>
-        <Link
+      <Group
+        justify="space-between"
+        mt="auto"
+      >
+        <Button
+          component={Link}
           to={`/requests/${request.id}`}
-          className={styles.detailsLink}
+          variant="light"
+          size="sm"
         >
           Details
-        </Link>
+        </Button>
 
         {showProcessButton && (
-          <button
-            className={styles.processButton}
+          <Button
+            size="sm"
+            color="blue"
             onClick={handleTakeInProgress}
-            disabled={isLoading}
+            loading={isLoading}
           >
-            {isLoading ? 'Updating...' : 'Approve'}
-          </button>
+            Approve
+          </Button>
         )}
-      </div>
-    </div>
+      </Group>
+    </Card>
   );
 };
 
