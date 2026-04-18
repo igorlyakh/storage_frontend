@@ -97,7 +97,7 @@ const Navigation = () => {
         />
       )}
 
-      {role === 'ADMIN' && (
+      {['ADMIN', 'WAREHOUSE'].includes(role) && (
         <Button
           component={Link}
           to="/requests"
