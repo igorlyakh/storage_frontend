@@ -34,7 +34,9 @@ const AddProductForm = () => {
     const payload = {
       ...data,
       limitPerOrder:
-        !data.limitPerOrder || data.limitPerOrder === 0
+        data.limitPerOrder === 0 ||
+        data.limitPerOrder === '' ||
+        data.limitPerOrder === null
           ? null
           : Number(data.limitPerOrder),
       initialQuantity: Number(data.initialQuantity) || 0,
