@@ -1,102 +1,138 @@
-import { useForm } from 'react-hook-form';
+import {
+  Button,
+  NumberInput,
+  Paper,
+  Select,
+  Stack,
+  TextInput,
+  Title,
+} from '@mantine/core';
+import { Controller, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { useAddProductMutation } from '../../store/api/api';
 import { productCategories } from './config';
-import styles from './styles.module.scss';
 
 const AddProductForm = () => {
-  const [addProduct] = useAddProductMutation();
+  const [addProduct, { isLoading }] = useAddProductMutation();
 
   const {
     register,
     handleSubmit,
     reset,
+    control,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      name: '',
+      category: productCategories[0] || '',
+      limitPerOrder: '',
+      initialQuantity: 1,
+    },
+  });
 
   const onSubmit = async data => {
-    const { limitPerOrder } = data;
-    if (limitPerOrder === '0' || limitPerOrder === '')
-      data = {
-        ...data,
-        limitPerOrder: null,
-        initialQuantity: Number(data.initialQuantity),
-      };
+    const payload = {
+      ...data,
+      limitPerOrder:
+        !data.limitPerOrder || data.limitPerOrder === 0
+          ? null
+          : Number(data.limitPerOrder),
+      initialQuantity: Number(data.initialQuantity) || 0,
+    };
+
     try {
-      await addProduct(data).unwrap();
+      await addProduct(payload).unwrap();
       reset();
       toast.success('Product added!');
     } catch (error) {
-      toast.error(error.data?.message[0] || error.message);
+      toast.error(error.data?.message?.[0] || error.message || 'Failed to add product');
     }
   };
 
   return (
-    <div className={styles.formContainer}>
-      <h2>Add New Product</h2>
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem' }}
+    <Paper
+      withBorder
+      shadow="sm"
+      radius="md"
+      p="xl"
+      mx="auto"
+      w={{ base: '100%', sm: 450 }}
+    >
+      <Title
+        order={3}
+        mb="lg"
+        ta="center"
       >
-        <label className={styles.labelGroup}>
-          <span>Product name</span>
-          <input
-            className={styles.inputField}
-            type="text"
+        Add New Product
+      </Title>
+
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <Stack gap="md">
+          <TextInput
+            label="Product name"
             placeholder="Enter product name"
+            withAsterisk
             {...register('name', { required: 'Product name is required!' })}
+            error={errors.name?.message}
           />
-          {errors.name && (
-            <span className={styles.errorMessage}>{errors.name.message}</span>
-          )}
-        </label>
 
-        <label className={styles.labelGroup}>
-          <span>Category</span>
-          <select
-            className={styles.selectField}
-            {...register('category')}
+          <Controller
+            name="category"
+            control={control}
+            rules={{ required: 'Category is required!' }}
+            render={({ field }) => (
+              <Select
+                {...field}
+                label="Category"
+                withAsterisk
+                data={productCategories}
+                error={errors.category?.message}
+              />
+            )}
+          />
+
+          <Controller
+            name="limitPerOrder"
+            control={control}
+            render={({ field }) => (
+              <NumberInput
+                {...field}
+                label="Limit (optional)"
+                placeholder="Enter limit"
+                min={0}
+                allowNegative={false}
+                hideControls
+              />
+            )}
+          />
+
+          <Controller
+            name="initialQuantity"
+            control={control}
+            render={({ field }) => (
+              <NumberInput
+                {...field}
+                label="Initial Quantity"
+                placeholder="Enter quantity"
+                min={0}
+                allowNegative={false}
+                withAsterisk
+                hideControls
+              />
+            )}
+          />
+
+          <Button
+            type="submit"
+            mt="md"
+            loading={isLoading}
+            fullWidth
           >
-            {productCategories.map(category => (
-              <option
-                key={category}
-                value={category}
-              >
-                {category}
-              </option>
-            ))}
-          </select>
-        </label>
-
-        <label className={styles.labelGroup}>
-          <span>Limit (optional)</span>
-          <input
-            className={styles.inputField}
-            type="number"
-            placeholder="Enter limit"
-            {...register('limitPerOrder')}
-          />
-        </label>
-
-        <label className={styles.labelGroup}>
-          <span>Initial Quantity</span>
-          <input
-            className={styles.inputField}
-            type="number"
-            placeholder="Enter quantity"
-            defaultValue={1}
-            {...register('initialQuantity')}
-          />
-        </label>
-
-        <button
-          type="submit"
-          className={styles.submitBtn}
-        >
-          Create Product
-        </button>
+            Create Product
+          </Button>
+        </Stack>
       </form>
-    </div>
+    </Paper>
   );
 };
 
