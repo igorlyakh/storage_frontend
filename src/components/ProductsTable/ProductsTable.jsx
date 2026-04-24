@@ -1,251 +1,366 @@
-import { AgGridReact } from 'ag-grid-react';
-import { useCallback, useMemo, useState } from 'react';
-
-import { AllCommunityModule, ModuleRegistry, themeQuartz } from 'ag-grid-community';
+import {
+  ActionIcon,
+  Badge,
+  Box,
+  Button,
+  Group,
+  Paper,
+  Switch,
+  Table,
+  Text,
+  Tooltip,
+} from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
+import {
+  flexRender,
+  getCoreRowModel,
+  getExpandedRowModel,
+  getGroupedRowModel,
+  getSortedRowModel,
+  useReactTable,
+} from '@tanstack/react-table';
 import dayjs from 'dayjs';
+import { ChevronDown, ChevronRight, Trash } from 'lucide-react';
+import { useCallback, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useSelector } from 'react-redux';
 import {
   useCreateWarehouseRequestMutation,
-  useDeleteProductMutation,
   useUpdateProductsMutation,
 } from '../../store/api/api';
 import { userRoleSelector } from '../../store/selectors/selectors';
 
-ModuleRegistry.registerModules([AllCommunityModule]);
+import DeleteProductModal from './DeleteProductModal';
+import { EditableNumberCell, EditableOrderCell, EditableTextCell } from './EditableCells';
 
 const ProductsTable = ({ data }) => {
   const userRole = useSelector(userRoleSelector);
+  const isWarehouse = userRole === 'WAREHOUSE';
+
   const [updateProducts] = useUpdateProductsMutation();
-  const [deleteProduct] = useDeleteProductMutation();
   const [createWarehouseRequest, { isLoading: isSending }] =
     useCreateWarehouseRequestMutation();
 
   const [orderQuantities, setOrderQuantities] = useState({});
+  const [openedDelete, { open: openDelete, close: closeDelete }] = useDisclosure(false);
+  const [productToDelete, setProductToDelete] = useState(null);
 
-  const isWarehouse = userRole === 'WAREHOUSE';
-
-  const tableData = useMemo(() => {
-    return data?.map(item => ({
-      ...item,
-      orderQuantity: orderQuantities[item.id] || null,
-    }));
-  }, [data, orderQuantities]);
-
-  const onUpdatedProduct = useCallback(
-    async e => {
-      if (e.colDef.field === 'orderQuantity') {
-        const newValue = parseInt(e.newValue, 10);
-        setOrderQuantities(prev => {
-          const nextState = { ...prev };
-          if (!isNaN(newValue) && newValue > 0) {
-            nextState[e.data.id] = newValue;
-          } else {
-            delete nextState[e.data.id];
-          }
-          return nextState;
-        });
-        return;
-      }
-
+  const handleUpdateProduct = useCallback(
+    async (product, field, newValue) => {
       try {
-        await updateProducts({
-          ...e.data,
-          [e.colDef.field]: e.newValue,
-        }).unwrap();
-        toast.success('Product is updated!');
-      } catch (error) {
+        await updateProducts({ ...product, [field]: newValue }).unwrap();
+        toast.success('Product updated!');
+      } catch {
         toast.error('Failed to update product');
-        console.error('Update product error:', error);
       }
     },
     [updateProducts],
   );
 
-  const handleDelete = useCallback(
-    async id => {
-      if (window.confirm('Delete?')) {
-        await deleteProduct({ id }).unwrap();
-        toast.success('Deleted');
-      }
-    },
-    [deleteProduct],
-  );
-
   const handleSendOrder = async () => {
-    const items = Object.entries(orderQuantities).map(([productId, quantity]) => ({
-      productId,
-      quantity,
-    }));
+    const itemsToOrder = Object.entries(orderQuantities).map(([productId, quantity]) => {
+      const product = data.find(p => String(p.id) === String(productId));
+      return { product, quantity };
+    });
 
-    if (items.length === 0) {
+    if (itemsToOrder.length === 0) {
       return toast.error('Please specify quantity for at least one product');
     }
 
+    for (const item of itemsToOrder) {
+      if (
+        item.product.limitPerOrder !== null &&
+        item.quantity > item.product.limitPerOrder
+      ) {
+        return toast.error(`Limit exceeded for "${item.product.name}"`);
+      }
+    }
+
+    const payloadItems = itemsToOrder.map(item => ({
+      productId: item.product.id,
+      quantity: item.quantity,
+    }));
+
     try {
-      await createWarehouseRequest({ items }).unwrap();
-      toast.success('Request sent to admin successfully!');
+      await createWarehouseRequest({ items: payloadItems }).unwrap();
+      toast.success('Request sent successfully!');
       setOrderQuantities({});
-    } catch (error) {
+    } catch {
       toast.error('Failed to send request');
-      console.error(error);
     }
   };
 
-  // ДИНАМИЧЕСКИЕ КОЛОНКИ
-  const columnDefs = useMemo(() => {
-    const baseColumns = [
+  const columns = useMemo(() => {
+    const cols = [
       {
-        field: 'name',
-        headerName: 'Product name',
-        flex: 2,
-        filter: 'agTextColumnFilter',
-        editable: true,
+        accessorKey: 'name',
+        header: 'Product Name',
+        cell: ({ row, table, getValue }) => (
+          <EditableTextCell
+            initialValue={getValue()}
+            onUpdate={newVal =>
+              table.options.meta.updateData(row.original, 'name', newVal)
+            }
+          />
+        ),
       },
       {
-        field: 'category',
-        headerName: 'Category',
-        flex: 1,
+        accessorKey: 'category',
+        header: 'Category',
       },
       {
-        field: 'stock.quantity',
-        headerName: 'Stock',
-        flex: 1,
-        cellStyle: params => {
-          if (params.value < 0) return { color: '#ef4444', fontWeight: 'bold' };
-          return null;
+        accessorKey: 'stock.quantity',
+        header: 'Stock',
+        cell: ({ getValue }) => {
+          const val = getValue() ?? 0;
+          return (
+            <Text
+              c={val < 0 ? 'red' : 'dark'}
+              fw={val < 0 ? 700 : 400}
+            >
+              {val}
+            </Text>
+          );
         },
-        valueFormatter: params => params.value ?? '',
       },
     ];
 
-    // Добавляем колонку для заказа ТОЛЬКО если это склад
     if (isWarehouse) {
-      baseColumns.push({
-        field: 'orderQuantity',
-        headerName: 'To Order (Qty)',
-        flex: 1,
-        editable: true,
-        cellStyle: { backgroundColor: '#f0fdf4', fontWeight: 'bold' },
-        valueParser: params => params.newValue,
+      cols.push({
+        id: 'orderQuantity',
+        header: 'To Order',
+        cell: ({ row, table }) => {
+          const product = row.original;
+          const val = table.options.meta.orderQuantities[product.id] || null;
+
+          return (
+            <EditableOrderCell
+              initialValue={val}
+              max={product.limitPerOrder}
+              onUpdate={newVal => table.options.meta.setOrderQuantity(product.id, newVal)}
+            />
+          );
+        },
       });
     }
 
-    // Добавляем остальные общие колонки
-    baseColumns.push(
+    cols.push(
       {
-        field: 'isEnabled',
-        headerName: 'Available',
-        flex: 1,
-        editable: true,
-        cellRenderer: params => (params.value ? '🟢 Yes' : '🔴 No'),
+        accessorKey: 'isEnabled',
+        header: 'Available',
+        cell: ({ row, table, getValue }) => (
+          <Switch
+            checked={getValue()}
+            onChange={e =>
+              table.options.meta.updateData(
+                row.original,
+                'isEnabled',
+                e.currentTarget.checked,
+              )
+            }
+            color="green"
+            size="sm"
+          />
+        ),
       },
       {
-        field: 'updatedAt',
-        headerName: 'Updated',
-        flex: 1,
-        valueFormatter: params => dayjs(params.value).format('DD.MM.YY HH:mm'),
+        accessorKey: 'updatedAt',
+        header: 'Updated',
+        cell: ({ getValue }) => (
+          <Text size="sm">{dayjs(getValue()).format('DD.MM.YY HH:mm')}</Text>
+        ),
       },
       {
-        field: 'limitPerOrder',
-        headerName: 'Limit',
-        editable: true,
-        flex: 1,
-        valueFormatter: params => params.value || 'No limit',
-        valueParser: params => (params.newValue === '0' ? null : Number(params.newValue)),
+        accessorKey: 'limitPerOrder',
+        header: 'Limit',
+        cell: ({ row, table, getValue }) => (
+          <EditableNumberCell
+            initialValue={getValue()}
+            onUpdate={newVal =>
+              table.options.meta.updateData(row.original, 'limitPerOrder', newVal)
+            }
+          />
+        ),
       },
       {
-        headerName: 'Delete',
-        field: 'id',
-        flex: 1,
-        sortable: false,
-        filter: false,
-        cellRendererParams: {
-          onDelete: handleDelete,
-        },
-        cellRenderer: params => (
-          <button
-            onClick={() => params.onDelete(params.data.id)}
-            style={{
-              backgroundColor: '#ef4444',
-              color: 'white',
-              border: 'none',
-              padding: '4px 12px',
-              borderRadius: '4px',
-              cursor: 'pointer',
-              fontSize: '12px',
-            }}
-          >
-            Delete
-          </button>
+        id: 'actions',
+        header: 'Delete',
+        cell: ({ row, table }) => (
+          <Tooltip label="Delete Product">
+            <ActionIcon
+              color="red"
+              variant="light"
+              onClick={() => table.options.meta.openDelete(row.original)}
+            >
+              <Trash size={16} />
+            </ActionIcon>
+          </Tooltip>
         ),
       },
     );
 
-    return baseColumns;
-  }, [handleDelete, isWarehouse]);
+    return cols;
+  }, [isWarehouse]);
 
-  const defaultColDef = useMemo(
+  const defaultData = useMemo(() => [], []);
+
+  const tableMeta = useMemo(
     () => ({
-      sortable: true,
-      filter: true,
-      resizable: true,
+      orderQuantities,
+      setOrderQuantity: (id, val) => {
+        setOrderQuantities(prev => {
+          const next = { ...prev };
+          if (val > 0) next[id] = val;
+          else delete next[id];
+          return next;
+        });
+      },
+      updateData: handleUpdateProduct,
+      openDelete: product => {
+        setProductToDelete(product);
+        openDelete();
+      },
     }),
-    [],
+    [orderQuantities, handleUpdateProduct, openDelete],
   );
+
+  const table = useReactTable({
+    data: data || defaultData,
+    columns,
+    initialState: {
+      grouping: ['category'],
+      expanded: true,
+      sorting: [
+        { id: 'category', desc: false },
+        { id: 'name', desc: false },
+      ],
+    },
+    meta: tableMeta,
+    getCoreRowModel: getCoreRowModel(),
+    getGroupedRowModel: getGroupedRowModel(),
+    getExpandedRowModel: getExpandedRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+  });
 
   const totalItemsToOrder = Object.keys(orderQuantities).length;
 
   return (
-    <div>
-      {/* ПАНЕЛЬ ЗАКАЗА ВИДНА ТОЛЬКО СКЛАДУ */}
+    <>
       {isWarehouse && (
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginTop: 10,
-          }}
+        <Group
+          justify="space-between"
+          mb="md"
+          align="center"
         >
-          <div>
+          <Box>
             {totalItemsToOrder > 0 && (
-              <span style={{ fontSize: '14px', fontWeight: 'bold', color: '#16a34a' }}>
+              <Badge
+                color="green"
+                size="lg"
+                variant="light"
+              >
                 Selected products: {totalItemsToOrder}
-              </span>
+              </Badge>
             )}
-          </div>
-          <button
+          </Box>
+          <Button
             onClick={handleSendOrder}
             disabled={isSending || totalItemsToOrder === 0}
-            style={{
-              backgroundColor: totalItemsToOrder > 0 ? '#16a34a' : '#d1d5db',
-              color: 'white',
-              border: 'none',
-              padding: '8px 16px',
-              borderRadius: '6px',
-              cursor: totalItemsToOrder > 0 ? 'pointer' : 'not-allowed',
-              fontWeight: 'bold',
-            }}
+            color={totalItemsToOrder > 0 ? 'green' : 'gray'}
+            loading={isSending}
           >
-            {isSending ? 'Sending...' : 'Send Request'}
-          </button>
-        </div>
+            Send Request
+          </Button>
+        </Group>
       )}
 
-      <div style={{ height: 500, width: '100%', marginTop: 10 }}>
-        <AgGridReact
-          onCellEditRequest={onUpdatedProduct}
-          rowData={tableData}
-          columnDefs={columnDefs}
-          defaultColDef={defaultColDef}
-          animateRows={true}
-          rowSelection="multiple"
-          theme={themeQuartz}
-          readOnlyEdit={true}
-        />
-      </div>
-    </div>
+      <Paper
+        withBorder
+        radius="md"
+        overflow="hidden"
+      >
+        <Table
+          verticalSpacing="sm"
+          highlightOnHover
+        >
+          <Table.Thead bg="gray.0">
+            {table.getHeaderGroups().map(headerGroup => (
+              <Table.Tr key={headerGroup.id}>
+                {headerGroup.headers.map(header => {
+                  if (header.id === 'category') return null;
+                  return (
+                    <Table.Th key={header.id}>
+                      {flexRender(header.column.columnDef.header, header.getContext())}
+                    </Table.Th>
+                  );
+                })}
+              </Table.Tr>
+            ))}
+          </Table.Thead>
+
+          <Table.Tbody>
+            {table.getRowModel().rows.map(row => {
+              if (row.getIsGrouped()) {
+                return (
+                  <Table.Tr
+                    key={row.id}
+                    bg="blue.0"
+                  >
+                    <Table.Td colSpan={row.getVisibleCells().length}>
+                      <Group
+                        gap="xs"
+                        onClick={row.getToggleExpandedHandler()}
+                        style={{ cursor: 'pointer', userSelect: 'none' }}
+                      >
+                        {row.getIsExpanded() ? (
+                          <ChevronDown size={18} />
+                        ) : (
+                          <ChevronRight size={18} />
+                        )}
+                        <Text
+                          fw={700}
+                          size="md"
+                          c="blue.9"
+                        >
+                          {row.groupingValue}
+                        </Text>
+                        <Badge
+                          color="blue"
+                          variant="filled"
+                          size="sm"
+                          circle
+                        >
+                          {row.subRows.length}
+                        </Badge>
+                      </Group>
+                    </Table.Td>
+                  </Table.Tr>
+                );
+              }
+
+              return (
+                <Table.Tr key={row.id}>
+                  {row.getVisibleCells().map(cell => {
+                    if (cell.column.id === 'category') return null;
+                    return (
+                      <Table.Td key={cell.id}>
+                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      </Table.Td>
+                    );
+                  })}
+                </Table.Tr>
+              );
+            })}
+          </Table.Tbody>
+        </Table>
+      </Paper>
+
+      <DeleteProductModal
+        opened={openedDelete}
+        onClose={closeDelete}
+        product={productToDelete}
+      />
+    </>
   );
 };
 
