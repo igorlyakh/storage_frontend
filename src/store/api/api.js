@@ -108,6 +108,25 @@ export const api = createApi({
       }),
       invalidatesTags: ['Users'],
     }),
+    deleteUser: builder.mutation({
+      query: id => ({
+        url: '/users',
+        method: 'DELETE',
+        body: { id },
+      }),
+      invalidatesTags: ['Users'],
+    }),
+    resetUserPassword: builder.mutation({
+      query: ({ id, password }) => ({
+        url: '/auth/restore',
+        method: 'POST',
+        body: {
+          userId: id,
+          password,
+        },
+      }),
+      invalidatesTags: ['Users'],
+    }),
     deleteProduct: builder.mutation({
       query: id => ({
         url: '/product',
@@ -181,4 +200,6 @@ export const {
   useCreateWarehouseRequestMutation,
   useUpdateWarehouseRequestStatusMutation,
   useGetWarehouseRequestByIdQuery,
+  useDeleteUserMutation,
+  useResetUserPasswordMutation,
 } = api;
