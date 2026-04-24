@@ -1,8 +1,18 @@
+import {
+  Button,
+  Loader,
+  MultiSelect, // Добавили импорт MultiSelect
+  Paper,
+  PasswordInput,
+  Select,
+  Stack,
+  TextInput,
+  Title,
+} from '@mantine/core';
 import { useEffect } from 'react';
-import { useForm, useWatch } from 'react-hook-form';
+import { Controller, useForm, useWatch } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { useCreateUserMutation, useGetAllStoresQuery } from '../../store/api/api';
-import styles from './styles.module.scss';
 
 const CreateUserForm = () => {
   const { data: stores = [], isLoading, isError } = useGetAllStoresQuery();
@@ -21,6 +31,7 @@ const CreateUserForm = () => {
       password: '',
       role: 'STORE',
       storeId: '',
+      adminScopes: [],
     },
   });
 
@@ -33,12 +44,21 @@ const CreateUserForm = () => {
     if (selectedRole !== 'STORE') {
       setValue('storeId', '');
     }
+    if (selectedRole !== 'ADMIN') {
+      setValue('adminScopes', []);
+    }
   }, [selectedRole, setValue]);
+
+  const storeOptions = stores.map(store => ({
+    value: String(store.id),
+    label: store.name || `Store #${store.id}`,
+  }));
 
   const onSubmit = async data => {
     const payload = {
       ...data,
-      storeId: data.role === 'STORE' ? data.storeId : null,
+      storeId: data.role === 'STORE' ? Number(data.storeId) : null,
+      adminScopes: data.role === 'ADMIN' ? data.adminScopes : [],
     };
 
     try {
@@ -46,90 +66,126 @@ const CreateUserForm = () => {
       reset();
       toast.success('User created!');
     } catch (error) {
-      toast.error(error.data?.message || error.message);
+      toast.error(error.data?.message || error.message || 'Failed to create user');
     }
   };
 
   return (
-    <div className={styles.formWrapper}>
-      <h2>Create New User</h2>
+    <Paper
+      withBorder
+      shadow="sm"
+      radius="md"
+      p="xl"
+      mx="auto"
+      w={{ base: '100%', sm: 450 }}
+    >
+      <Title
+        order={3}
+        mb="lg"
+        ta="center"
+      >
+        Create New User
+      </Title>
 
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className={styles.formGroup}>
-          <label>Username</label>
-          <input
-            className={errors.username ? styles.errorInput : ''}
-            {...register('username', { required: 'Username is required' })}
+        <Stack gap="md">
+          <TextInput
+            label="Username"
             placeholder="Enter username"
+            withAsterisk
+            {...register('username', { required: 'Username is required' })}
+            error={errors.username?.message}
           />
-          {errors.username && (
-            <span className={styles.errorMessage}>{errors.username.message}</span>
-          )}
-        </div>
 
-        <div className={styles.formGroup}>
-          <label>Password</label>
-          <input
-            type="password"
-            className={errors.password ? styles.errorInput : ''}
+          <PasswordInput
+            label="Password"
+            placeholder="••••••••"
+            withAsterisk
             {...register('password', {
               required: 'Password is required',
               minLength: { value: 6, message: 'Minimum 6 characters' },
             })}
-            placeholder="••••••••"
+            error={errors.password?.message}
           />
-          {errors.password && (
-            <span className={styles.errorMessage}>{errors.password.message}</span>
-          )}
-        </div>
 
-        <div className={styles.formGroup}>
-          <label>Access Role</label>
-          <select {...register('role')}>
-            <option value="ADMIN">ADMIN</option>
-            <option value="WAREHOUSE">WAREHOUSE</option>
-            <option value="STORE">STORE</option>
-          </select>
-        </div>
-
-        {selectedRole === 'STORE' && (
-          <div className={styles.formGroup}>
-            <label>Assigned Store</label>
-            <select
-              className={errors.storeId ? styles.errorInput : ''}
-              {...register('storeId', {
-                required: selectedRole === 'STORE' ? 'Please select a store' : false,
-                valueAsNumber: true,
-              })}
-              disabled={isLoading}
-            >
-              <option value="">-- Choose a store --</option>
-              {stores.map(store => (
-                <option
-                  key={store.id}
-                  value={store.id}
-                >
-                  {store.name}
-                </option>
-              ))}
-            </select>
-            {isLoading && <span className={styles.loadingText}>Loading stores...</span>}
-            {isError && <span className={styles.errorMessage}>Error loading stores</span>}
-            {errors.storeId && (
-              <span className={styles.errorMessage}>{errors.storeId.message}</span>
+          <Controller
+            name="role"
+            control={control}
+            render={({ field }) => (
+              <Select
+                {...field}
+                label="Access Role"
+                withAsterisk
+                data={[
+                  { value: 'ADMIN', label: 'ADMIN' },
+                  { value: 'WAREHOUSE', label: 'WAREHOUSE' },
+                  { value: 'STORE', label: 'STORE' },
+                ]}
+              />
             )}
-          </div>
-        )}
+          />
 
-        <button
-          type="submit"
-          className={styles.submitBtn}
-          disabled={isSubmitting}
-        >
-          {isSubmitting ? 'Creating...' : 'Create User'}
-        </button>
+          {selectedRole === 'ADMIN' && (
+            <Controller
+              name="adminScopes"
+              control={control}
+              rules={{
+                required:
+                  selectedRole === 'ADMIN' ? 'Please select at least one scope' : false,
+              }}
+              render={({ field }) => (
+                <MultiSelect
+                  {...field}
+                  label="Admin Scopes"
+                  placeholder="-- Choose scopes --"
+                  withAsterisk
+                  clearable
+                  searchable
+                  error={errors.adminScopes?.message}
+                  data={[
+                    { value: 'BAGS', label: 'BAGS' },
+                    { value: 'LABELS', label: 'LABELS' },
+                    { value: 'PACKAGING', label: 'PACKAGING' },
+                  ]}
+                />
+              )}
+            />
+          )}
+
+          {selectedRole === 'STORE' && (
+            <Controller
+              name="storeId"
+              control={control}
+              rules={{
+                required: selectedRole === 'STORE' ? 'Please select a store' : false,
+              }}
+              render={({ field }) => (
+                <Select
+                  label="Assigned Store"
+                  placeholder="-- Choose a store --"
+                  withAsterisk
+                  data={storeOptions}
+                  error={errors.storeId?.message || (isError && 'Error loading stores')}
+                  disabled={isLoading}
+                  rightSection={isLoading ? <Loader size="xs" /> : null}
+                  onChange={val => field.onChange(val)}
+                  value={field.value ? String(field.value) : null}
+                />
+              )}
+            />
+          )}
+
+          <Button
+            type="submit"
+            mt="md"
+            loading={isSubmitting}
+            fullWidth
+          >
+            Create User
+          </Button>
+        </Stack>
       </form>
-    </div>
+    </Paper>
   );
 };
 
