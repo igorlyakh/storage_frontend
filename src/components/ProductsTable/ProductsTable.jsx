@@ -67,15 +67,6 @@ const ProductsTable = ({ data }) => {
       return toast.error('Please specify quantity for at least one product');
     }
 
-    for (const item of itemsToOrder) {
-      if (
-        item.product.limitPerOrder !== null &&
-        item.quantity > item.product.limitPerOrder
-      ) {
-        return toast.error(`Limit exceeded for "${item.product.name}"`);
-      }
-    }
-
     const payloadItems = itemsToOrder.map(item => ({
       productId: item.product.id,
       quantity: item.quantity,
@@ -136,7 +127,6 @@ const ProductsTable = ({ data }) => {
           return (
             <EditableOrderCell
               initialValue={val}
-              max={product.limitPerOrder}
               onUpdate={newVal => table.options.meta.setOrderQuantity(product.id, newVal)}
             />
           );
