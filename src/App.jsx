@@ -1,12 +1,10 @@
 import { lazy, Suspense } from 'react';
-import { useSelector } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
 
+import { Center, Loader } from '@mantine/core';
 import Layout from './components/Layout';
-import Loader from './components/Loader';
 import ProtectedRoutes from './pages/ProtectedRoutes';
 import RestrictedRouts from './pages/RestrictedRoutes';
-import { isGlobalLoading } from './store/selectors/selectors';
 
 const HomePage = lazy(() => import('./pages/HomePage/HomePage'));
 const LoginPage = lazy(() => import('./pages/LoginPage/LoginPage'));
@@ -25,13 +23,15 @@ const RequestsPage = lazy(() => import('./pages/RequestsPage/RequestsPage'));
 const StoresPage = lazy(() => import('./pages/StoresPage'));
 
 const App = () => {
-  const isLoading = useSelector(isGlobalLoading);
-
   return (
     <>
-      {isLoading && <Loader />}
-
-      <Suspense fallback={<Loader />}>
+      <Suspense
+        fallback={
+          <Center h="100vh">
+            <Loader size={50} />
+          </Center>
+        }
+      >
         <Routes>
           <Route
             element={<Layout />}
