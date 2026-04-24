@@ -59,7 +59,7 @@ const UsersTable = ({ data }) => {
       {
         accessorKey: 'store.name',
         header: 'Store',
-        cell: info => <Text>{info.getValue() || 'MARLOG'}</Text>,
+        cell: info => <Text>{info.getValue() || 'LOGISTICS'}</Text>,
       },
       {
         id: 'actions',
