@@ -17,7 +17,7 @@ import { userRoleSelector } from '../../store/selectors/selectors';
 import EditableShippedCell from './EditableShippedCell';
 
 const OrderItemsTable = ({ order }) => {
-  const { id: orderId, items = [], status } = order;
+  const { id: orderId, items = [], status, customRequest } = order;
 
   const userRole = useSelector(userRoleSelector);
   const [sendOrder, { isLoading }] = useSendOrderMutation();
@@ -207,6 +207,45 @@ const OrderItemsTable = ({ order }) => {
                 </Table.Tr>
               );
             })}
+
+            {customRequest &&
+              typeof customRequest === 'string' &&
+              customRequest.trim() !== '' && (
+                <>
+                  <Table.Tr bg="blue.0">
+                    <Table.Td colSpan={columns.length - 1}>
+                      <Group
+                        gap="xs"
+                        style={{ userSelect: 'none' }}
+                      >
+                        <ChevronDown
+                          size={18}
+                          color="transparent"
+                        />{' '}
+                        <Text
+                          fw={700}
+                          size="md"
+                          c="blue.9"
+                        >
+                          Other
+                        </Text>
+                      </Group>
+                    </Table.Td>
+                  </Table.Tr>
+                  <Table.Tr>
+                    <Table.Td colSpan={columns.length - 1}>
+                      <Text
+                        size="sm"
+                        px="md"
+                        py="xs"
+                        style={{ whiteSpace: 'pre-wrap' }}
+                      >
+                        {customRequest}
+                      </Text>
+                    </Table.Td>
+                  </Table.Tr>
+                </>
+              )}
           </Table.Tbody>
         </Table>
       </Paper>
