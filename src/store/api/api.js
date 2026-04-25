@@ -80,6 +80,10 @@ export const api = createApi({
       query: () => '/product',
       providesTags: ['Products'],
     }),
+    getAllProductsByBrand: builder.query({
+      query: () => '/product/brands',
+      providesTags: ['Products'],
+    }),
     updateProducts: builder.mutation({
       query: data => ({
         url: `/product/${data.id}`,
@@ -204,6 +208,7 @@ export const {
   useLogoutMutation,
   useGetMyOrdersQuery,
   useGetAllProductsQuery,
+  useGetAllProductsByBrandQuery,
   useGetOrderByIdQuery,
   useUpdateProductsMutation,
   useAddProductMutation,

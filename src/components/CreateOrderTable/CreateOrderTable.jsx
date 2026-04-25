@@ -1,16 +1,39 @@
-import { Badge, Button, Group, NumberInput, Paper, Table, Text } from '@mantine/core';
-import { flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
-import { useCallback, useMemo } from 'react';
+import {
+  Badge,
+  Button,
+  Group,
+  NumberInput,
+  Paper,
+  Table,
+  Text,
+  Textarea,
+} from '@mantine/core';
+import {
+  flexRender,
+  getCoreRowModel,
+  getExpandedRowModel,
+  getGroupedRowModel,
+  getSortedRowModel,
+  useReactTable,
+} from '@tanstack/react-table';
+import { ChevronDown, ChevronRight } from 'lucide-react';
+import { useCallback, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useDispatch } from 'react-redux';
 
-import { api, useCreateOrderMutation, useGetAllProductsQuery } from '../../store/api/api';
+import {
+  api,
+  useCreateOrderMutation,
+  useGetAllProductsByBrandQuery,
+} from '../../store/api/api';
 
 const CreateOrderTable = () => {
   const dispatch = useDispatch();
 
-  const { data: products = [] } = useGetAllProductsQuery();
+  const { data: products = [] } = useGetAllProductsByBrandQuery();
   const [createOrder, { isLoading }] = useCreateOrderMutation();
+
+  const [customRequest, setCustomRequest] = useState('');
 
   const rowData = useMemo(() => products.filter(p => p.isEnabled), [products]);
 
@@ -19,7 +42,7 @@ const CreateOrderTable = () => {
       const newValue = Number(val) || 0;
 
       dispatch(
-        api.util.updateQueryData('getAllProducts', undefined, draft => {
+        api.util.updateQueryData('getAllProductsByBrand', undefined, draft => {
           const product = draft.find(p => p.id === productId);
           if (product) {
             product.orderQuantity = newValue > 0 ? newValue : undefined;
@@ -36,6 +59,10 @@ const CreateOrderTable = () => {
         accessorKey: 'name',
         header: 'Product Name',
         cell: info => <Text fw={500}>{info.getValue()}</Text>,
+      },
+      {
+        accessorKey: 'category',
+        header: 'Category',
       },
       {
         accessorKey: 'limitPerOrder',
@@ -85,14 +112,25 @@ const CreateOrderTable = () => {
   const table = useReactTable({
     data: rowData,
     columns,
+    initialState: {
+      grouping: ['category'],
+      expanded: true,
+      sorting: [
+        { id: 'category', desc: false },
+        { id: 'name', desc: false },
+      ],
+    },
     getCoreRowModel: getCoreRowModel(),
+    getGroupedRowModel: getGroupedRowModel(),
+    getExpandedRowModel: getExpandedRowModel(),
+    getSortedRowModel: getSortedRowModel(),
   });
 
   const handleSendOrder = async () => {
     const itemsToOrder = rowData.filter(p => p.orderQuantity > 0);
 
-    if (itemsToOrder.length === 0) {
-      return toast.error('Please specify quantity for at least one product');
+    if (itemsToOrder.length === 0 && !customRequest.trim()) {
+      return toast.error('Please specify quantity or write a custom request');
     }
 
     for (const item of itemsToOrder) {
@@ -108,12 +146,19 @@ const CreateOrderTable = () => {
       quantity: p.orderQuantity,
     }));
 
+    const payload = {
+      items: payloadItems,
+      ...(customRequest.trim() && { customRequest: customRequest.trim() }),
+    };
+
     try {
-      await createOrder({ items: payloadItems }).unwrap();
+      await createOrder(payload).unwrap();
       toast.success('Order created successfully!');
 
+      setCustomRequest('');
+
       dispatch(
-        api.util.updateQueryData('getAllProducts', undefined, draft => {
+        api.util.updateQueryData('getAllProductsByBrand', undefined, draft => {
           draft.forEach(p => {
             delete p.orderQuantity;
           });
@@ -140,17 +185,58 @@ const CreateOrderTable = () => {
           <Table.Thead bg="gray.0">
             {table.getHeaderGroups().map(headerGroup => (
               <Table.Tr key={headerGroup.id}>
-                {headerGroup.headers.map(header => (
-                  <Table.Th key={header.id}>
-                    {flexRender(header.column.columnDef.header, header.getContext())}
-                  </Table.Th>
-                ))}
+                {headerGroup.headers.map(header => {
+                  if (header.id === 'category') return null;
+                  return (
+                    <Table.Th key={header.id}>
+                      {flexRender(header.column.columnDef.header, header.getContext())}
+                    </Table.Th>
+                  );
+                })}
               </Table.Tr>
             ))}
           </Table.Thead>
 
           <Table.Tbody>
             {table.getRowModel().rows.map(row => {
+              if (row.getIsGrouped()) {
+                return (
+                  <Table.Tr
+                    key={row.id}
+                    bg="blue.0"
+                  >
+                    <Table.Td colSpan={columns.length - 1}>
+                      <Group
+                        gap="xs"
+                        onClick={row.getToggleExpandedHandler()}
+                        style={{ cursor: 'pointer', userSelect: 'none' }}
+                      >
+                        {row.getIsExpanded() ? (
+                          <ChevronDown size={18} />
+                        ) : (
+                          <ChevronRight size={18} />
+                        )}
+                        <Text
+                          fw={700}
+                          size="md"
+                          c="blue.9"
+                        >
+                          {row.groupingValue}
+                        </Text>
+                        <Badge
+                          color="blue"
+                          variant="filled"
+                          size="sm"
+                          circle
+                        >
+                          {row.subRows.length}
+                        </Badge>
+                      </Group>
+                    </Table.Td>
+                  </Table.Tr>
+                );
+              }
+
               const isSelected = row.original.orderQuantity > 0;
 
               return (
@@ -158,14 +244,54 @@ const CreateOrderTable = () => {
                   key={row.id}
                   bg={isSelected ? 'green.0' : undefined}
                 >
-                  {row.getVisibleCells().map(cell => (
-                    <Table.Td key={cell.id}>
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                    </Table.Td>
-                  ))}
+                  {row.getVisibleCells().map(cell => {
+                    if (cell.column.id === 'category') return null;
+                    return (
+                      <Table.Td key={cell.id}>
+                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      </Table.Td>
+                    );
+                  })}
                 </Table.Tr>
               );
             })}
+
+            <Table.Tr bg="blue.0">
+              <Table.Td colSpan={columns.length - 1}>
+                <Group
+                  gap="xs"
+                  style={{ userSelect: 'none' }}
+                >
+                  <ChevronDown
+                    size={18}
+                    color="transparent"
+                  />{' '}
+                  <Text
+                    fw={700}
+                    size="md"
+                    c="blue.9"
+                  >
+                    Other
+                  </Text>
+                </Group>
+              </Table.Td>
+            </Table.Tr>
+            <Table.Tr>
+              <Table.Td colSpan={columns.length - 1}>
+                <Textarea
+                  placeholder="Didn't find what you need? Describe it here..."
+                  value={customRequest}
+                  onChange={e => setCustomRequest(e.currentTarget.value)}
+                  autosize
+                  minRows={2}
+                  variant="unstyled"
+                  px="md"
+                  styles={{
+                    input: { borderBottom: '1px dashed var(--mantine-color-gray-4)' },
+                  }}
+                />
+              </Table.Td>
+            </Table.Tr>
           </Table.Tbody>
         </Table>
       </Paper>
