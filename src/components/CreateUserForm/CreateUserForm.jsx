@@ -3,8 +3,10 @@ import {
   Loader,
   MultiSelect, // Добавили импорт MultiSelect
   Paper,
+  PasswordInput,
   Select,
   Stack,
+  TextInput,
   Title,
 } from '@mantine/core';
 import { useEffect } from 'react';
