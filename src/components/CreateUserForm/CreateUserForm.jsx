@@ -3,10 +3,8 @@ import {
   Loader,
   MultiSelect, // Добавили импорт MultiSelect
   Paper,
-  PasswordInput,
   Select,
   Stack,
-  TextInput,
   Title,
 } from '@mantine/core';
 import { useEffect } from 'react';
@@ -19,7 +17,6 @@ const CreateUserForm = () => {
   const [createUser] = useCreateUserMutation();
 
   const {
-    register,
     handleSubmit,
     reset,
     control,
@@ -89,23 +86,40 @@ const CreateUserForm = () => {
 
       <form onSubmit={handleSubmit(onSubmit)}>
         <Stack gap="md">
-          <TextInput
-            label="Username"
-            placeholder="Enter username"
-            withAsterisk
-            {...register('username', { required: 'Username is required' })}
-            error={errors.username?.message}
+          <Controller
+            name="username"
+            control={control}
+            rules={{ required: 'Username is required' }}
+            render={({ field }) => (
+              <TextInput
+                {...field}
+                label="Username"
+                placeholder="Enter username"
+                withAsterisk
+                error={errors.username?.message}
+              />
+            )}
           />
 
-          <PasswordInput
-            label="Password"
-            placeholder="••••••••"
-            withAsterisk
-            {...register('password', {
+          <Controller
+            name="password"
+            control={control}
+            rules={{
               required: 'Password is required',
-              minLength: { value: 6, message: 'Minimum 6 characters' },
-            })}
-            error={errors.password?.message}
+              minLength: {
+                value: 6,
+                message: 'Password must be at least 6 characters long',
+              },
+            }}
+            render={({ field }) => (
+              <PasswordInput
+                label="Password"
+                placeholder="••••••••"
+                withAsterisk
+                {...field}
+                error={errors.password?.message}
+              />
+            )}
           />
 
           <Controller
