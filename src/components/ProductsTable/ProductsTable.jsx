@@ -30,6 +30,7 @@ import {
 } from '../../store/api/api';
 import { userRoleSelector } from '../../store/selectors/selectors';
 
+import getBrandColor from '../../utils/getBrandColor';
 import DeleteProductModal from './DeleteProductModal';
 import { EditableNumberCell, EditableOrderCell, EditableTextCell } from './EditableCells';
 
@@ -94,6 +95,27 @@ const ProductsTable = ({ data }) => {
             }
           />
         ),
+      },
+      {
+        accessorKey: 'brands',
+        header: 'Brands',
+        cell: ({ getValue }) => {
+          const brands = getValue() || [];
+          return (
+            <Group gap={5}>
+              {brands.map(brand => (
+                <Badge
+                  key={brand.id}
+                  variant="light"
+                  size="sm"
+                  color={getBrandColor(brand.name)}
+                >
+                  {brand.name}
+                </Badge>
+              ))}
+            </Group>
+          );
+        },
       },
       {
         accessorKey: 'category',

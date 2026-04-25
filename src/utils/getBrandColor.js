@@ -1,4 +1,3 @@
-// Список приятных цветов из палитры Mantine
 const MANTINE_COLORS = [
   'blue',
   'cyan',

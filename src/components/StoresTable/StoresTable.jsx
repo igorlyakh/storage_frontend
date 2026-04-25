@@ -7,7 +7,7 @@ import {
 } from '@tanstack/react-table';
 import dayjs from 'dayjs';
 import { useMemo } from 'react';
-import getBrandColor from './randomColor';
+import getBrandColor from '../../utils/getBrandColor';
 
 const StoresTable = ({ data }) => {
   const columns = useMemo(
