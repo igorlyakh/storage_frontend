@@ -120,6 +120,16 @@ const Navigation = () => {
 
       {role === 'ADMIN' && (
         <NavMenu
+          title="Brands"
+          items={[
+            { label: 'All Brands', to: '/brands' },
+            { label: 'Create Brand', to: '/brands/create' },
+          ]}
+        />
+      )}
+
+      {role === 'ADMIN' && (
+        <NavMenu
           title="Stores"
           items={[
             { label: 'All Stores', to: '/stores' },

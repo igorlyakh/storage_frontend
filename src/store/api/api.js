@@ -12,7 +12,7 @@ export const api = createApi({
       return headers;
     },
   }),
-  tagTypes: ['Users', 'Orders', 'Products', 'Stores', 'WarehouseRequests'],
+  tagTypes: ['Users', 'Orders', 'Products', 'Stores', 'WarehouseRequests', 'Brands'],
   endpoints: builder => ({
     getAllOrders: builder.query({
       query: ({ page = 1, statuses, storeIds, date }) => ({
@@ -175,6 +175,10 @@ export const api = createApi({
       query: id => `/warehouse/${id}`,
       providesTags: ['WarehouseRequests'],
     }),
+    getAllBrands: builder.query({
+      query: () => '/brands',
+      providesTags: ['Brands'],
+    }),
   }),
 });
 
@@ -202,4 +206,5 @@ export const {
   useGetWarehouseRequestByIdQuery,
   useDeleteUserMutation,
   useResetUserPasswordMutation,
+  useGetAllBrandsQuery,
 } = api;

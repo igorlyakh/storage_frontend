@@ -21,6 +21,7 @@ const ProductsPage = lazy(() => import('./pages/ProductsPage/ProductsPage'));
 const RequestPage = lazy(() => import('./pages/RequestPage/RequestPage'));
 const RequestsPage = lazy(() => import('./pages/RequestsPage/RequestsPage'));
 const StoresPage = lazy(() => import('./pages/StoresPage'));
+const BrandsPage = lazy(() => import('./pages/BrandsPage/BrandsPage'));
 
 const App = () => {
   return (
@@ -137,6 +138,24 @@ const App = () => {
               element={
                 <ProtectedRoutes allowedRoles={['ADMIN']}>
                   <CreateUserPage />
+                </ProtectedRoutes>
+              }
+            />
+
+            <Route
+              path="brands"
+              element={
+                <ProtectedRoutes allowedRoles={['ADMIN']}>
+                  <BrandsPage />
+                </ProtectedRoutes>
+              }
+            />
+
+            <Route
+              path="brands/create"
+              element={
+                <ProtectedRoutes allowedRoles={['ADMIN']}>
+                  <div>Create Brand</div>
                 </ProtectedRoutes>
               }
             />
