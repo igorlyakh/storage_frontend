@@ -16,7 +16,6 @@ const CreateStoreForm = () => {
   const [createStore] = useCreateStoreMutation();
 
   const {
-    register,
     handleSubmit,
     reset,
     control,
@@ -62,15 +61,22 @@ const CreateStoreForm = () => {
 
       <form onSubmit={handleSubmit(onSubmit)}>
         <Stack gap="md">
-          <TextInput
-            label="Store Name"
-            placeholder="e.g. Store-1"
-            withAsterisk
-            {...register('name', {
+          <Controller
+            name="name"
+            control={control}
+            rules={{
               required: 'Store name is required',
               minLength: { value: 3, message: 'Name must be at least 3 characters' },
-            })}
-            error={errors.name?.message}
+            }}
+            render={({ field }) => (
+              <TextInput
+                {...field}
+                label="Store Name"
+                placeholder="e.g. Store-1"
+                withAsterisk
+                error={errors.name?.message}
+              />
+            )}
           />
 
           <Controller
