@@ -97,7 +97,6 @@ const BrandsTable = ({ data }) => {
         </Table>
       </Paper>
 
-      {/* Вынесенный компонент */}
       <DeleteBrandModal
         opened={openedDelete}
         onClose={closeDelete}

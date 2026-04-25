@@ -7,7 +7,6 @@ const DeleteBrandModal = ({ opened, onClose, brand }) => {
 
   const handleDelete = async () => {
     try {
-      // Отправляем имя бренда в body, как договаривались
       await deleteBrand(brand.name).unwrap();
       toast.success(`Brand "${brand.name}" deleted`);
       onClose();

@@ -179,6 +179,14 @@ export const api = createApi({
       query: () => '/brands',
       providesTags: ['Brands'],
     }),
+    createBrand: builder.mutation({
+      query: name => ({
+        url: '/brands',
+        method: 'POST',
+        body: { name },
+      }),
+      invalidatesTags: ['Brands'],
+    }),
     deleteBrand: builder.mutation({
       query: name => ({
         url: '/brands',
@@ -216,4 +224,5 @@ export const {
   useResetUserPasswordMutation,
   useGetAllBrandsQuery,
   useDeleteBrandMutation,
+  useCreateBrandMutation,
 } = api;
