@@ -124,7 +124,6 @@ const OrderItem = ({ store, status, sended, updated, id }) => {
           </Button>
         )}
 
-        {/* Ссылка "To order" сжимается вправо, если кнопки "Accept" нет */}
         <Button
           component={Link}
           to={`/orders/${id}`}
