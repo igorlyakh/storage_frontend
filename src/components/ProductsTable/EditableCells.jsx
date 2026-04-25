@@ -1,5 +1,6 @@
-import { NumberInput, TextInput } from '@mantine/core';
+import { Badge, Group, MultiSelect, NumberInput, Text, TextInput } from '@mantine/core';
 import { useEffect, useState } from 'react';
+import getBrandColor from '../../utils/getBrandColor';
 
 export const EditableTextCell = ({ initialValue, onUpdate }) => {
   const [value, setValue] = useState(initialValue);
@@ -72,5 +73,74 @@ export const EditableOrderCell = ({ initialValue, max, onUpdate }) => {
         },
       }}
     />
+  );
+};
+
+export const EditableBrandsCell = ({ initialBrands = [], allBrands = [], onUpdate }) => {
+  const [isEditing, setIsEditing] = useState(false);
+  const [value, setValue] = useState([]);
+
+  const handleStartEdit = () => {
+    setValue(initialBrands.map(b => String(b.id)));
+    setIsEditing(true);
+  };
+
+  const handleSave = () => {
+    setIsEditing(false);
+
+    const initialIds = initialBrands
+      .map(b => String(b.id))
+      .sort()
+      .join(',');
+
+    const currentIds = [...value].sort().join(',');
+
+    if (initialIds !== currentIds) {
+      onUpdate(value);
+    }
+  };
+
+  if (isEditing) {
+    return (
+      <MultiSelect
+        data={allBrands.map(b => ({ value: String(b.id), label: b.name }))}
+        value={value}
+        onChange={setValue}
+        onDropdownClose={handleSave}
+        searchable
+        autoFocus
+        placeholder="Select brands..."
+        styles={{ input: { minWidth: 200 } }}
+      />
+    );
+  }
+
+  return (
+    <Group
+      gap={5}
+      onClick={handleStartEdit}
+      style={{ cursor: 'pointer', minHeight: 28, padding: '2px', borderRadius: '4px' }}
+    >
+      {initialBrands.length > 0 ? (
+        initialBrands.map(brand => (
+          <Badge
+            key={brand.id}
+            variant="light"
+            size="sm"
+            color={getBrandColor(brand.name)}
+          >
+            {brand.name}
+          </Badge>
+        ))
+      ) : (
+        <Text
+          size="xs"
+          c="dimmed"
+          style={{ borderBottom: '1px dashed' }}
+        >
+          Add brands...
+        </Text>
+      )}
+    </Group>
   );
 };

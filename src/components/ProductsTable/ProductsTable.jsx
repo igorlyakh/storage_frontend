@@ -24,19 +24,27 @@ import { ChevronDown, ChevronRight, Trash } from 'lucide-react';
 import { useCallback, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useSelector } from 'react-redux';
+
 import {
   useCreateWarehouseRequestMutation,
+  useGetAllBrandsQuery,
   useUpdateProductsMutation,
 } from '../../store/api/api';
 import { userRoleSelector } from '../../store/selectors/selectors';
 
-import getBrandColor from '../../utils/getBrandColor';
 import DeleteProductModal from './DeleteProductModal';
-import { EditableNumberCell, EditableOrderCell, EditableTextCell } from './EditableCells';
+import {
+  EditableBrandsCell,
+  EditableNumberCell,
+  EditableOrderCell,
+  EditableTextCell,
+} from './EditableCells';
 
 const ProductsTable = ({ data }) => {
   const userRole = useSelector(userRoleSelector);
   const isWarehouse = userRole === 'WAREHOUSE';
+
+  const { data: allBrands = [] } = useGetAllBrandsQuery();
 
   const [updateProducts] = useUpdateProductsMutation();
   const [createWarehouseRequest, { isLoading: isSending }] =
@@ -99,23 +107,15 @@ const ProductsTable = ({ data }) => {
       {
         accessorKey: 'brands',
         header: 'Brands',
-        cell: ({ getValue }) => {
-          const brands = getValue() || [];
-          return (
-            <Group gap={5}>
-              {brands.map(brand => (
-                <Badge
-                  key={brand.id}
-                  variant="light"
-                  size="sm"
-                  color={getBrandColor(brand.name)}
-                >
-                  {brand.name}
-                </Badge>
-              ))}
-            </Group>
-          );
-        },
+        cell: ({ row, table, getValue }) => (
+          <EditableBrandsCell
+            initialBrands={getValue() || []}
+            allBrands={table.options.meta.allBrands}
+            onUpdate={newBrandIds =>
+              table.options.meta.updateData(row.original, 'brandIds', newBrandIds)
+            }
+          />
+        ),
       },
       {
         accessorKey: 'category',
@@ -218,6 +218,7 @@ const ProductsTable = ({ data }) => {
 
   const tableMeta = useMemo(
     () => ({
+      allBrands,
       orderQuantities,
       setOrderQuantity: (id, val) => {
         setOrderQuantities(prev => {
@@ -233,7 +234,7 @@ const ProductsTable = ({ data }) => {
         openDelete();
       },
     }),
-    [orderQuantities, handleUpdateProduct, openDelete],
+    [orderQuantities, handleUpdateProduct, openDelete, allBrands],
   );
 
   const table = useReactTable({
