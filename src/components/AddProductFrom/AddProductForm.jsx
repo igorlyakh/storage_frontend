@@ -1,5 +1,7 @@
 import {
   Button,
+  Loader,
+  MultiSelect,
   NumberInput,
   Paper,
   Select,
@@ -9,14 +11,14 @@ import {
 } from '@mantine/core';
 import { Controller, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { useAddProductMutation } from '../../store/api/api';
+import { useAddProductMutation, useGetAllBrandsQuery } from '../../store/api/api';
 import { productCategories } from './config';
 
 const AddProductForm = () => {
+  const { data: brands = [], isLoading: isBrandsLoading } = useGetAllBrandsQuery();
   const [addProduct, { isLoading }] = useAddProductMutation();
 
   const {
-    register,
     handleSubmit,
     reset,
     control,
@@ -27,8 +29,14 @@ const AddProductForm = () => {
       category: productCategories[0] || '',
       limitPerOrder: '',
       initialQuantity: 1,
+      brandsIds: [],
     },
   });
+
+  const brandOptions = brands.map(brand => ({
+    value: String(brand.id),
+    label: brand.name,
+  }));
 
   const onSubmit = async data => {
     const payload = {
@@ -70,12 +78,19 @@ const AddProductForm = () => {
 
       <form onSubmit={handleSubmit(onSubmit)}>
         <Stack gap="md">
-          <TextInput
-            label="Product name"
-            placeholder="Enter product name"
-            withAsterisk
-            {...register('name', { required: 'Product name is required!' })}
-            error={errors.name?.message}
+          <Controller
+            name="name"
+            control={control}
+            rules={{ required: 'Name is required!' }}
+            render={({ field }) => (
+              <TextInput
+                {...field}
+                label="Product name"
+                placeholder="Enter product name"
+                withAsterisk
+                error={errors.name?.message}
+              />
+            )}
           />
 
           <Controller
@@ -89,6 +104,24 @@ const AddProductForm = () => {
                 withAsterisk
                 data={productCategories}
                 error={errors.category?.message}
+              />
+            )}
+          />
+
+          <Controller
+            name="brandsIds"
+            control={control}
+            render={({ field }) => (
+              <MultiSelect
+                {...field}
+                label="Brands"
+                placeholder={isBrandsLoading ? 'Loading brands...' : 'Select brands'}
+                data={brandOptions}
+                searchable
+                clearable
+                disabled={isBrandsLoading}
+                rightSection={isBrandsLoading ? <Loader size="xs" /> : null}
+                error={errors.brandsIds?.message}
               />
             )}
           />
