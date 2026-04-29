@@ -1,6 +1,6 @@
 import { Badge, Button, Card, Group, Stack, Text } from '@mantine/core';
 import dayjs from 'dayjs';
-import { ArrowRight, Play } from 'lucide-react';
+import { ArrowRight, CheckCircle } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useSelector } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
@@ -109,16 +109,13 @@ const OrderItem = ({ store, status, sended, updated, id }) => {
       >
         {status === 'NEW' && ['ADMIN', 'WAREHOUSE'].includes(userRole) && (
           <Button
-            size="sm"
+            variant="light"
+            size="xs"
+            radius="xl"
             color="blue"
             onClick={handleAccept}
             loading={isLoading}
-            leftSection={
-              <Play
-                size={16}
-                fill="currentColor"
-              />
-            }
+            leftSection={<CheckCircle size={16} />}
           >
             Accept order
           </Button>
@@ -129,8 +126,8 @@ const OrderItem = ({ store, status, sended, updated, id }) => {
           to={`/orders/${id}`}
           state={{ from: location }}
           variant="subtle"
-          size="sm"
-          rightSection={<ArrowRight size={16} />}
+          size="xs"
+          rightSection={<ArrowRight size={14} />}
           style={{ marginLeft: 'auto' }}
         >
           To order
