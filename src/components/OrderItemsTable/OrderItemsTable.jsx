@@ -101,7 +101,7 @@ const OrderItemsTable = ({ order }) => {
     columns,
     initialState: {
       grouping: ['category'],
-      expanded: true,
+      expanded: false,
       sorting: [
         { id: 'category', desc: false },
         { id: 'name', desc: false },
