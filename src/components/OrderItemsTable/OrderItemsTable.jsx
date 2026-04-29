@@ -7,7 +7,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import { ChevronDown, ChevronRight } from 'lucide-react';
+import { ChevronDown, ChevronRight, Send } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useSelector } from 'react-redux';
@@ -256,10 +256,14 @@ const OrderItemsTable = ({ order }) => {
           mt="md"
         >
           <Button
-            color="violet"
+            variant="gradient"
+            gradient={{ from: 'violet', to: 'indigo', deg: 90 }}
+            radius="md"
             size="md"
             loading={isLoading}
             onClick={handleSendOrder}
+            leftSection={<Send size={18} />}
+            style={{ boxShadow: 'var(--mantine-shadow-sm)' }}
           >
             Send order
           </Button>
