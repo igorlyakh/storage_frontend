@@ -21,6 +21,7 @@ import { useCallback, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useDispatch } from 'react-redux';
 
+import { modals } from '@mantine/modals';
 import {
   api,
   useCreateOrderMutation,
@@ -153,7 +154,31 @@ const CreateOrderTable = () => {
 
     try {
       await createOrder(payload).unwrap();
-      toast.success('Order created successfully!');
+      // toast.success('Order created successfully!');
+
+      modals.open({
+        title: 'Order Status',
+        centered: true,
+        withCloseButton: false,
+        closeOnClickOutside: false,
+        children: (
+          <>
+            <Text
+              size="sm"
+              mb="md"
+            >
+              Your order has been sent successfully! The warehouse has been notified.
+            </Text>
+            <Button
+              fullWidth
+              onClick={() => modals.closeAll()}
+              color="green"
+            >
+              Understood
+            </Button>
+          </>
+        ),
+      });
 
       setCustomRequest('');
 

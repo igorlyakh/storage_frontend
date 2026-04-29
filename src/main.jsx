@@ -1,5 +1,6 @@
 import { MantineProvider } from '@mantine/core';
 import '@mantine/core/styles.css';
+import { ModalsProvider } from '@mantine/modals';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Toaster } from 'react-hot-toast';
@@ -12,25 +13,27 @@ import { persister, store } from './store/store.js';
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <MantineProvider>
-      <Provider store={store}>
-        <PersistGate
-          loading={null}
-          persistor={persister}
-        >
-          <BrowserRouter>
-            <App />
-            <Toaster
-              position="top-right"
-              toastOptions={{
-                style: {
-                  background: '#242020',
-                  color: '#ffffff',
-                },
-              }}
-            />
-          </BrowserRouter>
-        </PersistGate>
-      </Provider>
+      <ModalsProvider>
+        <Provider store={store}>
+          <PersistGate
+            loading={null}
+            persistor={persister}
+          >
+            <BrowserRouter>
+              <App />
+              <Toaster
+                position="top-right"
+                toastOptions={{
+                  style: {
+                    background: '#242020',
+                    color: '#ffffff',
+                  },
+                }}
+              />
+            </BrowserRouter>
+          </PersistGate>
+        </Provider>
+      </ModalsProvider>
     </MantineProvider>
   </StrictMode>,
 );
