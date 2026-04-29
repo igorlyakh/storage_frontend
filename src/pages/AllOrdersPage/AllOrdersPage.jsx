@@ -10,6 +10,7 @@ import {
   Popover,
   ScrollArea,
   Stack,
+  Text,
   TextInput,
   Title,
 } from '@mantine/core';
@@ -17,9 +18,7 @@ import { useState } from 'react';
 import OrdersList from '../../components/OrdersList/OrdersList';
 import { useGetAllOrdersQuery, useGetAllStoresQuery } from '../../store/api/api';
 
-// 1. Обновленный FilterPopover с кнопками "Select All" и "Clear"
 const FilterPopover = ({ label, options, values, onChange }) => {
-  // Обработчик клика по одному чекбоксу
   const handleToggle = val => {
     const newValues = values.includes(val)
       ? values.filter(v => v !== val)
@@ -27,13 +26,11 @@ const FilterPopover = ({ label, options, values, onChange }) => {
     onChange(newValues);
   };
 
-  // Обработчик "Выбрать всё"
   const handleSelectAll = () => {
     const allValues = options.map(opt => opt.value);
     onChange(allValues);
   };
 
-  // Обработчик "Снять всё"
   const handleClearAll = () => {
     onChange([]);
   };
@@ -57,7 +54,6 @@ const FilterPopover = ({ label, options, values, onChange }) => {
 
       <Popover.Dropdown p="sm">
         <Stack gap="xs">
-          {/* Панель массовых действий */}
           <Group
             grow
             gap="xs"
@@ -83,7 +79,6 @@ const FilterPopover = ({ label, options, values, onChange }) => {
 
           <Divider my="xs" />
 
-          {/* Список чекбоксов */}
           <ScrollArea.Autosize
             mah={220}
             type="scroll"
@@ -105,12 +100,13 @@ const FilterPopover = ({ label, options, values, onChange }) => {
   );
 };
 
-// 2. Главная страница
 const AllOrdersPage = () => {
   const [page, setPage] = useState(1);
   const [statuses, setStatuses] = useState(['NEW', 'IN_PROGRESS']);
   const [storeIds, setStoreIds] = useState([]);
-  const [date, setDate] = useState('');
+
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
 
   const { data: storesData } = useGetAllStoresQuery();
   const stores = storesData || [];
@@ -132,7 +128,8 @@ const AllOrdersPage = () => {
       page,
       statuses: statuses.length ? statuses.join(',') : undefined,
       storeIds: storeIds.length ? storeIds.join(',') : undefined,
-      date: date || undefined,
+      startDate: startDate || undefined,
+      endDate: endDate || undefined,
     },
     {
       pollingInterval: 10 * 60 * 1000,
@@ -144,7 +141,6 @@ const AllOrdersPage = () => {
   const orders = data?.data || [];
   const meta = data?.meta;
 
-  // Обновленные обработчики (теперь принимают готовый массив)
   const handleStatusesChange = newStatuses => {
     setStatuses(newStatuses);
     setPage(1);
@@ -186,21 +182,42 @@ const AllOrdersPage = () => {
         >
           <TextInput
             type="date"
-            value={date}
+            placeholder="From"
+            value={startDate}
             onChange={e => {
-              setDate(e.target.value);
+              setStartDate(e.target.value);
               setPage(1);
             }}
-            w={{ base: '100%', sm: 180 }}
+            w={{ base: '100%', sm: 140 }}
           />
-          {date && (
+
+          <Text
+            size="sm"
+            c="dimmed"
+          >
+            -
+          </Text>
+
+          <TextInput
+            type="date"
+            placeholder="To"
+            value={endDate}
+            onChange={e => {
+              setEndDate(e.target.value);
+              setPage(1);
+            }}
+            w={{ base: '100%', sm: 140 }}
+          />
+
+          {(startDate || endDate) && (
             <CloseButton
               size="lg"
               onClick={() => {
-                setDate('');
+                setStartDate('');
+                setEndDate('');
                 setPage(1);
               }}
-              title="Clear date"
+              title="Clear dates"
             />
           )}
         </Group>

@@ -15,13 +15,14 @@ export const api = createApi({
   tagTypes: ['Users', 'Orders', 'Products', 'Stores', 'WarehouseRequests', 'Brands'],
   endpoints: builder => ({
     getAllOrders: builder.query({
-      query: ({ page = 1, statuses, storeIds, date }) => ({
+      query: ({ page = 1, statuses, storeIds, startDate, endDate }) => ({
         url: '/orders/all',
         params: {
           page,
           statuses,
           storeIds,
-          date,
+          startDate,
+          endDate,
         },
       }),
       providesTags: ['Orders'],
