@@ -12,7 +12,7 @@ import {
 import { Controller, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { useAddProductMutation, useGetAllBrandsQuery } from '../../store/api/api';
-import { productCategories } from './config';
+import { productCategories, productTags } from './config';
 
 const AddProductForm = () => {
   const { data: brands = [], isLoading: isBrandsLoading } = useGetAllBrandsQuery();
@@ -27,6 +27,7 @@ const AddProductForm = () => {
     defaultValues: {
       name: '',
       category: productCategories[0] || '',
+      tag: productTags[0] || '',
       limitPerOrder: '',
       initialQuantity: 1,
       brandsIds: [],
@@ -104,6 +105,21 @@ const AddProductForm = () => {
                 withAsterisk
                 data={productCategories}
                 error={errors.category?.message}
+              />
+            )}
+          />
+
+          <Controller
+            name="tag"
+            control={control}
+            rules={{ required: 'Tag is required!' }}
+            render={({ field }) => (
+              <Select
+                {...field}
+                label="Admin Tag"
+                withAsterisk
+                data={productTags}
+                error={errors.tag?.message}
               />
             )}
           />
