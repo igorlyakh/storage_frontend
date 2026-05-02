@@ -62,7 +62,14 @@ const CreateOrderTable = () => {
       {
         accessorKey: 'name',
         header: 'Product Name',
-        cell: info => <Text fw={500}>{info.getValue()}</Text>,
+        cell: info => (
+          <Text
+            fw={700}
+            fz={18}
+          >
+            {info.getValue()}
+          </Text>
+        ),
       },
       {
         accessorKey: 'category',

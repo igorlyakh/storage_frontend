@@ -53,7 +53,14 @@ const OrderItemsTable = ({ order }) => {
         accessorFn: row => row.product.name,
         id: 'name',
         header: 'Product Name',
-        cell: info => <Text fw={500}>{info.getValue()}</Text>,
+        cell: info => (
+          <Text
+            fz={16}
+            fw={700}
+          >
+            {info.getValue()}
+          </Text>
+        ),
       },
       {
         accessorFn: row => row.product.category,

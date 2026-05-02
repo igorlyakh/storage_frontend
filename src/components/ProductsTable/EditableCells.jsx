@@ -11,6 +11,8 @@ export const EditableTextCell = ({ initialValue, onUpdate }) => {
 
   return (
     <TextInput
+      fz={18}
+      fw={700}
       value={value}
       onChange={e => setValue(e.currentTarget.value)}
       onBlur={() => {
