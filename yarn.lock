@@ -485,10 +485,10 @@
   resolved "https://registry.npmjs.org/@mantine/carousel/-/carousel-9.0.2.tgz#cd8f989b67e9576846a867382805cad32015e8dd"
   integrity sha512-DMSksjmduBVyXaX/OgLJdllr/GmDj+GoGviRBUSziR1jzCWkTKDiNTJsWMS6k3uYGOAhzR/IN3OSIP7i69cWRA==
 
-"@mantine/charts@^9.0.2":
-  version "9.0.2"
-  resolved "https://registry.npmjs.org/@mantine/charts/-/charts-9.0.2.tgz#4a1907dc3b259443df401193fb1bc8c13b5a1557"
-  integrity sha512-x5g9R2hLI700o5QamY0QWtfm1wD+/oYQYOUcI5Mv+EwyDmT/xVHOwfuv3/lKd88H60OKGxS9cyO4BRC2bF15nw==
+"@mantine/charts@^9.1.1":
+  version "9.1.1"
+  resolved "https://registry.npmjs.org/@mantine/charts/-/charts-9.1.1.tgz#46eb11977c5167e084c8892959d84ac7e23fb30f"
+  integrity sha512-f+RbCe9ULHGmhF2KYw8PIwL3xWUDulhVrZ2lNW/2sKUTaAobSBNmwBXy4kbN6gOHtxAbZx8YnVXH2F6mSaYtcg==
 
 "@mantine/code-highlight@^9.0.2":
   version "9.0.2"

@@ -12,7 +12,15 @@ export const api = createApi({
       return headers;
     },
   }),
-  tagTypes: ['Users', 'Orders', 'Products', 'Stores', 'WarehouseRequests', 'Brands'],
+  tagTypes: [
+    'Users',
+    'Orders',
+    'Products',
+    'Stores',
+    'WarehouseRequests',
+    'Brands',
+    'Statistics',
+  ],
   endpoints: builder => ({
     getAllOrders: builder.query({
       query: ({ page = 1, statuses, storeIds, startDate, endDate }) => ({
@@ -200,6 +208,21 @@ export const api = createApi({
       }),
       invalidatesTags: ['Brands'],
     }),
+    getMonthlyStats: builder.query({
+      query: ({ year, month, productId }) => ({
+        url: '/statistics/monthly',
+        params: { year, month, productId },
+      }),
+      providesTags: ['Statistics', 'Orders'],
+    }),
+
+    getYearlyStats: builder.query({
+      query: ({ year, productId }) => ({
+        url: '/statistics/yearly',
+        params: { year, productId },
+      }),
+      providesTags: ['Statistics', 'Orders'],
+    }),
   }),
 });
 
@@ -231,4 +254,6 @@ export const {
   useGetAllBrandsQuery,
   useDeleteBrandMutation,
   useCreateBrandMutation,
+  useGetMonthlyStatsQuery,
+  useGetYearlyStatsQuery,
 } = api;
