@@ -574,12 +574,12 @@
     "@mantine/store" "9.0.2"
     react-transition-group "4.4.5"
 
-"@mantine/nprogress@^9.0.2":
-  version "9.0.2"
-  resolved "https://registry.npmjs.org/@mantine/nprogress/-/nprogress-9.0.2.tgz#bb61b1e1bb290cc0ff57c5267e6fb84a023d1710"
-  integrity sha512-RqkKp3VOZPJCtbwUpS7w8RiCAqLkHscYBjz6sNQy/Dq3SvDcnzxzh9PTcSMyVwZNL6U010ZiZRCRNoxBy7DboA==
+"@mantine/nprogress@^9.1.1":
+  version "9.1.1"
+  resolved "https://registry.npmjs.org/@mantine/nprogress/-/nprogress-9.1.1.tgz#8c8c77628ae65a9972b9b205a2df0faa18348e59"
+  integrity sha512-7WYsXu3/jxmK4nZVX2x66d7JPufKFYoA+aCMj1ZkHGEv34i8K4ldvu9O/8zYQrv7Sk14aQqhnaHpgW+41sTD6Q==
   dependencies:
-    "@mantine/store" "9.0.2"
+    "@mantine/store" "9.1.1"
 
 "@mantine/spotlight@^9.0.2":
   version "9.0.2"
@@ -592,6 +592,11 @@
   version "9.0.2"
   resolved "https://registry.npmjs.org/@mantine/store/-/store-9.0.2.tgz#4f181b55f6f99863b038f69b15f560abe8acb141"
   integrity sha512-5bckpj3Up7SUueKCPcpSTno7c8XTB6o2+mjUHH+Bh++X/S+kjPnxJWN+ikdSyCjLUWGChpEZlokRDswYmcpbDw==
+
+"@mantine/store@9.1.1":
+  version "9.1.1"
+  resolved "https://registry.npmjs.org/@mantine/store/-/store-9.1.1.tgz#09e63b31db5b3c0202b29ba052a751d4ad433396"
+  integrity sha512-kbxEU8wVGbobHlmQmk0lu9M+xCILKjuAPcMAshgzPznGLfXeE9zrB0gNT2cbk11Ik8dlV9J6Vsn9cuACyOSpfQ==
 
 "@mantine/tiptap@^9.0.2":
   version "9.0.2"

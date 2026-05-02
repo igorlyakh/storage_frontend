@@ -1,7 +1,9 @@
-import { lazy, Suspense } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { lazy, Suspense, useEffect } from 'react';
+import { Route, Routes, useLocation } from 'react-router-dom';
 
 import { Center, Loader } from '@mantine/core';
+import { NavigationProgress, nprogress } from '@mantine/nprogress';
+
 import Layout from './components/Layout';
 import ProtectedRoutes from './pages/ProtectedRoutes';
 import RestrictedRouts from './pages/RestrictedRoutes';
@@ -25,17 +27,34 @@ const BrandsPage = lazy(() => import('./pages/BrandsPage/BrandsPage'));
 const CreateBrandPage = lazy(() => import('./pages/CreateBrandPage/CreateBrandPage'));
 const StatisticPage = lazy(() => import('./pages/StatisticPage/StatisticPage'));
 
+const SuspenseLoader = () => {
+  useEffect(() => {
+    nprogress.start();
+
+    return () => {
+      nprogress.complete();
+    };
+  }, []);
+
+  return (
+    <Center h="100vh">
+      <Loader size={50} />
+    </Center>
+  );
+};
+
 const App = () => {
+  const location = useLocation();
+
   return (
     <>
+      <NavigationProgress />
+
       <Suspense
-        fallback={
-          <Center h="100vh">
-            <Loader size={50} />
-          </Center>
-        }
+        key={location.pathname}
+        fallback={<SuspenseLoader />}
       >
-        <Routes>
+        <Routes location={location}>
           <Route
             element={<Layout />}
             path="/"
