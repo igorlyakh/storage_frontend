@@ -1,11 +1,31 @@
 import { LineChart } from '@mantine/charts';
-import { Box, Card, LoadingOverlay, Text, Title } from '@mantine/core';
-import { forwardRef, useMemo } from 'react';
+import {
+  Box,
+  Card,
+  Group,
+  LoadingOverlay,
+  MultiSelect,
+  Text,
+  Title,
+} from '@mantine/core';
+import { forwardRef, useMemo, useState } from 'react';
 
 const YearlyChartCard = forwardRef(({ data, isFetching, chartLabel }, ref) => {
+  const [selectedStores, setSelectedStores] = useState([]);
+
+  const allStoresOptions = useMemo(() => {
+    if (data.length === 0) return [];
+    return Object.keys(data[0]).filter(key => key !== 'month');
+  }, [data]);
+
   const yearlySeries = useMemo(() => {
     if (data.length === 0) return [];
-    const stores = Object.keys(data[0]).filter(key => key !== 'month');
+
+    const allStores = Object.keys(data[0]).filter(key => key !== 'month');
+
+    const storesToShow =
+      selectedStores.length > 0 ? selectedStores : allStores.slice(0, 3);
+
     const colors = [
       'blue.6',
       'teal.6',
@@ -16,11 +36,11 @@ const YearlyChartCard = forwardRef(({ data, isFetching, chartLabel }, ref) => {
       'cyan.6',
     ];
 
-    return stores.map((storeName, index) => ({
+    return storesToShow.map((storeName, index) => ({
       name: storeName,
       color: colors[index % colors.length],
     }));
-  }, [data]);
+  }, [data, selectedStores]);
 
   return (
     <Card
@@ -29,19 +49,37 @@ const YearlyChartCard = forwardRef(({ data, isFetching, chartLabel }, ref) => {
       radius="md"
       p="md"
     >
-      <Title
-        order={4}
-        mb="xs"
-      >
-        Yearly Dynamics
-      </Title>
-      <Text
-        c="dimmed"
-        size="sm"
+      <Group
+        justify="space-between"
+        align="flex-start"
         mb="md"
       >
-        {chartLabel}
-      </Text>
+        <div>
+          <Title
+            order={4}
+            mb="xs"
+          >
+            Yearly Dynamics
+          </Title>
+          <Text
+            c="dimmed"
+            size="sm"
+          >
+            {chartLabel}
+          </Text>
+        </div>
+
+        <MultiSelect
+          placeholder="Select stores to compare"
+          data={allStoresOptions}
+          value={selectedStores}
+          onChange={setSelectedStores}
+          searchable
+          clearable
+          maxValues={10}
+          w={250}
+        />
+      </Group>
 
       <Box
         pos="relative"
