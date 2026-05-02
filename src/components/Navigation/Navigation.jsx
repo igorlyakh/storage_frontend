@@ -138,6 +138,17 @@ const Navigation = () => {
         />
       )}
 
+      {['ADMIN', 'WAREHOUSE'].includes(role) && (
+        <Button
+          component={Link}
+          to="/statistics"
+          variant="subtle"
+          color="gray.0"
+        >
+          Statistics
+        </Button>
+      )}
+
       {token ? (
         <Button
           variant="light"
