@@ -1,6 +1,7 @@
 import { BarChart, LineChart } from '@mantine/charts';
 import {
   Box,
+  Button,
   Card,
   Group,
   LoadingOverlay,
@@ -10,7 +11,13 @@ import {
   Text,
   Title,
 } from '@mantine/core';
-import { useMemo, useState } from 'react';
+import { Download } from 'lucide-react';
+import { useMemo, useRef, useState } from 'react';
+
+import ExcelJS from 'exceljs';
+import { saveAs } from 'file-saver';
+import html2canvas from 'html2canvas';
+
 import {
   useGetAllProductsQuery,
   useGetMonthlyStatsQuery,
@@ -24,6 +31,11 @@ const StatisticsPage = () => {
   const [year, setYear] = useState(currentYear.toString());
   const [month, setMonth] = useState(currentMonth.toString());
   const [productId, setProductId] = useState(null);
+
+  const [isExporting, setIsExporting] = useState(false);
+
+  const monthlyChartRef = useRef(null);
+  const yearlyChartRef = useRef(null);
 
   const { data: products = [] } = useGetAllProductsQuery();
   const productOptions = products.map(p => ({
@@ -45,7 +57,6 @@ const StatisticsPage = () => {
 
   const yearlySeries = useMemo(() => {
     if (yearlyData.length === 0) return [];
-
     const stores = Object.keys(yearlyData[0]).filter(key => key !== 'month');
     const colors = [
       'blue.6',
@@ -65,6 +76,68 @@ const StatisticsPage = () => {
 
   const chartLabel = productId ? 'Items Quantity Ordered' : 'Total Orders Count';
 
+  const handleExportExcel = async () => {
+    setIsExporting(true);
+    try {
+      const workbook = new ExcelJS.Workbook();
+
+      const monthlySheet = workbook.addWorksheet(`Monthly (${month}-${year})`);
+
+      monthlySheet.columns = [
+        { header: 'Store Name', key: 'storeName', width: 30 },
+        { header: chartLabel, key: 'value', width: 25 },
+      ];
+      monthlySheet.addRows(monthlyData);
+
+      if (monthlyChartRef.current) {
+        const canvas = await html2canvas(monthlyChartRef.current, { scale: 2 });
+        const imageId = workbook.addImage({
+          base64: canvas.toDataURL('image/png'),
+          extension: 'png',
+        });
+        monthlySheet.addImage(imageId, {
+          tl: { col: 3, row: 1 },
+          ext: { width: 600, height: 300 },
+        });
+      }
+
+      const yearlySheet = workbook.addWorksheet(`Yearly (${year})`);
+
+      if (yearlyData.length > 0) {
+        const columns = Object.keys(yearlyData[0]).map(key => ({
+          header: key === 'month' ? 'Month' : key,
+          key: key,
+          width: 15,
+        }));
+        yearlySheet.columns = columns;
+        yearlySheet.addRows(yearlyData);
+      }
+
+      if (yearlyChartRef.current) {
+        const canvas = await html2canvas(yearlyChartRef.current, { scale: 2 });
+        const imageId = workbook.addImage({
+          base64: canvas.toDataURL('image/png'),
+          extension: 'png',
+        });
+        yearlySheet.addImage(imageId, {
+          tl: { col: 0, row: 15 },
+          ext: { width: 700, height: 350 },
+        });
+      }
+
+      const buffer = await workbook.xlsx.writeBuffer();
+      const productName = productId
+        ? products.find(p => p.id === productId)?.name.replace(/[^a-z0-9]/gi, '_')
+        : 'All_Orders';
+
+      saveAs(new Blob([buffer]), `Statistics_${productName}_${month}-${year}.xlsx`);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsExporting(false);
+    }
+  };
+
   return (
     <Stack
       gap="lg"
@@ -75,6 +148,17 @@ const StatisticsPage = () => {
         align="flex-end"
       >
         <Title order={2}>Global Statistics</Title>
+
+        <Button
+          leftSection={<Download size={18} />}
+          onClick={handleExportExcel}
+          variant="light"
+          color="green"
+          loading={isExporting}
+          disabled={isMonthlyFetching || isYearlyFetching}
+        >
+          Export to Excel
+        </Button>
       </Group>
 
       <Card
@@ -154,6 +238,8 @@ const StatisticsPage = () => {
           <Box
             pos="relative"
             h={300}
+            ref={monthlyChartRef}
+            bg="white"
           >
             <LoadingOverlay
               visible={isMonthlyFetching}
@@ -165,7 +251,7 @@ const StatisticsPage = () => {
                 h={300}
                 data={monthlyData}
                 dataKey="storeName"
-                series={[{ name: 'value', color: 'blue.6' }]}
+                series={[{ name: 'value', label: chartLabel, color: 'blue.6' }]}
                 tickLine="y"
                 tooltipAnimationDuration={200}
               />
@@ -204,6 +290,8 @@ const StatisticsPage = () => {
           <Box
             pos="relative"
             h={300}
+            ref={yearlyChartRef}
+            bg="white"
           >
             <LoadingOverlay
               visible={isYearlyFetching}
