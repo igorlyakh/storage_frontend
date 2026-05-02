@@ -27,6 +27,8 @@ const MonthlyChartCard = forwardRef(({ data, isFetching, chartLabel }, ref) => {
       <Box
         pos="relative"
         h={300}
+        w="100%"
+        style={{ minHeight: 300 }}
         ref={ref}
         bg="white"
       >
