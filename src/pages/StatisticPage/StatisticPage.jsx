@@ -4,7 +4,6 @@ import {
   Card,
   Group,
   LoadingOverlay,
-  SegmentedControl,
   Select,
   SimpleGrid,
   Stack,
@@ -26,8 +25,6 @@ const StatisticsPage = () => {
   const [month, setMonth] = useState(currentMonth.toString());
   const [productId, setProductId] = useState(null);
 
-  const [metric, setMetric] = useState('orders');
-
   const { data: products = [] } = useGetAllProductsQuery();
   const productOptions = products.map(p => ({
     value: p.id,
@@ -46,28 +43,10 @@ const StatisticsPage = () => {
     productId,
   });
 
-  const monthlyChartData = useMemo(() => {
-    return monthlyData.map(item => ({
-      storeName: item.storeName,
-      value: metric === 'orders' ? item.totalOrders : item.totalItems,
-    }));
-  }, [monthlyData, metric]);
+  const yearlySeries = useMemo(() => {
+    if (yearlyData.length === 0) return [];
 
-  const { yearlyChartData, yearlySeries } = useMemo(() => {
-    const formattedData = [];
-    const storesSet = new Set();
-
-    yearlyData.forEach(monthData => {
-      const row = { month: monthData.month };
-
-      Object.entries(monthData.stores).forEach(([storeName, stats]) => {
-        storesSet.add(storeName);
-        row[storeName] = metric === 'orders' ? stats.orders : stats.items;
-      });
-
-      formattedData.push(row);
-    });
-
+    const stores = Object.keys(yearlyData[0]).filter(key => key !== 'month');
     const colors = [
       'blue.6',
       'teal.6',
@@ -77,13 +56,14 @@ const StatisticsPage = () => {
       'red.6',
       'cyan.6',
     ];
-    const series = Array.from(storesSet).map((storeName, index) => ({
+
+    return stores.map((storeName, index) => ({
       name: storeName,
       color: colors[index % colors.length],
     }));
+  }, [yearlyData]);
 
-    return { yearlyChartData: formattedData, yearlySeries: series };
-  }, [yearlyData, metric]);
+  const chartLabel = productId ? 'Items Quantity Ordered' : 'Total Orders Count';
 
   return (
     <Stack
@@ -94,16 +74,7 @@ const StatisticsPage = () => {
         justify="space-between"
         align="flex-end"
       >
-        <Title order={2}>Statistics Dashboard</Title>
-
-        <SegmentedControl
-          value={metric}
-          onChange={setMetric}
-          data={[
-            { label: 'Orders Count', value: 'orders' },
-            { label: 'Items Count (Qty)', value: 'items' },
-          ]}
-        />
+        <Title order={2}>Global Statistics</Title>
       </Group>
 
       <Card
@@ -145,7 +116,7 @@ const StatisticsPage = () => {
           />
           <Select
             label="Product Filter"
-            placeholder="All Products"
+            placeholder="All Products (Orders count)"
             data={productOptions}
             value={productId}
             onChange={setProductId}
@@ -168,10 +139,18 @@ const StatisticsPage = () => {
         >
           <Title
             order={4}
+            mb="xs"
+          >
+            Monthly Comparison
+          </Title>
+          <Text
+            c="dimmed"
+            size="sm"
             mb="md"
           >
-            Stores Performance ({month}/{year})
-          </Title>
+            {chartLabel}
+          </Text>
+
           <Box
             pos="relative"
             h={300}
@@ -181,10 +160,10 @@ const StatisticsPage = () => {
               zIndex={1000}
               overlayProps={{ blur: 2 }}
             />
-            {monthlyChartData.length > 0 ? (
+            {monthlyData.length > 0 ? (
               <BarChart
                 h={300}
-                data={monthlyChartData}
+                data={monthlyData}
                 dataKey="storeName"
                 series={[{ name: 'value', color: 'blue.6' }]}
                 tickLine="y"
@@ -196,7 +175,7 @@ const StatisticsPage = () => {
                 ta="center"
                 mt={100}
               >
-                No data for this period
+                No data
               </Text>
             )}
           </Box>
@@ -210,10 +189,18 @@ const StatisticsPage = () => {
         >
           <Title
             order={4}
+            mb="xs"
+          >
+            Yearly Dynamics
+          </Title>
+          <Text
+            c="dimmed"
+            size="sm"
             mb="md"
           >
-            Yearly Dynamics ({year})
-          </Title>
+            {chartLabel}
+          </Text>
+
           <Box
             pos="relative"
             h={300}
@@ -223,10 +210,10 @@ const StatisticsPage = () => {
               zIndex={1000}
               overlayProps={{ blur: 2 }}
             />
-            {yearlyChartData.length > 0 && yearlySeries.length > 0 ? (
+            {yearlyData.length > 0 && yearlySeries.length > 0 ? (
               <LineChart
                 h={300}
-                data={yearlyChartData}
+                data={yearlyData}
                 dataKey="month"
                 series={yearlySeries}
                 curveType="monotone"
@@ -241,7 +228,7 @@ const StatisticsPage = () => {
                 ta="center"
                 mt={100}
               >
-                No data for this period
+                No data
               </Text>
             )}
           </Box>
