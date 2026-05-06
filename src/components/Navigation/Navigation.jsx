@@ -1,4 +1,13 @@
-import { Burger, Button, Drawer, Group, Menu, Stack } from '@mantine/core';
+import {
+  Accordion,
+  Burger,
+  Button,
+  Drawer,
+  Group,
+  Menu,
+  Stack,
+  Text,
+} from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import toast from 'react-hot-toast';
 import { useDispatch, useSelector } from 'react-redux';
@@ -7,37 +16,77 @@ import { useLogoutMutation } from '../../store/api/api';
 import { tokenSelector, userRoleSelector } from '../../store/selectors/selectors';
 import { logoutAction } from '../../store/userSlice/userSlice';
 
-const NavMenu = ({ title, items, isMobile, closeDrawer }) => (
-  <Menu
-    trigger={isMobile ? 'click' : 'hover'}
-    openDelay={100}
-    closeDelay={200}
-    shadow="md"
-    width={isMobile ? '100%' : 200}
-  >
-    <Menu.Target>
-      <Button
-        variant="subtle"
-        color={isMobile ? 'dark' : 'gray.0'}
-        fullWidth={isMobile}
+const NavMenu = ({ title, items, isMobile, closeDrawer }) => {
+  if (isMobile) {
+    return (
+      <Accordion
+        variant="separated"
+        styles={{ item: { border: 'none' }, control: { padding: '8px 12px' } }}
       >
-        {title}
-      </Button>
-    </Menu.Target>
-    <Menu.Dropdown>
-      {items.map(item => (
-        <Menu.Item
-          key={item.to}
-          component={Link}
-          to={item.to}
-          onClick={isMobile ? closeDrawer : undefined}
+        <Accordion.Item value={title}>
+          <Accordion.Control>
+            <Text
+              size="sm"
+              fw={500}
+            >
+              {title}
+            </Text>
+          </Accordion.Control>
+          <Accordion.Panel>
+            <Stack gap={4}>
+              {items.map(item => (
+                <Button
+                  key={item.to}
+                  component={Link}
+                  to={item.to}
+                  variant="subtle"
+                  color="dark"
+                  fullWidth
+                  justify="flex-start"
+                  onClick={closeDrawer}
+                  size="sm"
+                >
+                  {item.label}
+                </Button>
+              ))}
+            </Stack>
+          </Accordion.Panel>
+        </Accordion.Item>
+      </Accordion>
+    );
+  }
+
+  return (
+    <Menu
+      trigger="hover"
+      openDelay={50}
+      closeDelay={200}
+      shadow="md"
+      width={200}
+      withinPortal
+    >
+      <Menu.Target>
+        <Button
+          variant="subtle"
+          color="gray.0"
         >
-          {item.label}
-        </Menu.Item>
-      ))}
-    </Menu.Dropdown>
-  </Menu>
-);
+          {title}
+        </Button>
+      </Menu.Target>
+      <Menu.Dropdown>
+        {items.map(item => (
+          <Menu.Item
+            key={item.to}
+            component={Link}
+            to={item.to}
+          >
+            {item.label}
+          </Menu.Item>
+        ))}
+      </Menu.Dropdown>
+    </Menu>
+  );
+};
 
 const Navigation = () => {
   const token = useSelector(tokenSelector);
@@ -65,6 +114,7 @@ const Navigation = () => {
         variant="subtle"
         color={isMobile ? 'dark' : 'gray.0'}
         fullWidth={isMobile}
+        justify={isMobile ? 'flex-start' : 'center'}
         onClick={isMobile ? close : undefined}
       >
         Home
@@ -77,6 +127,7 @@ const Navigation = () => {
           variant="subtle"
           color={isMobile ? 'dark' : 'gray.0'}
           fullWidth={isMobile}
+          justify={isMobile ? 'flex-start' : 'center'}
           onClick={isMobile ? close : undefined}
         >
           All orders
@@ -114,6 +165,7 @@ const Navigation = () => {
           variant="subtle"
           color={isMobile ? 'dark' : 'gray.0'}
           fullWidth={isMobile}
+          justify={isMobile ? 'flex-start' : 'center'}
           onClick={isMobile ? close : undefined}
         >
           Requests
@@ -121,39 +173,35 @@ const Navigation = () => {
       )}
 
       {role === 'ADMIN' && (
-        <NavMenu
-          title="Users"
-          items={[
-            { label: 'All Users', to: '/users' },
-            { label: 'Create User', to: '/users/create' },
-          ]}
-          isMobile={isMobile}
-          closeDrawer={close}
-        />
-      )}
-
-      {role === 'ADMIN' && (
-        <NavMenu
-          title="Brands"
-          items={[
-            { label: 'All Brands', to: '/brands' },
-            { label: 'Create Brand', to: '/brands/create' },
-          ]}
-          isMobile={isMobile}
-          closeDrawer={close}
-        />
-      )}
-
-      {role === 'ADMIN' && (
-        <NavMenu
-          title="Stores"
-          items={[
-            { label: 'All Stores', to: '/stores' },
-            { label: 'Create Store', to: '/stores/create' },
-          ]}
-          isMobile={isMobile}
-          closeDrawer={close}
-        />
+        <>
+          <NavMenu
+            title="Users"
+            items={[
+              { label: 'All Users', to: '/users' },
+              { label: 'Create User', to: '/users/create' },
+            ]}
+            isMobile={isMobile}
+            closeDrawer={close}
+          />
+          <NavMenu
+            title="Brands"
+            items={[
+              { label: 'All Brands', to: '/brands' },
+              { label: 'Create Brand', to: '/brands/create' },
+            ]}
+            isMobile={isMobile}
+            closeDrawer={close}
+          />
+          <NavMenu
+            title="Stores"
+            items={[
+              { label: 'All Stores', to: '/stores' },
+              { label: 'Create Store', to: '/stores/create' },
+            ]}
+            isMobile={isMobile}
+            closeDrawer={close}
+          />
+        </>
       )}
 
       {['ADMIN', 'WAREHOUSE'].includes(role) && (
@@ -163,6 +211,7 @@ const Navigation = () => {
           variant="subtle"
           color={isMobile ? 'dark' : 'gray.0'}
           fullWidth={isMobile}
+          justify={isMobile ? 'flex-start' : 'center'}
           onClick={isMobile ? close : undefined}
         >
           Statistics
@@ -218,12 +267,12 @@ const Navigation = () => {
       <Drawer
         opened={opened}
         onClose={close}
-        size="sm"
-        title="Navigation"
+        size="xs"
+        title="Inventory Menu"
         hiddenFrom="lg"
         zIndex={1000000}
       >
-        <Stack gap="xs">{renderLinks(true)}</Stack>
+        <Stack gap={4}>{renderLinks(true)}</Stack>
       </Drawer>
     </>
   );
