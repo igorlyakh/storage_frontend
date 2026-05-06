@@ -249,6 +249,7 @@ const ProductsTable = ({ data }) => {
       ],
     },
     meta: tableMeta,
+    autoResetExpanded: false,
     getCoreRowModel: getCoreRowModel(),
     getGroupedRowModel: getGroupedRowModel(),
     getExpandedRowModel: getExpandedRowModel(),
@@ -305,8 +306,24 @@ const ProductsTable = ({ data }) => {
                 <Table.Tr key={headerGroup.id}>
                   {headerGroup.headers.map(header => {
                     if (header.id === 'category') return null;
+
+                    const isNameCol = header.id === 'name';
+
                     return (
-                      <Table.Th key={header.id}>
+                      <Table.Th
+                        key={header.id}
+                        style={
+                          isNameCol
+                            ? {
+                                position: 'sticky',
+                                left: 0,
+                                zIndex: 2,
+                                backgroundColor: 'var(--mantine-color-gray-0)',
+                                boxShadow: '2px 0 5px -2px rgba(0,0,0,0.1)',
+                              }
+                            : undefined
+                        }
+                      >
                         {flexRender(header.column.columnDef.header, header.getContext())}
                       </Table.Th>
                     );
@@ -359,8 +376,24 @@ const ProductsTable = ({ data }) => {
                   <Table.Tr key={row.id}>
                     {row.getVisibleCells().map(cell => {
                       if (cell.column.id === 'category') return null;
+
+                      const isNameCol = cell.column.id === 'name';
+
                       return (
-                        <Table.Td key={cell.id}>
+                        <Table.Td
+                          key={cell.id}
+                          style={
+                            isNameCol
+                              ? {
+                                  position: 'sticky',
+                                  left: 0,
+                                  zIndex: 1,
+                                  backgroundColor: 'var(--mantine-color-body)',
+                                  boxShadow: '2px 0 5px -2px rgba(0,0,0,0.1)',
+                                }
+                              : undefined
+                          }
+                        >
                           {flexRender(cell.column.columnDef.cell, cell.getContext())}
                         </Table.Td>
                       );
