@@ -5,5 +5,5 @@ export const productCategories = [
   'PACKAGING',
   'HANGERS',
   'TAGS',
-  'PRESENT_PACKING',
+  'PRESENTS_PACKING',
 ];
