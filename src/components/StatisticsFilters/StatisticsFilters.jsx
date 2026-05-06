@@ -14,11 +14,11 @@ const StatisticsFilters = ({
       withBorder
       shadow="sm"
       radius="md"
-      p="md"
+      p={{ base: 'sm', sm: 'md' }}
     >
       <SimpleGrid
         cols={{ base: 1, sm: 3 }}
-        spacing="md"
+        spacing={{ base: 'sm', sm: 'md' }}
       >
         <Select
           label="Year"
@@ -26,6 +26,7 @@ const StatisticsFilters = ({
           value={year}
           onChange={setYear}
           allowDeselect={false}
+          size={{ base: 'md', sm: 'sm' }}
         />
         <Select
           label="Month"
@@ -46,6 +47,7 @@ const StatisticsFilters = ({
           value={month}
           onChange={setMonth}
           allowDeselect={false}
+          size={{ base: 'md', sm: 'sm' }}
         />
         <Select
           label="Product Filter"
@@ -55,6 +57,7 @@ const StatisticsFilters = ({
           onChange={setProductId}
           searchable
           clearable
+          size={{ base: 'md', sm: 'sm' }}
         />
       </SimpleGrid>
     </Card>

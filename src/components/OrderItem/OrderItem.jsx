@@ -41,37 +41,43 @@ const OrderItem = ({ store, status, sended, updated, id }) => {
       withBorder
       shadow="sm"
       radius="md"
-      padding="md"
+      padding={{ base: 'sm', sm: 'md' }}
       display="flex"
       style={{ flexDirection: 'column' }}
     >
       <Group
         justify="space-between"
-        mb="sm"
+        mb={{ base: 'xs', sm: 'sm' }}
+        align="flex-start"
       >
         <Text
           fw={600}
-          size="lg"
+          fz={{ base: 'md', sm: 'lg' }}
         >
           <Text
             span
             c="dimmed"
-            size="sm"
+            fz={{ base: 'xs', sm: 'sm' }}
             fw={400}
           >
             From:{' '}
           </Text>
           {store}
         </Text>
-        <Badge color={getStatusColor(status)}>{status}</Badge>
+        <Badge
+          color={getStatusColor(status)}
+          size="sm"
+        >
+          {status}
+        </Badge>
       </Group>
 
       <Stack
-        gap="xs"
-        mb="lg"
+        gap={{ base: 4, sm: 'xs' }}
+        mb={{ base: 'md', sm: 'lg' }}
         style={{ flexGrow: 1 }}
       >
-        <Text size="sm">
+        <Text fz={{ base: 'xs', sm: 'sm' }}>
           <Text
             span
             c="dimmed"
@@ -86,7 +92,7 @@ const OrderItem = ({ store, status, sended, updated, id }) => {
           </Text>
         </Text>
         {updated !== sended && (
-          <Text size="sm">
+          <Text fz={{ base: 'xs', sm: 'sm' }}>
             <Text
               span
               c="dimmed"
@@ -106,6 +112,7 @@ const OrderItem = ({ store, status, sended, updated, id }) => {
       <Group
         justify="space-between"
         mt="auto"
+        gap="xs"
       >
         {status === 'NEW' && ['ADMIN', 'WAREHOUSE'].includes(userRole) && (
           <Button
@@ -116,6 +123,7 @@ const OrderItem = ({ store, status, sended, updated, id }) => {
             onClick={handleAccept}
             loading={isLoading}
             leftSection={<CheckCircle size={16} />}
+            flex={{ base: 1, sm: 'none' }}
           >
             Accept order
           </Button>
@@ -128,7 +136,15 @@ const OrderItem = ({ store, status, sended, updated, id }) => {
           variant="subtle"
           size="xs"
           rightSection={<ArrowRight size={14} />}
-          style={{ marginLeft: 'auto' }}
+          style={{
+            marginLeft:
+              status === 'NEW' && ['ADMIN', 'WAREHOUSE'].includes(userRole) ? 0 : 'auto',
+          }}
+          flex={{
+            base:
+              status === 'NEW' && ['ADMIN', 'WAREHOUSE'].includes(userRole) ? 1 : 'none',
+            sm: 'none',
+          }}
         >
           To order
         </Button>

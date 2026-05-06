@@ -1,4 +1,5 @@
-import { Button, Group, Menu } from '@mantine/core';
+import { Burger, Button, Drawer, Group, Menu, Stack } from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
 import toast from 'react-hot-toast';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -6,18 +7,19 @@ import { useLogoutMutation } from '../../store/api/api';
 import { tokenSelector, userRoleSelector } from '../../store/selectors/selectors';
 import { logoutAction } from '../../store/userSlice/userSlice';
 
-const NavMenu = ({ title, items }) => (
+const NavMenu = ({ title, items, isMobile, closeDrawer }) => (
   <Menu
-    trigger="hover"
+    trigger={isMobile ? 'click' : 'hover'}
     openDelay={100}
     closeDelay={200}
     shadow="md"
-    width={200}
+    width={isMobile ? '100%' : 200}
   >
     <Menu.Target>
       <Button
         variant="subtle"
-        color="gray.0"
+        color={isMobile ? 'dark' : 'gray.0'}
+        fullWidth={isMobile}
       >
         {title}
       </Button>
@@ -28,6 +30,7 @@ const NavMenu = ({ title, items }) => (
           key={item.to}
           component={Link}
           to={item.to}
+          onClick={isMobile ? closeDrawer : undefined}
         >
           {item.label}
         </Menu.Item>
@@ -41,27 +44,28 @@ const Navigation = () => {
   const role = useSelector(userRoleSelector);
   const dispatch = useDispatch();
   const [logout] = useLogoutMutation();
+  const [opened, { toggle, close }] = useDisclosure(false);
 
   const handler = async () => {
     try {
       await logout().unwrap();
       dispatch(logoutAction());
       toast.success('You have successfully logged out!');
+      close();
     } catch {
       toast.error('Something went wrong! Try again.');
     }
   };
 
-  return (
-    <Group
-      component="nav"
-      gap="sm"
-    >
+  const renderLinks = isMobile => (
+    <>
       <Button
         component={Link}
         to="/"
         variant="subtle"
-        color="gray.0"
+        color={isMobile ? 'dark' : 'gray.0'}
+        fullWidth={isMobile}
+        onClick={isMobile ? close : undefined}
       >
         Home
       </Button>
@@ -71,7 +75,9 @@ const Navigation = () => {
           component={Link}
           to="/all-orders"
           variant="subtle"
-          color="gray.0"
+          color={isMobile ? 'dark' : 'gray.0'}
+          fullWidth={isMobile}
+          onClick={isMobile ? close : undefined}
         >
           All orders
         </Button>
@@ -84,6 +90,8 @@ const Navigation = () => {
             { label: 'My Orders', to: '/orders' },
             { label: 'Create Order', to: '/orders/create' },
           ]}
+          isMobile={isMobile}
+          closeDrawer={close}
         />
       )}
 
@@ -94,6 +102,8 @@ const Navigation = () => {
             { label: 'All Products', to: '/products' },
             { label: 'Create Product', to: '/products/create' },
           ]}
+          isMobile={isMobile}
+          closeDrawer={close}
         />
       )}
 
@@ -102,7 +112,9 @@ const Navigation = () => {
           component={Link}
           to="/requests"
           variant="subtle"
-          color="gray.0"
+          color={isMobile ? 'dark' : 'gray.0'}
+          fullWidth={isMobile}
+          onClick={isMobile ? close : undefined}
         >
           Requests
         </Button>
@@ -115,6 +127,8 @@ const Navigation = () => {
             { label: 'All Users', to: '/users' },
             { label: 'Create User', to: '/users/create' },
           ]}
+          isMobile={isMobile}
+          closeDrawer={close}
         />
       )}
 
@@ -125,6 +139,8 @@ const Navigation = () => {
             { label: 'All Brands', to: '/brands' },
             { label: 'Create Brand', to: '/brands/create' },
           ]}
+          isMobile={isMobile}
+          closeDrawer={close}
         />
       )}
 
@@ -135,6 +151,8 @@ const Navigation = () => {
             { label: 'All Stores', to: '/stores' },
             { label: 'Create Store', to: '/stores/create' },
           ]}
+          isMobile={isMobile}
+          closeDrawer={close}
         />
       )}
 
@@ -143,7 +161,9 @@ const Navigation = () => {
           component={Link}
           to="/statistics"
           variant="subtle"
-          color="gray.0"
+          color={isMobile ? 'dark' : 'gray.0'}
+          fullWidth={isMobile}
+          onClick={isMobile ? close : undefined}
         >
           Statistics
         </Button>
@@ -154,7 +174,9 @@ const Navigation = () => {
           variant="light"
           color="red"
           onClick={handler}
-          ml="md"
+          fullWidth={isMobile}
+          ml={isMobile ? 0 : 'md'}
+          mt={isMobile ? 'md' : 0}
         >
           Logout
         </Button>
@@ -164,12 +186,46 @@ const Navigation = () => {
           to="/login"
           variant="filled"
           color="blue"
-          ml="md"
+          onClick={isMobile ? close : undefined}
+          fullWidth={isMobile}
+          ml={isMobile ? 0 : 'md'}
+          mt={isMobile ? 'md' : 0}
         >
           Login
         </Button>
       )}
-    </Group>
+    </>
+  );
+
+  return (
+    <>
+      <Burger
+        opened={opened}
+        onClick={toggle}
+        hiddenFrom="lg"
+        color="gray.0"
+        size="sm"
+      />
+
+      <Group
+        component="nav"
+        gap="sm"
+        visibleFrom="lg"
+      >
+        {renderLinks(false)}
+      </Group>
+
+      <Drawer
+        opened={opened}
+        onClose={close}
+        size="sm"
+        title="Navigation"
+        hiddenFrom="lg"
+        zIndex={1000000}
+      >
+        <Stack gap="xs">{renderLinks(true)}</Stack>
+      </Drawer>
+    </>
   );
 };
 

@@ -42,25 +42,30 @@ const CreateStoreForm = () => {
     }
   };
 
+  const inputStyles = {
+    label: { marginBottom: 8 },
+  };
+
   return (
     <Paper
       withBorder
       shadow="sm"
       radius="md"
-      p="xl"
+      p={{ base: 'md', sm: 'xl' }}
       mx="auto"
       w={{ base: '100%', sm: 450 }}
     >
       <Title
         order={3}
-        mb="lg"
+        mb={30}
         ta="center"
       >
         Create New Store
       </Title>
 
       <form onSubmit={handleSubmit(onSubmit)}>
-        <Stack gap="md">
+        <Stack gap={25}>
+          {' '}
           <Controller
             name="name"
             control={control}
@@ -75,10 +80,13 @@ const CreateStoreForm = () => {
                 placeholder="e.g. Store-1"
                 withAsterisk
                 error={errors.name?.message}
+                h={{ base: 42, sm: 36 }}
+                fz={{ base: 'md', sm: 'sm' }}
+                styles={inputStyles}
+                mb={15}
               />
             )}
           />
-
           <Controller
             name="brandIds"
             control={control}
@@ -96,15 +104,18 @@ const CreateStoreForm = () => {
                 error={errors.brandIds?.message}
                 value={field.value || []}
                 onChange={field.onChange}
+                fz={{ base: 'md', sm: 'sm' }}
+                styles={inputStyles}
               />
             )}
           />
-
           <Button
             type="submit"
-            mt="md"
             fullWidth
             loading={isSubmitting}
+            mt={15}
+            h={{ base: 46, sm: 40 }}
+            fz={{ base: 'md', sm: 'sm' }}
           >
             Create Store
           </Button>

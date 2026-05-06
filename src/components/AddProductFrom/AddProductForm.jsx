@@ -5,6 +5,7 @@ import {
   NumberInput,
   Paper,
   Select,
+  SimpleGrid,
   Stack,
   TextInput,
   Title,
@@ -65,9 +66,9 @@ const AddProductForm = () => {
       withBorder
       shadow="sm"
       radius="md"
-      p="xl"
+      p={{ base: 'md', sm: 'xl' }}
       mx="auto"
-      w={{ base: '100%', sm: 450 }}
+      w={{ base: '100%', sm: 500, md: 600 }}
     >
       <Title
         order={3}
@@ -94,35 +95,40 @@ const AddProductForm = () => {
             )}
           />
 
-          <Controller
-            name="category"
-            control={control}
-            rules={{ required: 'Category is required!' }}
-            render={({ field }) => (
-              <Select
-                {...field}
-                label="Category"
-                withAsterisk
-                data={productCategories}
-                error={errors.category?.message}
-              />
-            )}
-          />
+          <SimpleGrid
+            cols={{ base: 1, sm: 2 }}
+            spacing="md"
+          >
+            <Controller
+              name="category"
+              control={control}
+              rules={{ required: 'Category is required!' }}
+              render={({ field }) => (
+                <Select
+                  {...field}
+                  label="Category"
+                  withAsterisk
+                  data={productCategories}
+                  error={errors.category?.message}
+                />
+              )}
+            />
 
-          <Controller
-            name="tag"
-            control={control}
-            rules={{ required: 'Tag is required!' }}
-            render={({ field }) => (
-              <Select
-                {...field}
-                label="Admin Tag"
-                withAsterisk
-                data={productTags}
-                error={errors.tag?.message}
-              />
-            )}
-          />
+            <Controller
+              name="tag"
+              control={control}
+              rules={{ required: 'Tag is required!' }}
+              render={({ field }) => (
+                <Select
+                  {...field}
+                  label="Admin Tag"
+                  withAsterisk
+                  data={productTags}
+                  error={errors.tag?.message}
+                />
+              )}
+            />
+          </SimpleGrid>
 
           <Controller
             name="brandsIds"
@@ -142,36 +148,41 @@ const AddProductForm = () => {
             )}
           />
 
-          <Controller
-            name="limitPerOrder"
-            control={control}
-            render={({ field }) => (
-              <NumberInput
-                {...field}
-                label="Limit (optional)"
-                placeholder="Enter limit"
-                min={0}
-                allowNegative={false}
-                hideControls
-              />
-            )}
-          />
+          <SimpleGrid
+            cols={{ base: 1, sm: 2 }}
+            spacing="md"
+          >
+            <Controller
+              name="limitPerOrder"
+              control={control}
+              render={({ field }) => (
+                <NumberInput
+                  {...field}
+                  label="Limit (optional)"
+                  placeholder="Enter limit"
+                  min={0}
+                  allowNegative={false}
+                  hideControls
+                />
+              )}
+            />
 
-          <Controller
-            name="initialQuantity"
-            control={control}
-            render={({ field }) => (
-              <NumberInput
-                {...field}
-                label="Initial Quantity"
-                placeholder="Enter quantity"
-                min={0}
-                allowNegative={false}
-                withAsterisk
-                hideControls
-              />
-            )}
-          />
+            <Controller
+              name="initialQuantity"
+              control={control}
+              render={({ field }) => (
+                <NumberInput
+                  {...field}
+                  label="Initial Quantity"
+                  placeholder="Enter quantity"
+                  min={0}
+                  allowNegative={false}
+                  withAsterisk
+                  hideControls
+                />
+              )}
+            />
+          </SimpleGrid>
 
           <Button
             type="submit"

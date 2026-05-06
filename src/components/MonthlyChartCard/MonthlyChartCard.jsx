@@ -3,25 +3,26 @@ import { Box, Card, LoadingOverlay, ScrollArea, Text, Title } from '@mantine/cor
 import { forwardRef } from 'react';
 
 const MonthlyChartCard = forwardRef(({ data, isFetching, chartLabel }, ref) => {
-  const chartWidth = Math.max(data.length * 50, 600);
+  const chartWidth = `max(100%, ${data.length * 50}px)`;
 
   return (
     <Card
       withBorder
       shadow="sm"
       radius="md"
-      p="md"
+      p={{ base: 'sm', sm: 'md' }}
     >
       <Title
         order={4}
         mb="xs"
+        fz={{ base: 18, sm: 20 }}
       >
         Monthly Comparison
       </Title>
       <Text
         c="dimmed"
-        size="sm"
-        mb="md"
+        size={{ base: 'xs', sm: 'sm' }}
+        mb={{ base: 'sm', sm: 'md' }}
       >
         {chartLabel}
       </Text>
@@ -29,9 +30,8 @@ const MonthlyChartCard = forwardRef(({ data, isFetching, chartLabel }, ref) => {
       <ScrollArea offsetScrollbars>
         <Box
           pos="relative"
-          h={300}
+          h={{ base: 250, sm: 300 }}
           w={chartWidth}
-          style={{ minHeight: 300 }}
           ref={ref}
           bg="white"
         >
@@ -42,7 +42,7 @@ const MonthlyChartCard = forwardRef(({ data, isFetching, chartLabel }, ref) => {
           />
           {data.length > 0 ? (
             <BarChart
-              h={300}
+              h={{ base: 250, sm: 300 }}
               data={data}
               dataKey="storeName"
               series={[{ name: 'value', label: chartLabel, color: 'blue.6' }]}
@@ -53,7 +53,7 @@ const MonthlyChartCard = forwardRef(({ data, isFetching, chartLabel }, ref) => {
             <Text
               c="dimmed"
               ta="center"
-              mt={100}
+              mt={{ base: 80, sm: 100 }}
             >
               No data
             </Text>

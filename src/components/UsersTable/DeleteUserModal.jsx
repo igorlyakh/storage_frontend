@@ -23,6 +23,8 @@ const DeleteUserModal = ({ opened, onClose, user }) => {
       onClose={onClose}
       title="Confirm Deletion"
       centered
+      size={{ base: '95%', sm: 400 }}
+      padding={{ base: 'md', sm: 'lg' }}
     >
       <Text
         size="sm"
@@ -31,12 +33,16 @@ const DeleteUserModal = ({ opened, onClose, user }) => {
         Are you sure you want to delete user <b>{user.username}</b>? This action cannot be
         undone.
       </Text>
-      <Group justify="flex-end">
+      <Group
+        justify="flex-end"
+        gap={{ base: 'sm', sm: 'md' }}
+      >
         <Button
           variant="light"
           color="gray"
           onClick={onClose}
           disabled={isLoading}
+          w={{ base: '100%', sm: 'auto' }}
         >
           Cancel
         </Button>
@@ -44,6 +50,7 @@ const DeleteUserModal = ({ opened, onClose, user }) => {
           color="red"
           onClick={handleDelete}
           loading={isLoading}
+          w={{ base: '100%', sm: 'auto' }}
         >
           Delete User
         </Button>

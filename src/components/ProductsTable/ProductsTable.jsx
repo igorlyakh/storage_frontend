@@ -264,13 +264,15 @@ const ProductsTable = ({ data }) => {
           justify="space-between"
           mb="md"
           align="center"
+          gap="sm"
         >
-          <Box>
+          <Box w={{ base: '100%', sm: 'auto' }}>
             {totalItemsToOrder > 0 && (
               <Badge
                 color="green"
                 size="lg"
                 variant="light"
+                w={{ base: '100%', sm: 'auto' }}
               >
                 Selected products: {totalItemsToOrder}
               </Badge>
@@ -281,6 +283,7 @@ const ProductsTable = ({ data }) => {
             disabled={isSending || totalItemsToOrder === 0}
             color={totalItemsToOrder > 0 ? 'green' : 'gray'}
             loading={isSending}
+            w={{ base: '100%', sm: 'auto' }}
           >
             Send Request
           </Button>
@@ -292,80 +295,82 @@ const ProductsTable = ({ data }) => {
         radius="md"
         overflow="hidden"
       >
-        <Table
-          verticalSpacing="sm"
-          highlightOnHover
-        >
-          <Table.Thead bg="gray.0">
-            {table.getHeaderGroups().map(headerGroup => (
-              <Table.Tr key={headerGroup.id}>
-                {headerGroup.headers.map(header => {
-                  if (header.id === 'category') return null;
-                  return (
-                    <Table.Th key={header.id}>
-                      {flexRender(header.column.columnDef.header, header.getContext())}
-                    </Table.Th>
-                  );
-                })}
-              </Table.Tr>
-            ))}
-          </Table.Thead>
-
-          <Table.Tbody>
-            {table.getRowModel().rows.map(row => {
-              if (row.getIsGrouped()) {
-                return (
-                  <Table.Tr
-                    key={row.id}
-                    bg="blue.0"
-                  >
-                    <Table.Td colSpan={row.getVisibleCells().length}>
-                      <Group
-                        gap="xs"
-                        onClick={row.getToggleExpandedHandler()}
-                        style={{ cursor: 'pointer', userSelect: 'none' }}
-                      >
-                        {row.getIsExpanded() ? (
-                          <ChevronDown size={18} />
-                        ) : (
-                          <ChevronRight size={18} />
-                        )}
-                        <Text
-                          fw={700}
-                          size="md"
-                          c="blue.9"
-                        >
-                          {row.groupingValue}
-                        </Text>
-                        <Badge
-                          color="blue"
-                          variant="filled"
-                          size="sm"
-                          circle
-                        >
-                          {row.subRows.length}
-                        </Badge>
-                      </Group>
-                    </Table.Td>
-                  </Table.Tr>
-                );
-              }
-
-              return (
-                <Table.Tr key={row.id}>
-                  {row.getVisibleCells().map(cell => {
-                    if (cell.column.id === 'category') return null;
+        <Table.ScrollContainer minWidth={900}>
+          <Table
+            verticalSpacing="sm"
+            highlightOnHover
+          >
+            <Table.Thead bg="gray.0">
+              {table.getHeaderGroups().map(headerGroup => (
+                <Table.Tr key={headerGroup.id}>
+                  {headerGroup.headers.map(header => {
+                    if (header.id === 'category') return null;
                     return (
-                      <Table.Td key={cell.id}>
-                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                      </Table.Td>
+                      <Table.Th key={header.id}>
+                        {flexRender(header.column.columnDef.header, header.getContext())}
+                      </Table.Th>
                     );
                   })}
                 </Table.Tr>
-              );
-            })}
-          </Table.Tbody>
-        </Table>
+              ))}
+            </Table.Thead>
+
+            <Table.Tbody>
+              {table.getRowModel().rows.map(row => {
+                if (row.getIsGrouped()) {
+                  return (
+                    <Table.Tr
+                      key={row.id}
+                      bg="blue.0"
+                    >
+                      <Table.Td colSpan={row.getVisibleCells().length}>
+                        <Group
+                          gap="xs"
+                          onClick={row.getToggleExpandedHandler()}
+                          style={{ cursor: 'pointer', userSelect: 'none' }}
+                        >
+                          {row.getIsExpanded() ? (
+                            <ChevronDown size={18} />
+                          ) : (
+                            <ChevronRight size={18} />
+                          )}
+                          <Text
+                            fw={700}
+                            size="md"
+                            c="blue.9"
+                          >
+                            {row.groupingValue}
+                          </Text>
+                          <Badge
+                            color="blue"
+                            variant="filled"
+                            size="sm"
+                            circle
+                          >
+                            {row.subRows.length}
+                          </Badge>
+                        </Group>
+                      </Table.Td>
+                    </Table.Tr>
+                  );
+                }
+
+                return (
+                  <Table.Tr key={row.id}>
+                    {row.getVisibleCells().map(cell => {
+                      if (cell.column.id === 'category') return null;
+                      return (
+                        <Table.Td key={cell.id}>
+                          {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                        </Table.Td>
+                      );
+                    })}
+                  </Table.Tr>
+                );
+              })}
+            </Table.Tbody>
+          </Table>
+        </Table.ScrollContainer>
       </Paper>
 
       <DeleteProductModal

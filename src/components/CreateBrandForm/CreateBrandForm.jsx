@@ -32,20 +32,21 @@ const CreateBrandForm = () => {
       withBorder
       shadow="sm"
       radius="md"
-      p="xl"
+      p={{ base: 'md', sm: 'xl' }}
       mx="auto"
       w={{ base: '100%', sm: 400 }}
     >
       <Title
         order={3}
-        mb="lg"
+        mb={30}
         ta="center"
       >
         Create New Brand
       </Title>
 
       <form onSubmit={handleSubmit(onSubmit)}>
-        <Stack gap="md">
+        <Stack gap={25}>
+          {' '}
           <TextInput
             label="Brand Name"
             placeholder="Enter brand name"
@@ -55,13 +56,17 @@ const CreateBrandForm = () => {
               minLength: { value: 2, message: 'Minimum 2 characters' },
             })}
             error={errors.name?.message}
+            h={{ base: 42, sm: 36 }}
+            fz={{ base: 'md', sm: 'sm' }}
+            styles={{ label: { marginBottom: 8 } }}
           />
-
           <Button
             type="submit"
-            mt="md"
             fullWidth
             loading={isLoading}
+            h={{ base: 46, sm: 40 }}
+            fz={{ base: 'md', sm: 'sm' }}
+            mt={20}
           >
             Create Brand
           </Button>

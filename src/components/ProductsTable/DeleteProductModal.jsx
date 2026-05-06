@@ -23,6 +23,8 @@ const DeleteProductModal = ({ opened, onClose, product }) => {
       onClose={onClose}
       title="Confirm Deletion"
       centered
+      padding={{ base: 'md', sm: 'lg' }}
+      size={{ base: '95%', sm: 400 }}
     >
       <Text
         size="sm"
@@ -30,12 +32,16 @@ const DeleteProductModal = ({ opened, onClose, product }) => {
       >
         Are you sure you want to delete <b>{product.name}</b>?
       </Text>
-      <Group justify="flex-end">
+      <Group
+        justify="flex-end"
+        gap={{ base: 'sm', sm: 'md' }}
+      >
         <Button
           variant="light"
           color="gray"
           onClick={onClose}
           disabled={isLoading}
+          w={{ base: '100%', sm: 'auto' }}
         >
           Cancel
         </Button>
@@ -43,6 +49,7 @@ const DeleteProductModal = ({ opened, onClose, product }) => {
           color="red"
           onClick={handleDelete}
           loading={isLoading}
+          w={{ base: '100%', sm: 'auto' }}
         >
           Delete
         </Button>

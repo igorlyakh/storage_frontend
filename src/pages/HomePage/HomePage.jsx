@@ -5,16 +5,20 @@ const HomePage = () => {
   return (
     <Container
       size="md"
-      py={80}
+      py={{ base: 40, sm: 80 }}
     >
       <Stack
         align="center"
-        gap="lg"
+        gap={{ base: 'md', sm: 'lg' }}
       >
         <Title
           order={1}
           ta="center"
-          style={{ fontSize: '4rem', fontWeight: 900, letterSpacing: '-2px' }}
+          style={{
+            fontSize: 'clamp(2.5rem, 8vw, 4rem)',
+            fontWeight: 900,
+            letterSpacing: '-2px',
+          }}
         >
           <Text
             component="span"
@@ -33,6 +37,7 @@ const HomePage = () => {
           ta="center"
           maw={800}
           mt="md"
+          fz={{ base: 'md', sm: 'xl' }}
         >
           Welcome to the ultimate inventory management solution. This application is
           specifically designed to ensure seamless stock control at the central warehouse
@@ -44,6 +49,7 @@ const HomePage = () => {
           size="md"
           ta="center"
           maw={700}
+          visibleFrom="sm"
         >
           Streamline your entire supply chain, track product availability in real-time,
           and manage automated replenishment requests with absolute precision. Built for
@@ -53,7 +59,7 @@ const HomePage = () => {
 
         <Paper
           withBorder
-          p="lg"
+          p={{ base: 'md', sm: 'lg' }}
           radius="md"
           shadow="sm"
           bg="gray.0"
@@ -84,6 +90,7 @@ const HomePage = () => {
               ta="center"
               fw={500}
               mt="sm"
+              fz="sm"
             >
               Please contact us at:{' '}
               <Text
@@ -99,13 +106,17 @@ const HomePage = () => {
           </Stack>
         </Paper>
 
-        <Group mt="xl">
+        <Group
+          mt="xl"
+          w={{ base: '100%', sm: 'auto' }}
+        >
           <Button
             component={Link}
             to="/all-orders"
             size="lg"
             radius="md"
             color="blue"
+            fullWidth={{ base: true, sm: false }}
           >
             Go to Dashboard
           </Button>

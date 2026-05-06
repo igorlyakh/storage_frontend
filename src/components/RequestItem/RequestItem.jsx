@@ -40,29 +40,35 @@ const RequestItem = ({ request }) => {
       withBorder
       shadow="sm"
       radius="md"
-      padding="md"
+      padding={{ base: 'sm', sm: 'md' }}
       display="flex"
       style={{ flexDirection: 'column' }}
     >
       <Group
         justify="space-between"
-        mb="sm"
+        mb={{ base: 'xs', sm: 'sm' }}
       >
         <Badge
           variant="light"
           color="pink"
+          size="sm"
         >
           {request.category}
         </Badge>
-        <Badge color={getStatusColor(request.status)}>{request.status}</Badge>
+        <Badge
+          color={getStatusColor(request.status)}
+          size="sm"
+        >
+          {request.status}
+        </Badge>
       </Group>
 
       <Stack
-        gap="xs"
-        mb="lg"
+        gap={{ base: 4, sm: 'xs' }}
+        mb={{ base: 'md', sm: 'lg' }}
         style={{ flexGrow: 1 }}
       >
-        <Text size="sm">
+        <Text fz={{ base: 'xs', sm: 'sm' }}>
           <Text
             span
             c="dimmed"
@@ -76,7 +82,7 @@ const RequestItem = ({ request }) => {
             {formattedDate}
           </Text>
         </Text>
-        <Text size="sm">
+        <Text fz={{ base: 'xs', sm: 'sm' }}>
           <Text
             span
             c="dimmed"
@@ -95,12 +101,15 @@ const RequestItem = ({ request }) => {
       <Group
         justify="space-between"
         mt="auto"
+        gap="xs"
+        wrap="nowrap"
       >
         <Button
           component={Link}
           to={`/requests/${request.id}`}
           variant="light"
           size="sm"
+          flex={1}
         >
           Details
         </Button>
@@ -111,6 +120,7 @@ const RequestItem = ({ request }) => {
             color="blue"
             onClick={handleTakeInProgress}
             loading={isLoading}
+            flex={1}
           >
             Approve
           </Button>

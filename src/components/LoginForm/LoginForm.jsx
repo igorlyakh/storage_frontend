@@ -39,25 +39,27 @@ const LoginForm = () => {
   return (
     <Center
       h="100%"
-      style={{ marginTop: 150 }}
+      mt={{ base: 60, sm: 100, md: 150 }}
+      px={{ base: 'md', sm: 0 }}
     >
       <Paper
         withBorder
         shadow="md"
-        p={30}
+        p={{ base: 'lg', sm: 30 }}
         radius="md"
-        w={{ base: 300, sm: 400 }}
+        w={{ base: '100%', sm: 400 }}
       >
         <Title
           order={2}
           ta="center"
           mb="lg"
+          fz={{ base: 22, sm: 26 }}
         >
-          Welcome to Stock Control
+          Welcome to Stock Assistant
         </Title>
 
         <form onSubmit={handleSubmit(handler)}>
-          <Stack>
+          <Stack gap={{ base: 'sm', sm: 'md' }}>
             <TextInput
               label="Username"
               placeholder="Enter your username"
@@ -66,6 +68,7 @@ const LoginForm = () => {
                 required: 'Username is required!',
               })}
               error={errors.username?.message}
+              size={{ base: 'md', sm: 'sm' }}
             />
 
             <PasswordInput
@@ -80,13 +83,15 @@ const LoginForm = () => {
                 },
               })}
               error={errors.password?.message}
+              size={{ base: 'md', sm: 'sm' }}
             />
 
             <Button
               type="submit"
               fullWidth
-              mt="md"
+              mt={{ base: 'sm', sm: 'md' }}
               loading={isLoading}
+              size="md"
             >
               Login
             </Button>

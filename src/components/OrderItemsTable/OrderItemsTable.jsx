@@ -55,7 +55,7 @@ const OrderItemsTable = ({ order }) => {
         header: 'Product Name',
         cell: info => (
           <Text
-            fz={16}
+            fz={{ base: 14, sm: 16 }}
             fw={700}
           >
             {info.getValue()}
@@ -142,119 +142,121 @@ const OrderItemsTable = ({ order }) => {
         overflow="hidden"
         shadow="sm"
       >
-        <Table
-          verticalSpacing="sm"
-          highlightOnHover
-        >
-          <Table.Thead bg="gray.0">
-            {table.getHeaderGroups().map(headerGroup => (
-              <Table.Tr key={headerGroup.id}>
-                {headerGroup.headers.map(header => {
-                  if (header.id === 'category') return null;
-                  return (
-                    <Table.Th key={header.id}>
-                      {flexRender(header.column.columnDef.header, header.getContext())}
-                    </Table.Th>
-                  );
-                })}
-              </Table.Tr>
-            ))}
-          </Table.Thead>
-
-          <Table.Tbody>
-            {table.getRowModel().rows.map(row => {
-              if (row.getIsGrouped()) {
-                return (
-                  <Table.Tr
-                    key={row.id}
-                    bg="blue.0"
-                  >
-                    <Table.Td colSpan={row.getVisibleCells().length}>
-                      <Group
-                        gap="xs"
-                        onClick={row.getToggleExpandedHandler()}
-                        style={{ cursor: 'pointer', userSelect: 'none' }}
-                      >
-                        {row.getIsExpanded() ? (
-                          <ChevronDown size={18} />
-                        ) : (
-                          <ChevronRight size={18} />
-                        )}
-                        <Text
-                          fw={700}
-                          size="md"
-                          c="blue.9"
-                        >
-                          {row.groupingValue}
-                        </Text>
-                        <Badge
-                          color="blue"
-                          variant="filled"
-                          size="sm"
-                          circle
-                        >
-                          {row.subRows.length}
-                        </Badge>
-                      </Group>
-                    </Table.Td>
-                  </Table.Tr>
-                );
-              }
-
-              return (
-                <Table.Tr key={row.id}>
-                  {row.getVisibleCells().map(cell => {
-                    if (cell.column.id === 'category') return null;
+        <Table.ScrollContainer minWidth={600}>
+          <Table
+            verticalSpacing="sm"
+            highlightOnHover
+          >
+            <Table.Thead bg="gray.0">
+              {table.getHeaderGroups().map(headerGroup => (
+                <Table.Tr key={headerGroup.id}>
+                  {headerGroup.headers.map(header => {
+                    if (header.id === 'category') return null;
                     return (
-                      <Table.Td key={cell.id}>
-                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                      </Table.Td>
+                      <Table.Th key={header.id}>
+                        {flexRender(header.column.columnDef.header, header.getContext())}
+                      </Table.Th>
                     );
                   })}
                 </Table.Tr>
-              );
-            })}
+              ))}
+            </Table.Thead>
 
-            {customRequest &&
-              typeof customRequest === 'string' &&
-              customRequest.trim() !== '' && (
-                <>
-                  <Table.Tr bg="blue.0">
-                    <Table.Td colSpan={columns.length - 1}>
-                      <Group
-                        gap="xs"
-                        style={{ userSelect: 'none' }}
-                      >
-                        <ChevronDown
-                          size={18}
-                          color="transparent"
-                        />{' '}
-                        <Text
-                          fw={700}
-                          size="md"
-                          c="blue.9"
+            <Table.Tbody>
+              {table.getRowModel().rows.map(row => {
+                if (row.getIsGrouped()) {
+                  return (
+                    <Table.Tr
+                      key={row.id}
+                      bg="blue.0"
+                    >
+                      <Table.Td colSpan={row.getVisibleCells().length}>
+                        <Group
+                          gap="xs"
+                          onClick={row.getToggleExpandedHandler()}
+                          style={{ cursor: 'pointer', userSelect: 'none' }}
                         >
-                          Other
+                          {row.getIsExpanded() ? (
+                            <ChevronDown size={18} />
+                          ) : (
+                            <ChevronRight size={18} />
+                          )}
+                          <Text
+                            fw={700}
+                            size="md"
+                            c="blue.9"
+                          >
+                            {row.groupingValue}
+                          </Text>
+                          <Badge
+                            color="blue"
+                            variant="filled"
+                            size="sm"
+                            circle
+                          >
+                            {row.subRows.length}
+                          </Badge>
+                        </Group>
+                      </Table.Td>
+                    </Table.Tr>
+                  );
+                }
+
+                return (
+                  <Table.Tr key={row.id}>
+                    {row.getVisibleCells().map(cell => {
+                      if (cell.column.id === 'category') return null;
+                      return (
+                        <Table.Td key={cell.id}>
+                          {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                        </Table.Td>
+                      );
+                    })}
+                  </Table.Tr>
+                );
+              })}
+
+              {customRequest &&
+                typeof customRequest === 'string' &&
+                customRequest.trim() !== '' && (
+                  <>
+                    <Table.Tr bg="blue.0">
+                      <Table.Td colSpan={columns.length - 1}>
+                        <Group
+                          gap="xs"
+                          style={{ userSelect: 'none' }}
+                        >
+                          <ChevronDown
+                            size={18}
+                            color="transparent"
+                          />{' '}
+                          <Text
+                            fw={700}
+                            size="md"
+                            c="blue.9"
+                          >
+                            Other
+                          </Text>
+                        </Group>
+                      </Table.Td>
+                    </Table.Tr>
+                    <Table.Tr>
+                      <Table.Td colSpan={columns.length - 1}>
+                        <Text
+                          size="sm"
+                          px="md"
+                          py="xs"
+                          style={{ whiteSpace: 'pre-wrap' }}
+                        >
+                          {customRequest}
                         </Text>
-                      </Group>
-                    </Table.Td>
-                  </Table.Tr>
-                  <Table.Tr>
-                    <Table.Td colSpan={columns.length - 1}>
-                      <Text
-                        size="sm"
-                        px="md"
-                        py="xs"
-                        style={{ whiteSpace: 'pre-wrap' }}
-                      >
-                        {customRequest}
-                      </Text>
-                    </Table.Td>
-                  </Table.Tr>
-                </>
-              )}
-          </Table.Tbody>
-        </Table>
+                      </Table.Td>
+                    </Table.Tr>
+                  </>
+                )}
+            </Table.Tbody>
+          </Table>
+        </Table.ScrollContainer>
       </Paper>
 
       {canEditAndSend && (
@@ -270,6 +272,7 @@ const OrderItemsTable = ({ order }) => {
             loading={isLoading}
             onClick={handleSendOrder}
             leftSection={<Send size={18} />}
+            w={{ base: '100%', sm: 'auto' }}
             style={{ boxShadow: 'var(--mantine-shadow-sm)' }}
           >
             Send order

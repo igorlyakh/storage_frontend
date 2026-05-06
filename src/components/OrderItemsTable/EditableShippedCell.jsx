@@ -19,7 +19,8 @@ const EditableShippedCell = ({ initialValue, onUpdate, disabled }) => {
       min={0}
       allowNegative={false}
       hideControls
-      w={120}
+      w={{ base: 80, sm: 120 }}
+      size={{ base: 'xs', sm: 'sm' }}
     />
   );
 };

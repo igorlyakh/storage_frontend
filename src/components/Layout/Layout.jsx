@@ -1,15 +1,22 @@
+import { Box } from '@mantine/core';
 import { Outlet } from 'react-router-dom';
 import Container from '../Container';
 import Header from '../Header';
 
 const Layout = () => {
   return (
-    <>
+    <Box style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       <Header />
-      <Container>
-        <Outlet />
-      </Container>
-    </>
+      <Box
+        component="main"
+        flex={1}
+        py={{ base: 'md', sm: 'xl', md: 'xxl' }}
+      >
+        <Container>
+          <Outlet />
+        </Container>
+      </Box>
+    </Box>
   );
 };
 

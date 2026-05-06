@@ -4,13 +4,17 @@ import { Link } from 'react-router-dom';
 const NotFoundPage = () => {
   return (
     <Center
-      h="100vh"
+      minHeight="100vh"
       bg="gray.0"
+      p={{ base: 'md', sm: 'xl' }}
     >
-      <Container size="md">
+      <Container
+        size="md"
+        w="100%"
+      >
         <Stack
           align="center"
-          gap="sm"
+          gap={{ base: 'md', sm: 'sm' }}
         >
           <Title
             style={{
@@ -18,7 +22,7 @@ const NotFoundPage = () => {
               fontWeight: 900,
               lineHeight: 1,
               color: 'var(--mantine-color-gray-3)',
-              marginBottom: '-30px',
+              marginBottom: 'clamp(-15px, -3vw, -30px)',
               userSelect: 'none',
             }}
           >
@@ -28,7 +32,8 @@ const NotFoundPage = () => {
           <Title
             order={2}
             ta="center"
-            mt="xl"
+            mt={{ base: 'sm', sm: 'xl' }}
+            fz={{ base: 24, sm: 34 }}
             style={{ zIndex: 1 }}
           >
             Oops! Page not found
@@ -36,7 +41,7 @@ const NotFoundPage = () => {
 
           <Text
             c="dimmed"
-            size="lg"
+            size={{ base: 'sm', sm: 'lg' }}
             ta="center"
             maw={540}
             style={{ zIndex: 1 }}
@@ -47,7 +52,8 @@ const NotFoundPage = () => {
 
           <Group
             justify="center"
-            mt="xl"
+            mt={{ base: 'lg', sm: 'xl' }}
+            w="100%"
             style={{ zIndex: 1 }}
           >
             <Button
@@ -57,6 +63,7 @@ const NotFoundPage = () => {
               radius="md"
               variant="filled"
               color="blue"
+              w={{ base: '100%', sm: 'auto' }}
             >
               Back to Home
             </Button>

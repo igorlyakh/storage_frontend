@@ -1,10 +1,11 @@
 import {
   Button,
   Loader,
-  MultiSelect, // Добавили импорт MultiSelect
+  MultiSelect,
   Paper,
   PasswordInput,
   Select,
+  SimpleGrid,
   Stack,
   TextInput,
   Title,
@@ -15,8 +16,13 @@ import toast from 'react-hot-toast';
 import { useCreateUserMutation, useGetAllStoresQuery } from '../../store/api/api';
 
 const CreateUserForm = () => {
-  const { data: stores = [], isLoading, isError } = useGetAllStoresQuery();
+  const { data: stores = [], isLoading } = useGetAllStoresQuery();
   const [createUser] = useCreateUserMutation();
+
+  const inputStyles = {
+    label: { marginBottom: 8 },
+    root: { marginBottom: 5 },
+  };
 
   const {
     handleSubmit,
@@ -34,18 +40,11 @@ const CreateUserForm = () => {
     },
   });
 
-  const selectedRole = useWatch({
-    control,
-    name: 'role',
-  });
+  const selectedRole = useWatch({ control, name: 'role' });
 
   useEffect(() => {
-    if (selectedRole !== 'STORE') {
-      setValue('storeId', '');
-    }
-    if (selectedRole !== 'ADMIN') {
-      setValue('adminScopes', []);
-    }
+    if (selectedRole !== 'STORE') setValue('storeId', '');
+    if (selectedRole !== 'ADMIN') setValue('adminScopes', []);
   }, [selectedRole, setValue]);
 
   const storeOptions = stores.map(store => ({
@@ -74,128 +73,148 @@ const CreateUserForm = () => {
       withBorder
       shadow="sm"
       radius="md"
-      p="xl"
+      p={{ base: 'md', sm: 'xl' }}
       mx="auto"
-      w={{ base: '100%', sm: 450 }}
+      w={{ base: '100%', sm: 500, md: 600 }}
     >
       <Title
         order={3}
-        mb="lg"
+        mb={30}
         ta="center"
       >
         Create New User
       </Title>
 
       <form onSubmit={handleSubmit(onSubmit)}>
-        <Stack gap="md">
-          <Controller
-            name="username"
-            control={control}
-            rules={{ required: 'Username is required' }}
-            render={({ field }) => (
-              <TextInput
-                {...field}
-                label="Username"
-                placeholder="Enter username"
-                withAsterisk
-                error={errors.username?.message}
-              />
-            )}
-          />
-
-          <Controller
-            name="password"
-            control={control}
-            rules={{
-              required: 'Password is required',
-              minLength: {
-                value: 6,
-                message: 'Password must be at least 6 characters long',
-              },
-            }}
-            render={({ field }) => (
-              <PasswordInput
-                label="Password"
-                placeholder="••••••••"
-                withAsterisk
-                {...field}
-                error={errors.password?.message}
-              />
-            )}
-          />
-
-          <Controller
-            name="role"
-            control={control}
-            render={({ field }) => (
-              <Select
-                {...field}
-                label="Access Role"
-                withAsterisk
-                data={[
-                  { value: 'ADMIN', label: 'ADMIN' },
-                  { value: 'WAREHOUSE', label: 'WAREHOUSE' },
-                  { value: 'STORE', label: 'STORE' },
-                ]}
-              />
-            )}
-          />
-
-          {selectedRole === 'ADMIN' && (
+        <Stack gap={25}>
+          <SimpleGrid
+            cols={{ base: 1, sm: 2 }}
+            spacing="lg"
+            verticalSpacing="xl"
+          >
             <Controller
-              name="adminScopes"
+              name="username"
               control={control}
-              rules={{
-                required:
-                  selectedRole === 'ADMIN' ? 'Please select at least one scope' : false,
-              }}
+              rules={{ required: 'Username is required' }}
               render={({ field }) => (
-                <MultiSelect
+                <TextInput
                   {...field}
-                  label="Admin Scopes"
-                  placeholder="-- Choose scopes --"
+                  label="Username"
+                  placeholder="Enter username"
                   withAsterisk
-                  clearable
-                  searchable
-                  error={errors.adminScopes?.message}
-                  data={[
-                    { value: 'BAGS', label: 'BAGS' },
-                    { value: 'LABELS', label: 'LABELS' },
-                    { value: 'PACKAGING', label: 'PACKAGING' },
-                  ]}
+                  error={errors.username?.message}
+                  h={{ base: 42, sm: 36 }}
+                  fz={{ base: 'md', sm: 'sm' }}
+                  styles={inputStyles}
                 />
               )}
             />
-          )}
 
-          {selectedRole === 'STORE' && (
             <Controller
-              name="storeId"
+              name="password"
               control={control}
               rules={{
-                required: selectedRole === 'STORE' ? 'Please select a store' : false,
+                required: 'Password is required',
+                minLength: { value: 6, message: 'At least 6 chars' },
               }}
+              render={({ field }) => (
+                <PasswordInput
+                  label="Password"
+                  placeholder="••••••••"
+                  withAsterisk
+                  {...field}
+                  error={errors.password?.message}
+                  h={{ base: 42, sm: 36 }}
+                  fz={{ base: 'md', sm: 'sm' }}
+                  styles={inputStyles}
+                />
+              )}
+            />
+          </SimpleGrid>
+
+          <SimpleGrid
+            cols={{ base: 1, sm: 2 }}
+            spacing="lg"
+            verticalSpacing="xl"
+          >
+            <Controller
+              name="role"
+              control={control}
               render={({ field }) => (
                 <Select
-                  label="Assigned Store"
-                  placeholder="-- Choose a store --"
+                  {...field}
+                  label="Access Role"
                   withAsterisk
-                  data={storeOptions}
-                  error={errors.storeId?.message || (isError && 'Error loading stores')}
-                  disabled={isLoading}
-                  rightSection={isLoading ? <Loader size="xs" /> : null}
-                  onChange={val => field.onChange(val)}
-                  value={field.value ? String(field.value) : null}
+                  data={[
+                    { value: 'ADMIN', label: 'ADMIN' },
+                    { value: 'WAREHOUSE', label: 'WAREHOUSE' },
+                    { value: 'STORE', label: 'STORE' },
+                  ]}
+                  h={{ base: 42, sm: 36 }}
+                  fz={{ base: 'md', sm: 'sm' }}
+                  styles={inputStyles}
                 />
               )}
             />
-          )}
+
+            {selectedRole === 'ADMIN' && (
+              <Controller
+                name="adminScopes"
+                control={control}
+                rules={{ required: selectedRole === 'ADMIN' }}
+                render={({ field }) => (
+                  <MultiSelect
+                    {...field}
+                    label="Admin Scopes"
+                    placeholder="-- Choose scopes --"
+                    withAsterisk
+                    clearable
+                    searchable
+                    error={errors.adminScopes?.message}
+                    data={[
+                      { value: 'BAGS', label: 'BAGS' },
+                      { value: 'LABELS', label: 'LABELS' },
+                      { value: 'PACKAGING', label: 'PACKAGING' },
+                    ]}
+                    fz={{ base: 'md', sm: 'sm' }}
+                    styles={inputStyles}
+                  />
+                )}
+              />
+            )}
+
+            {selectedRole === 'STORE' && (
+              <Controller
+                name="storeId"
+                control={control}
+                rules={{ required: selectedRole === 'STORE' }}
+                render={({ field }) => (
+                  <Select
+                    label="Assigned Store"
+                    placeholder="-- Choose --"
+                    withAsterisk
+                    data={storeOptions}
+                    error={errors.storeId?.message}
+                    disabled={isLoading}
+                    rightSection={isLoading ? <Loader size="xs" /> : null}
+                    onChange={val => field.onChange(val)}
+                    value={field.value ? String(field.value) : null}
+                    h={{ base: 42, sm: 36 }}
+                    fz={{ base: 'md', sm: 'sm' }}
+                    styles={inputStyles}
+                  />
+                )}
+              />
+            )}
+          </SimpleGrid>
 
           <Button
             type="submit"
-            mt="md"
+            mt={20}
             loading={isSubmitting}
             fullWidth
+            h={{ base: 46, sm: 40 }}
+            fz={{ base: 'md', sm: 'sm' }}
           >
             Create User
           </Button>

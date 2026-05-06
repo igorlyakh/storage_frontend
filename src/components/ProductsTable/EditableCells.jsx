@@ -11,7 +11,7 @@ export const EditableTextCell = ({ initialValue, onUpdate }) => {
 
   return (
     <TextInput
-      fz={18}
+      fz={{ base: 14, sm: 16, md: 18 }}
       fw={700}
       value={value}
       onChange={e => setValue(e.currentTarget.value)}
@@ -44,6 +44,7 @@ export const EditableNumberCell = ({ initialValue, onUpdate }) => {
       variant="unstyled"
       hideControls
       placeholder="No limit"
+      fz={{ base: 14, sm: 16 }}
       styles={{ input: { padding: 0, height: 'auto', minHeight: 'auto' } }}
     />
   );
@@ -67,7 +68,8 @@ export const EditableOrderCell = ({ initialValue, max, onUpdate }) => {
       max={max || undefined}
       allowNegative={false}
       placeholder="0"
-      w={100}
+      w={{ base: 80, sm: 100 }}
+      size={{ base: 'xs', sm: 'sm' }}
       styles={{
         input: {
           backgroundColor: value > 0 ? 'var(--mantine-color-green-0)' : undefined,
@@ -112,14 +114,15 @@ export const EditableBrandsCell = ({ initialBrands = [], allBrands = [], onUpdat
         searchable
         autoFocus
         placeholder="Select brands..."
-        styles={{ input: { minWidth: 200 } }}
+        w={{ base: 150, sm: 200 }}
+        size={{ base: 'xs', sm: 'sm' }}
       />
     );
   }
 
   return (
     <Group
-      gap={5}
+      gap={{ base: 2, sm: 5 }}
       onClick={handleStartEdit}
       style={{ cursor: 'pointer', minHeight: 28, padding: '2px', borderRadius: '4px' }}
     >
@@ -128,7 +131,7 @@ export const EditableBrandsCell = ({ initialBrands = [], allBrands = [], onUpdat
           <Badge
             key={brand.id}
             variant="light"
-            size="sm"
+            size={{ base: 'xs', sm: 'sm' }}
             color={getBrandColor(brand.name)}
           >
             {brand.name}
@@ -136,7 +139,7 @@ export const EditableBrandsCell = ({ initialBrands = [], allBrands = [], onUpdat
         ))
       ) : (
         <Text
-          size="xs"
+          size={{ base: 12, sm: 'xs' }}
           c="dimmed"
           style={{ borderBottom: '1px dashed' }}
         >

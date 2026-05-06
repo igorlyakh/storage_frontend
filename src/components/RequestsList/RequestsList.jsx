@@ -4,10 +4,10 @@ import RequestItem from '../RequestItem';
 const RequestsList = ({ requests }) => {
   if (!requests || requests.length === 0) {
     return (
-      <Center h={200}>
+      <Center h={{ base: 100, sm: 200 }}>
         <Text
           c="dimmed"
-          size="lg"
+          fz={{ base: 'md', sm: 'lg' }}
           fw={500}
         >
           List is empty!
@@ -19,7 +19,7 @@ const RequestsList = ({ requests }) => {
   return (
     <SimpleGrid
       cols={{ base: 1, sm: 2, md: 3, lg: 4 }}
-      spacing="md"
+      spacing={{ base: 'sm', sm: 'md', lg: 'lg' }}
     >
       {requests.map(request => (
         <RequestItem
