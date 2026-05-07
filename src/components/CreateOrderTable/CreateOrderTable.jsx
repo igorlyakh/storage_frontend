@@ -24,6 +24,7 @@ import toast from 'react-hot-toast';
 import { useDispatch } from 'react-redux';
 
 import { modals } from '@mantine/modals';
+import { Navigate } from 'react-router-dom';
 import {
   api,
   useCreateOrderMutation,
@@ -199,6 +200,7 @@ const CreateOrderTable = () => {
           });
         }),
       );
+      <Navigate to={'/orders'} />;
     } catch (error) {
       toast.error('Failed to create order');
       console.error(error);
