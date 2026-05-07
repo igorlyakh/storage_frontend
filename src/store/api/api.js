@@ -86,6 +86,14 @@ export const api = createApi({
       }),
       providesTags: ['Orders'],
     }),
+    completeOrder: builder.mutation({
+      query: orderId => ({
+        url: '/orders/complete',
+        method: 'PATCH',
+        body: { orderId },
+      }),
+      invalidatesTags: ['Orders'],
+    }),
     getAllProducts: builder.query({
       query: () => '/product',
       providesTags: ['Products'],
@@ -257,4 +265,5 @@ export const {
   useCreateBrandMutation,
   useGetMonthlyStatsQuery,
   useGetYearlyStatsQuery,
+  useCompleteOrderMutation,
 } = api;

@@ -1,10 +1,10 @@
 import { Badge, Button, Card, Group, Stack, Text } from '@mantine/core';
 import dayjs from 'dayjs';
-import { ArrowRight, CheckCircle } from 'lucide-react';
+import { ArrowRight, CheckCheck, CheckCircle } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useSelector } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
-import { useProcessOrderMutation } from '../../store/api/api';
+import { useCompleteOrderMutation, useProcessOrderMutation } from '../../store/api/api';
 import { userRoleSelector } from '../../store/selectors/selectors';
 
 const getStatusColor = status => {
@@ -25,9 +25,11 @@ const getStatusColor = status => {
 const OrderItem = ({ store, status, sended, updated, id }) => {
   const location = useLocation();
   const userRole = useSelector(userRoleSelector);
-  const [processOrder, { isLoading }] = useProcessOrderMutation();
 
-  const handleAccept = async () => {
+  const [processOrder, { isLoading: isProcessing }] = useProcessOrderMutation();
+  const [completeOrder, { isLoading: isCompleting }] = useCompleteOrderMutation();
+
+  const handleProcess = async () => {
     try {
       await processOrder({ orderId: id }).unwrap();
       toast.success('Order processed!');
@@ -35,6 +37,18 @@ const OrderItem = ({ store, status, sended, updated, id }) => {
       toast.error(error.data?.message?.[0] || error.message || 'Error processing order');
     }
   };
+
+  const handleComplete = async () => {
+    try {
+      await completeOrder(id).unwrap();
+      toast.success('Order successfully completed!');
+    } catch (error) {
+      toast.error(error.data?.message?.[0] || error.message || 'Error completing order');
+    }
+  };
+
+  const hasActionBtn =
+    (status === 'NEW' && ['ADMIN', 'WAREHOUSE'].includes(userRole)) || status === 'SENT';
 
   return (
     <Card
@@ -120,12 +134,27 @@ const OrderItem = ({ store, status, sended, updated, id }) => {
             size="xs"
             radius="xl"
             color="blue"
-            onClick={handleAccept}
-            loading={isLoading}
+            onClick={handleProcess}
+            loading={isProcessing}
             leftSection={<CheckCircle size={16} />}
             flex={{ base: 1, sm: 'none' }}
           >
-            Accept order
+            Process order
+          </Button>
+        )}
+
+        {status === 'SENT' && (
+          <Button
+            variant="light"
+            size="xs"
+            radius="xl"
+            color="green"
+            onClick={handleComplete}
+            loading={isCompleting}
+            leftSection={<CheckCheck size={16} />}
+            flex={{ base: 1, sm: 'none' }}
+          >
+            Accept
           </Button>
         )}
 
@@ -137,12 +166,10 @@ const OrderItem = ({ store, status, sended, updated, id }) => {
           size="xs"
           rightSection={<ArrowRight size={14} />}
           style={{
-            marginLeft:
-              status === 'NEW' && ['ADMIN', 'WAREHOUSE'].includes(userRole) ? 0 : 'auto',
+            marginLeft: hasActionBtn ? 0 : 'auto',
           }}
           flex={{
-            base:
-              status === 'NEW' && ['ADMIN', 'WAREHOUSE'].includes(userRole) ? 1 : 'none',
+            base: hasActionBtn ? 1 : 'none',
             sm: 'none',
           }}
         >
