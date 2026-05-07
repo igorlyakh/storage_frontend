@@ -268,7 +268,7 @@ const Navigation = () => {
         opened={opened}
         onClose={close}
         size="xs"
-        title="Inventory Menu"
+        title="Stock Assistant"
         hiddenFrom="lg"
         zIndex={1000000}
       >
