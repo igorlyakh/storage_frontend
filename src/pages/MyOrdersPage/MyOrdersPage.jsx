@@ -101,14 +101,14 @@ const FilterPopover = ({ label, options, values, onChange }) => {
 
 const MyOrdersPage = () => {
   const [page, setPage] = useState(1);
-  const [statuses, setStatuses] = useState(['NEW', 'IN_PROGRESS']);
+  const [statuses, setStatuses] = useState(['NEW', 'IN_PROGRESS', 'SENT']);
   const [date, setDate] = useState('');
 
   const statusOptions = [
     { value: 'NEW', label: 'NEW' },
-    { value: 'IN_PROGRESS', label: 'IN_PROGRESS' },
-    { value: 'COMPLETED', label: 'COMPLETED' },
+    { value: 'IN_PROGRESS', label: 'IN PROGRESS' },
     { value: 'SENT', label: 'SENT' },
+    { value: 'COMPLETED', label: 'COMPLETED' },
   ];
 
   const { data, isFetching } = useGetMyOrdersQuery(
