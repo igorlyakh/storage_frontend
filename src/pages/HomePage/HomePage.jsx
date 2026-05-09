@@ -1,7 +1,10 @@
 import { Button, Container, Group, Paper, Stack, Text, Title } from '@mantine/core';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { userRoleSelector } from '../../store/selectors/selectors';
 
 const HomePage = () => {
+  const userRole = useSelector(userRoleSelector);
   return (
     <Container
       size="md"
@@ -112,7 +115,7 @@ const HomePage = () => {
         >
           <Button
             component={Link}
-            to="/all-orders"
+            to={userRole === 'STORE' ? '/orders' : '/all-orders'}
             size="lg"
             radius="md"
             color="blue"
