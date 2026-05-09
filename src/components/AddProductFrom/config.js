@@ -1,4 +1,4 @@
-export const productTags = ['BAGS', 'LABELS', 'PACKAGING'];
+export const productTags = ['NCG', 'ADMINISTRATIVE'];
 export const productCategories = [
   'BAGS',
   'LABELS',
