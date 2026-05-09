@@ -26,52 +26,31 @@ export const api = createApi({
     getAllOrders: builder.query({
       query: ({ page = 1, statuses, storeIds, startDate, endDate }) => ({
         url: '/orders/all',
-        params: {
-          page,
-          statuses,
-          storeIds,
-          startDate,
-          endDate,
-        },
+        params: { page, statuses, storeIds, startDate, endDate },
       }),
       providesTags: ['Orders'],
     }),
     createOrder: builder.mutation({
-      query: data => ({
-        url: '/orders',
-        method: 'POST',
-        body: data,
-      }),
+      query: data => ({ url: '/orders', method: 'POST', body: data }),
       invalidatesTags: ['Orders'],
     }),
     processOrder: builder.mutation({
-      query: data => ({
-        url: '/orders/processing',
-        method: 'PATCH',
-        body: data,
-      }),
+      query: data => ({ url: '/orders/processing', method: 'PATCH', body: data }),
       invalidatesTags: ['Orders'],
     }),
     sendOrder: builder.mutation({
-      query: data => ({
-        url: '/orders/send',
-        method: 'PATCH',
-        body: data,
-      }),
+      query: data => ({ url: '/orders/send', method: 'PATCH', body: data }),
+      invalidatesTags: ['Orders'],
+    }),
+    completeOrder: builder.mutation({
+      query: orderId => ({ url: '/orders/complete', method: 'PATCH', body: { orderId } }),
       invalidatesTags: ['Orders'],
     }),
     login: builder.mutation({
-      query: data => ({
-        url: '/auth/login',
-        method: 'POST',
-        body: data,
-      }),
+      query: data => ({ url: '/auth/login', method: 'POST', body: data }),
     }),
     logout: builder.mutation({
-      query: () => ({
-        url: '/auth/logout',
-        method: 'POST',
-      }),
+      query: () => ({ url: '/auth/logout', method: 'POST' }),
     }),
     getMyOrders: builder.query({
       query: ({ page = 1, statuses, date }) => ({
@@ -81,18 +60,8 @@ export const api = createApi({
       providesTags: ['Orders'],
     }),
     getOrderById: builder.query({
-      query: id => ({
-        url: `/orders/${id}`,
-      }),
+      query: id => ({ url: `/orders/${id}` }),
       providesTags: ['Orders'],
-    }),
-    completeOrder: builder.mutation({
-      query: orderId => ({
-        url: '/orders/complete',
-        method: 'PATCH',
-        body: { orderId },
-      }),
-      invalidatesTags: ['Orders'],
     }),
     getAllProducts: builder.query({
       query: () => '/product',
@@ -103,19 +72,15 @@ export const api = createApi({
       providesTags: ['Products'],
     }),
     updateProducts: builder.mutation({
-      query: data => ({
-        url: `/product/${data.id}`,
-        method: 'PATCH',
-        body: data,
-      }),
+      query: data => ({ url: `/product/${data.id}`, method: 'PATCH', body: data }),
       invalidatesTags: ['Products'],
     }),
     addProduct: builder.mutation({
-      query: data => ({
-        url: '/product',
-        method: 'POST',
-        body: data,
-      }),
+      query: data => ({ url: '/product', method: 'POST', body: data }),
+      invalidatesTags: ['Products'],
+    }),
+    deleteProduct: builder.mutation({
+      query: id => ({ url: '/product', method: 'DELETE', body: id }),
       invalidatesTags: ['Products'],
     }),
     getAllUsers: builder.query({
@@ -123,50 +88,27 @@ export const api = createApi({
       providesTags: ['Users'],
     }),
     createUser: builder.mutation({
-      query: data => ({
-        url: '/users',
-        method: 'POST',
-        body: data,
-      }),
+      query: data => ({ url: '/users', method: 'POST', body: data }),
       invalidatesTags: ['Users'],
     }),
     deleteUser: builder.mutation({
-      query: id => ({
-        url: '/users',
-        method: 'DELETE',
-        body: { id },
-      }),
+      query: id => ({ url: '/users', method: 'DELETE', body: { id } }),
       invalidatesTags: ['Users'],
     }),
     resetUserPassword: builder.mutation({
       query: ({ id, password }) => ({
         url: '/auth/restore',
         method: 'POST',
-        body: {
-          userId: id,
-          password,
-        },
+        body: { userId: id, password },
       }),
       invalidatesTags: ['Users'],
-    }),
-    deleteProduct: builder.mutation({
-      query: id => ({
-        url: '/product',
-        method: 'DELETE',
-        body: id,
-      }),
-      invalidatesTags: ['Products'],
     }),
     getAllStores: builder.query({
       query: () => '/stores',
       providesTags: ['Stores'],
     }),
     createStore: builder.mutation({
-      query: data => ({
-        url: '/stores',
-        method: 'POST',
-        body: data,
-      }),
+      query: data => ({ url: '/stores', method: 'POST', body: data }),
       invalidatesTags: ['Stores'],
     }),
     getWarehouseRequests: builder.query({
@@ -178,11 +120,7 @@ export const api = createApi({
       providesTags: ['WarehouseRequests'],
     }),
     createWarehouseRequest: builder.mutation({
-      query: data => ({
-        url: '/warehouse',
-        method: 'POST',
-        body: data,
-      }),
+      query: data => ({ url: '/warehouse', method: 'POST', body: data }),
       invalidatesTags: ['WarehouseRequests'],
     }),
     updateWarehouseRequestStatus: builder.mutation({
@@ -202,35 +140,44 @@ export const api = createApi({
       providesTags: ['Brands'],
     }),
     createBrand: builder.mutation({
-      query: name => ({
-        url: '/brands',
-        method: 'POST',
-        body: { name },
-      }),
+      query: name => ({ url: '/brands', method: 'POST', body: { name } }),
       invalidatesTags: ['Brands'],
     }),
     deleteBrand: builder.mutation({
-      query: name => ({
-        url: '/brands',
-        method: 'DELETE',
-        body: { name },
-      }),
+      query: name => ({ url: '/brands', method: 'DELETE', body: { name } }),
       invalidatesTags: ['Brands'],
     }),
-    getMonthlyStats: builder.query({
-      query: ({ year, month, productId }) => ({
-        url: '/statistics/monthly',
-        params: { year, month, productId },
-      }),
+
+    getStatisticsData: builder.query({
+      query: ({ startDate, endDate, productId, storeId }) => {
+        const params = {};
+        if (startDate) params.startDate = startDate;
+        if (endDate) params.endDate = endDate;
+        if (productId) params.productId = productId;
+        if (storeId) params.storeId = storeId;
+
+        return {
+          url: '/statistics/data',
+          params,
+        };
+      },
       providesTags: ['Statistics', 'Orders'],
     }),
 
-    getYearlyStats: builder.query({
-      query: ({ year, productId }) => ({
-        url: '/statistics/yearly',
-        params: { year, productId },
-      }),
-      providesTags: ['Statistics', 'Orders'],
+    exportExcel: builder.mutation({
+      query: ({ startDate, endDate, productId, storeId }) => {
+        const params = {};
+        if (startDate) params.startDate = startDate;
+        if (endDate) params.endDate = endDate;
+        if (productId) params.productId = productId;
+        if (storeId) params.storeId = storeId;
+
+        return {
+          url: '/statistics/export',
+          params,
+          responseHandler: response => response.blob(),
+        };
+      },
     }),
   }),
 });
@@ -253,6 +200,7 @@ export const {
   useCreateOrderMutation,
   useProcessOrderMutation,
   useSendOrderMutation,
+  useCompleteOrderMutation,
   useGetWarehouseRequestsQuery,
   useGetAdminWarehouseRequestsQuery,
   useCreateWarehouseRequestMutation,
@@ -263,7 +211,6 @@ export const {
   useGetAllBrandsQuery,
   useDeleteBrandMutation,
   useCreateBrandMutation,
-  useGetMonthlyStatsQuery,
-  useGetYearlyStatsQuery,
-  useCompleteOrderMutation,
+  useGetStatisticsDataQuery,
+  useExportExcelMutation,
 } = api;

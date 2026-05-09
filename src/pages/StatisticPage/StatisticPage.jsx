@@ -1,108 +1,72 @@
-import { Button, Group, SimpleGrid, Stack, Title } from '@mantine/core';
-import ExcelJS from 'exceljs';
+import { Button, Center, Group, SimpleGrid, Stack, Text, Title } from '@mantine/core';
 import { saveAs } from 'file-saver';
-import html2canvas from 'html2canvas';
-import { Download } from 'lucide-react';
-import { useRef, useState } from 'react';
+import { Download, Info } from 'lucide-react';
+import { useState } from 'react';
 
-import MonthlyChartCard from '../../components/MonthlyChartCard';
+import BarChartCard from '../../components/BarChartCard';
+import LineChartCard from '../../components/LineChartCard';
 import StatisticsFilters from '../../components/StatisticsFilters';
-import YearlyChartCard from '../../components/YearlyChartCard';
+
 import {
+  useExportExcelMutation,
   useGetAllProductsQuery,
-  useGetMonthlyStatsQuery,
-  useGetYearlyStatsQuery,
+  useGetAllStoresQuery,
+  useGetStatisticsDataQuery,
 } from '../../store/api/api';
 
 const StatisticsPage = () => {
-  const currentYear = new Date().getFullYear();
-  const currentMonth = new Date().getMonth() + 1;
-
-  const [year, setYear] = useState(currentYear.toString());
-  const [month, setMonth] = useState(currentMonth.toString());
+  const [dateRange, setDateRange] = useState([null, null]);
   const [productId, setProductId] = useState(null);
-  const [isExporting, setIsExporting] = useState(false);
+  const [storeId, setStoreId] = useState(null);
 
-  const monthlyChartRef = useRef(null);
-  const yearlyChartRef = useRef(null);
+  const [exportExcel, { isLoading: isExporting }] = useExportExcelMutation();
+
+  let finalStartDate = undefined;
+  let finalEndDate = undefined;
+
+  if (dateRange && dateRange[0]) {
+    const s = new Date(dateRange[0]);
+    s.setHours(0, 0, 0, 0);
+    finalStartDate = s.toISOString();
+
+    const e = new Date(dateRange[1] || dateRange[0]);
+    e.setHours(23, 59, 59, 999);
+    finalEndDate = e.toISOString();
+  }
+
+  const queryParams = {
+    startDate: finalStartDate,
+    endDate: finalEndDate,
+    productId: productId || undefined,
+    storeId: storeId || undefined,
+  };
+
+  const isDateSelected = !!finalStartDate;
 
   const { data: products = [] } = useGetAllProductsQuery();
-  const productOptions = products.map(p => ({
-    value: p.id,
-    label: p.name,
-  }));
+  const productOptions = products.map(p => ({ value: p.id, label: p.name }));
 
-  const { data: monthlyData = [], isFetching: isMonthlyFetching } =
-    useGetMonthlyStatsQuery({
-      year: Number(year),
-      month: Number(month),
-      productId,
-    });
+  const { data: stores = [] } = useGetAllStoresQuery();
+  const storeOptions = stores.map(s => ({ value: s.id, label: s.name }));
 
-  const { data: yearlyData = [], isFetching: isYearlyFetching } = useGetYearlyStatsQuery({
-    year: Number(year),
-    productId,
+  const { data: statsData = [], isFetching } = useGetStatisticsDataQuery(queryParams, {
+    skip: !isDateSelected,
   });
 
   const chartLabel = productId ? 'Items Quantity Ordered' : 'Total Orders Count';
 
   const handleExportExcel = async () => {
-    setIsExporting(true);
     try {
-      const workbook = new ExcelJS.Workbook();
+      const blob = await exportExcel(queryParams).unwrap();
 
-      const monthlySheet = workbook.addWorksheet(`Monthly (${month}-${year})`);
-      monthlySheet.columns = [
-        { header: 'Store Name', key: 'storeName', width: 30 },
-        { header: chartLabel, key: 'value', width: 25 },
-      ];
-      monthlySheet.addRows(monthlyData);
+      const startDateStr = dateRange[0]
+        ? dateRange[0].toLocaleDateString('ru-RU')
+        : 'All';
+      const endDateStr = dateRange[1] ? dateRange[1].toLocaleDateString('ru-RU') : 'All';
 
-      if (monthlyChartRef.current) {
-        const canvas = await html2canvas(monthlyChartRef.current, { scale: 2 });
-        const imageId = workbook.addImage({
-          base64: canvas.toDataURL('image/png'),
-          extension: 'png',
-        });
-        monthlySheet.addImage(imageId, {
-          tl: { col: 3, row: 1 },
-          ext: { width: 600, height: 300 },
-        });
-      }
-
-      const yearlySheet = workbook.addWorksheet(`Yearly (${year})`);
-      if (yearlyData.length > 0) {
-        const columns = Object.keys(yearlyData[0]).map(key => ({
-          header: key === 'month' ? 'Month' : key,
-          key: key,
-          width: 15,
-        }));
-        yearlySheet.columns = columns;
-        yearlySheet.addRows(yearlyData);
-      }
-
-      if (yearlyChartRef.current) {
-        const canvas = await html2canvas(yearlyChartRef.current, { scale: 2 });
-        const imageId = workbook.addImage({
-          base64: canvas.toDataURL('image/png'),
-          extension: 'png',
-        });
-        yearlySheet.addImage(imageId, {
-          tl: { col: 0, row: 15 },
-          ext: { width: 700, height: 350 },
-        });
-      }
-
-      const buffer = await workbook.xlsx.writeBuffer();
-      const productName = productId
-        ? products.find(p => p.id === productId)?.name.replace(/[^a-z0-9]/gi, '_')
-        : 'All_Orders';
-
-      saveAs(new Blob([buffer]), `Statistics_${productName}_${month}-${year}.xlsx`);
+      saveAs(blob, `Statistics_${startDateStr}_to_${endDateStr}.xlsx`);
     } catch (error) {
-      console.error(error);
-    } finally {
-      setIsExporting(false);
+      console.error('Ошибка экспорта Excel:', error);
     }
   };
 
@@ -123,41 +87,61 @@ const StatisticsPage = () => {
           variant="light"
           color="green"
           loading={isExporting}
-          disabled={isMonthlyFetching || isYearlyFetching}
+          disabled={!isDateSelected || isFetching || statsData.length === 0}
         >
           Export to Excel
         </Button>
       </Group>
 
       <StatisticsFilters
-        year={year}
-        setYear={setYear}
-        month={month}
-        setMonth={setMonth}
+        dateRange={dateRange}
+        setDateRange={setDateRange}
         productId={productId}
         setProductId={setProductId}
         productOptions={productOptions}
+        storeId={storeId}
+        setStoreId={setStoreId}
+        storeOptions={storeOptions}
       />
 
-      <SimpleGrid
-        cols={{ base: 1, lg: 2 }}
-        spacing="lg"
-        mt="md"
-      >
-        <MonthlyChartCard
-          ref={monthlyChartRef}
-          data={monthlyData}
-          isFetching={isMonthlyFetching}
-          chartLabel={chartLabel}
-        />
+      {!isDateSelected ? (
+        <Center h={300}>
+          <Stack
+            align="center"
+            gap="xs"
+          >
+            <Info
+              size={48}
+              color="gray"
+            />
+            <Text
+              c="dimmed"
+              size="lg"
+              fw={500}
+            >
+              Please select a date range to view statistics.
+            </Text>
+          </Stack>
+        </Center>
+      ) : (
+        <SimpleGrid
+          cols={{ base: 1, lg: 2 }}
+          spacing="lg"
+          mt="md"
+        >
+          <BarChartCard
+            data={statsData}
+            isFetching={isFetching}
+            chartLabel={chartLabel}
+          />
 
-        <YearlyChartCard
-          ref={yearlyChartRef}
-          data={yearlyData}
-          isFetching={isYearlyFetching}
-          chartLabel={chartLabel}
-        />
-      </SimpleGrid>
+          <LineChartCard
+            data={statsData}
+            isFetching={isFetching}
+            chartLabel={chartLabel}
+          />
+        </SimpleGrid>
+      )}
     </Stack>
   );
 };

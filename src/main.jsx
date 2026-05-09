@@ -1,6 +1,7 @@
 import '@mantine/charts/styles.css';
 import { MantineProvider } from '@mantine/core';
 import '@mantine/core/styles.css';
+import '@mantine/dates/styles.css';
 import { ModalsProvider } from '@mantine/modals';
 import '@mantine/nprogress/styles.css';
 import { StrictMode } from 'react';
