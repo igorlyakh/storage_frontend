@@ -33,8 +33,8 @@ const AllOrdersPage = () => {
   const statusOptions = [
     { value: 'NEW', label: 'NEW' },
     { value: 'IN_PROGRESS', label: 'IN_PROGRESS' },
-    { value: 'COMPLETED', label: 'COMPLETED' },
     { value: 'SENT', label: 'SENT' },
+    { value: 'COMPLETED', label: 'COMPLETED' },
   ];
 
   const { data, isFetching } = useGetAllOrdersQuery(

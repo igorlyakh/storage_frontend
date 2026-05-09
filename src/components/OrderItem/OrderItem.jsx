@@ -102,7 +102,7 @@ const OrderItem = ({ store, status, sended, updated, id }) => {
             span
             fw={500}
           >
-            {dayjs(sended).format('DD.MM.YYYY HH:mm:ss')}
+            {dayjs(sended).format('DD.MM.YYYY HH:mm')}
           </Text>
         </Text>
         {updated !== sended && (
@@ -117,7 +117,7 @@ const OrderItem = ({ store, status, sended, updated, id }) => {
               span
               fw={500}
             >
-              {dayjs(updated).format('DD.MM.YYYY HH:mm:ss')}
+              {dayjs(updated).format('DD.MM.YYYY HH:mm')}
             </Text>
           </Text>
         )}

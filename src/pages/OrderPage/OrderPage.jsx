@@ -1,4 +1,4 @@
-import { Button, Center, Container, Loader, Stack, Title } from '@mantine/core';
+import { Badge, Button, Center, Container, Loader, Stack, Title } from '@mantine/core';
 import { ArrowLeft } from 'lucide-react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import OrderItemsTable from '../../components/OrderItemsTable/OrderItemsTable';
@@ -39,6 +39,12 @@ const OrderPage = () => {
           Back to Orders
         </Button>
         <Title order={2}>Order Details</Title>
+        <Badge
+          color="yellow"
+          size="md"
+        >
+          {order?.store?.name}
+        </Badge>
         {order && <OrderItemsTable order={order} />}
       </Stack>
     </Container>
