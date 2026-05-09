@@ -1,4 +1,12 @@
-import { Group, Stack } from '@mantine/core';
+import {
+  Button,
+  Checkbox,
+  Divider,
+  Group,
+  Popover,
+  ScrollArea,
+  Stack,
+} from '@mantine/core';
 
 const FilterPopover = ({ label, options, values, onChange }) => {
   const handleToggle = val => {
