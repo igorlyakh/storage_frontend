@@ -184,7 +184,10 @@ const CreateOrderTable = () => {
             </Text>
             <Button
               fullWidth
-              onClick={() => modals.closeAll()}
+              onClick={() => {
+                modals.closeAll();
+                navigate('/orders', { replace: true });
+              }}
               color="green"
             >
               Understood
@@ -202,7 +205,6 @@ const CreateOrderTable = () => {
           });
         }),
       );
-      navigate('/orders', { replace: true });
     } catch (error) {
       toast.error('Failed to create order');
       console.error(error);
