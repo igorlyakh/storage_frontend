@@ -362,7 +362,7 @@ const CreateOrderTable = () => {
           onClick={handleSendOrder}
           w={{ base: '100%', sm: 'auto' }}
         >
-          Confirm Order
+          Send Order
         </Button>
       </Group>
     </div>

@@ -80,6 +80,9 @@ const OrderItemsTable = ({ order }) => {
           const currentVal = shippedQuantities[item.id] ?? item.requestedQty;
 
           if (!canEditAndSend) {
+            if (item.shippedQty === null || item.shippedQty === undefined) {
+              return null;
+            }
             return (
               <Text
                 c={currentVal < item.requestedQty ? 'orange' : 'green'}
