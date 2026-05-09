@@ -24,7 +24,7 @@ import toast from 'react-hot-toast';
 import { useDispatch } from 'react-redux';
 
 import { modals } from '@mantine/modals';
-import { Navigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import {
   api,
   useCreateOrderMutation,
@@ -37,6 +37,8 @@ const CreateOrderTable = () => {
   const { data: products = [], isFetching: isProductsLoading } =
     useGetAllProductsByBrandQuery();
   const [createOrder, { isLoading }] = useCreateOrderMutation();
+
+  const navigate = useNavigate();
 
   const [customRequest, setCustomRequest] = useState('');
 
@@ -200,7 +202,7 @@ const CreateOrderTable = () => {
           });
         }),
       );
-      <Navigate to={'/orders'} />;
+      navigate('/orders', { replace: true });
     } catch (error) {
       toast.error('Failed to create order');
       console.error(error);
