@@ -172,9 +172,8 @@ const CreateUserForm = () => {
                     searchable
                     error={errors.adminScopes?.message}
                     data={[
-                      { value: 'BAGS', label: 'BAGS' },
-                      { value: 'LABELS', label: 'LABELS' },
-                      { value: 'PACKAGING', label: 'PACKAGING' },
+                      { value: 'NCG', label: 'NCG' },
+                      { value: 'ADMINISTRATIVE', label: 'ADMINISTRATIVE' },
                     ]}
                     fz={{ base: 'md', sm: 'sm' }}
                     styles={inputStyles}
