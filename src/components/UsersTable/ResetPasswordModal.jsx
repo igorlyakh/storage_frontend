@@ -29,7 +29,7 @@ const ResetPasswordModal = ({ opened, onClose, user }) => {
       onClose={onClose}
       title={`Reset password for ${user.username}`}
       centered
-      size={{ base: '95%', sm: 400 }}
+      size={400}
       padding={{ base: 'md', sm: 'lg' }}
     >
       <Stack gap={{ base: 'sm', sm: 'md' }}>
@@ -44,7 +44,7 @@ const ResetPasswordModal = ({ opened, onClose, user }) => {
           onClick={handleResetPassword}
           loading={isLoading}
           fullWidth
-          size={{ base: 'md', sm: 'sm' }}
+          size="md"
         >
           Confirm New Password
         </Button>
