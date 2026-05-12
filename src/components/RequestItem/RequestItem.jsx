@@ -1,11 +1,14 @@
 import { Badge, Button, Card, Group, Stack, Text } from '@mantine/core';
+import { useSelection } from '@mantine/hooks';
 import dayjs from 'dayjs';
 import toast from 'react-hot-toast';
 import { Link } from 'react-router-dom';
 import { useUpdateWarehouseRequestStatusMutation } from '../../store/api/api';
+import { userRoleSelector } from '../../store/selectors/selectors';
 
 const RequestItem = ({ request }) => {
   const [updateStatus, { isLoading }] = useUpdateWarehouseRequestStatusMutation();
+  const userRole = useSelection(userRoleSelector);
 
   const handleTakeInProgress = async () => {
     try {
@@ -18,7 +21,7 @@ const RequestItem = ({ request }) => {
   };
 
   const formattedDate = dayjs(request.createdAt).format('DD.MM.YYYY HH:mm:ss');
-  const showProcessButton = request.status === 'NEW';
+  const showProcessButton = request.status === 'NEW' && userRole === 'ADMIN';
 
   const getStatusColor = status => {
     switch (status) {
