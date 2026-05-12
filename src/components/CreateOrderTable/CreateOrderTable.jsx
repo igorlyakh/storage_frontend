@@ -10,6 +10,7 @@ import {
   Text,
   Textarea,
 } from '@mantine/core';
+import { modals } from '@mantine/modals';
 import {
   flexRender,
   getCoreRowModel,
@@ -22,23 +23,22 @@ import { ChevronDown, ChevronRight } from 'lucide-react';
 import { useCallback, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useDispatch } from 'react-redux';
-
-import { modals } from '@mantine/modals';
 import { useNavigate } from 'react-router-dom';
+
 import {
   api,
   useCreateOrderMutation,
   useGetAllProductsByBrandQuery,
 } from '../../store/api/api';
+import { ConfirmOrderModal } from '../ConfirmationModal/ConfirmationModal';
 
 const CreateOrderTable = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const { data: products = [], isFetching: isProductsLoading } =
     useGetAllProductsByBrandQuery();
   const [createOrder, { isLoading }] = useCreateOrderMutation();
-
-  const navigate = useNavigate();
 
   const [customRequest, setCustomRequest] = useState('');
 
@@ -141,20 +141,8 @@ const CreateOrderTable = () => {
     getSortedRowModel: getSortedRowModel(),
   });
 
-  const handleSendOrder = async () => {
-    const itemsToOrder = rowData.filter(p => p.orderQuantity > 0);
-
-    if (itemsToOrder.length === 0 && !customRequest.trim()) {
-      return toast.error('Please specify quantity or write a custom request');
-    }
-
-    for (const item of itemsToOrder) {
-      if (item.limitPerOrder !== null && item.orderQuantity > item.limitPerOrder) {
-        return toast.error(
-          `Limit exceeded for "${item.name}". Maximum allowed is ${item.limitPerOrder}.`,
-        );
-      }
-    }
+  const submitOrder = async itemsToOrder => {
+    modals.closeAll();
 
     const payloadItems = itemsToOrder.map(p => ({
       name: p.name,
@@ -209,6 +197,37 @@ const CreateOrderTable = () => {
       toast.error('Failed to create order');
       console.error(error);
     }
+  };
+
+  const handleSendOrder = () => {
+    const itemsToOrder = rowData.filter(p => p.orderQuantity > 0);
+
+    if (itemsToOrder.length === 0 && !customRequest.trim()) {
+      return toast.error('Please specify quantity or write a custom request');
+    }
+
+    for (const item of itemsToOrder) {
+      if (item.limitPerOrder !== null && item.orderQuantity > item.limitPerOrder) {
+        return toast.error(
+          `Limit exceeded for "${item.name}". Maximum allowed is ${item.limitPerOrder}.`,
+        );
+      }
+    }
+
+    modals.open({
+      centered: true,
+      closeOnClickOutside: false,
+      withCloseButton: false,
+      size: 'lg',
+      children: (
+        <ConfirmOrderModal
+          itemsToOrder={itemsToOrder}
+          customRequest={customRequest}
+          onConfirm={() => submitOrder(itemsToOrder)}
+          onCancel={() => modals.closeAll()}
+        />
+      ),
+    });
   };
 
   return (
