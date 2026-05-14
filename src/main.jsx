@@ -16,6 +16,7 @@ import { persister, store } from './store/store.js';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
+    <SpeedInsights />
     <MantineProvider>
       <ModalsProvider>
         <Provider store={store}>
@@ -25,7 +26,6 @@ createRoot(document.getElementById('root')).render(
           >
             <BrowserRouter>
               <App />
-              <SpeedInsights />
               <Toaster
                 position="top-right"
                 toastOptions={{
