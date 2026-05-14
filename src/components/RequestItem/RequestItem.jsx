@@ -1,14 +1,14 @@
 import { Badge, Button, Card, Group, Stack, Text } from '@mantine/core';
-import { useSelection } from '@mantine/hooks';
 import dayjs from 'dayjs';
 import toast from 'react-hot-toast';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { useUpdateWarehouseRequestStatusMutation } from '../../store/api/api';
 import { userRoleSelector } from '../../store/selectors/selectors';
 
 const RequestItem = ({ request }) => {
   const [updateStatus, { isLoading }] = useUpdateWarehouseRequestStatusMutation();
-  const userRole = useSelection(userRoleSelector);
+  const userRole = useSelector(userRoleSelector);
 
   const handleTakeInProgress = async () => {
     try {
