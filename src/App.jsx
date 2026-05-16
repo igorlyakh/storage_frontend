@@ -5,6 +5,7 @@ import { Center, Loader } from '@mantine/core';
 import { NavigationProgress, nprogress } from '@mantine/nprogress';
 
 import Layout from './components/Layout';
+import CreateCategoryPage from './pages/CreateCategoryPage/CreateCategoryPage';
 import ProtectedRoutes from './pages/ProtectedRoutes';
 import RestrictedRouts from './pages/RestrictedRoutes';
 
@@ -26,6 +27,7 @@ const StoresPage = lazy(() => import('./pages/StoresPage'));
 const BrandsPage = lazy(() => import('./pages/BrandsPage/BrandsPage'));
 const CreateBrandPage = lazy(() => import('./pages/CreateBrandPage/CreateBrandPage'));
 const StatisticPage = lazy(() => import('./pages/StatisticPage/StatisticPage'));
+const CategoriesPage = lazy(() => import('./pages/CategoriesPage/CategoriesPage'));
 
 const SuspenseLoader = () => {
   useEffect(() => {
@@ -177,6 +179,24 @@ const App = () => {
               element={
                 <ProtectedRoutes allowedRoles={['ADMIN']}>
                   <CreateBrandPage />
+                </ProtectedRoutes>
+              }
+            />
+
+            <Route
+              path="categories"
+              element={
+                <ProtectedRoutes allowedRoles={['ADMIN']}>
+                  <CategoriesPage />
+                </ProtectedRoutes>
+              }
+            />
+
+            <Route
+              path="categories/create"
+              element={
+                <ProtectedRoutes allowedRoles={['ADMIN']}>
+                  <CreateCategoryPage />
                 </ProtectedRoutes>
               }
             />

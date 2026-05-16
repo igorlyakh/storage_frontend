@@ -3,8 +3,8 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 export const api = createApi({
   reducerPath: 'api',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'https://storage-1dgt.onrender.com/api',
-    // baseUrl: 'http://localhost:3001/api',
+    // baseUrl: 'https://storage-1dgt.onrender.com/api',
+    baseUrl: 'http://localhost:3001/api',
     prepareHeaders: (headers, { getState }) => {
       const token = getState().user.accessToken;
       if (token) {
@@ -21,6 +21,7 @@ export const api = createApi({
     'WarehouseRequests',
     'Brands',
     'Statistics',
+    'Categories',
   ],
   endpoints: builder => ({
     getAllOrders: builder.query({
@@ -179,6 +180,14 @@ export const api = createApi({
         };
       },
     }),
+    getAllCategories: builder.query({
+      query: () => '/category',
+      providesTags: ['Categories'],
+    }),
+    createCategory: builder.mutation({
+      query: data => ({ url: '/category', method: 'POST', body: data }),
+      invalidatesTags: ['Categories'],
+    }),
   }),
 });
 
@@ -213,4 +222,6 @@ export const {
   useCreateBrandMutation,
   useGetStatisticsDataQuery,
   useExportExcelMutation,
+  useGetAllCategoriesQuery,
+  useCreateCategoryMutation,
 } = api;
