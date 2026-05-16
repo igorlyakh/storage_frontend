@@ -33,7 +33,7 @@ const RequestPage = () => {
       cell: info => <Text fw={500}>{info.getValue()}</Text>,
     },
     {
-      accessorKey: 'product.category',
+      accessorKey: 'product.category.name',
       header: 'Category',
       cell: info => <Badge variant="outline">{info.getValue()}</Badge>,
     },
