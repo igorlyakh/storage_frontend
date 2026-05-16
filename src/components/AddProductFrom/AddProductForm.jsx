@@ -12,11 +12,17 @@ import {
 } from '@mantine/core';
 import { Controller, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { useAddProductMutation, useGetAllBrandsQuery } from '../../store/api/api';
-import { productCategories, productTags } from './config';
+import {
+  useAddProductMutation,
+  useGetAllBrandsQuery,
+  useGetAllCategoriesQuery,
+} from '../../store/api/api';
+import { productTags } from './config';
 
 const AddProductForm = () => {
   const { data: brands = [], isLoading: isBrandsLoading } = useGetAllBrandsQuery();
+  const { data: productCategories = [], isLoading: isCategoriesLoading } =
+    useGetAllCategoriesQuery();
   const [addProduct, { isLoading }] = useAddProductMutation();
 
   const {
@@ -27,7 +33,7 @@ const AddProductForm = () => {
   } = useForm({
     defaultValues: {
       name: '',
-      category: productCategories[0] || '',
+      category: '',
       tag: productTags[0] || '',
       limitPerOrder: '',
       initialQuantity: 1,
@@ -38,6 +44,11 @@ const AddProductForm = () => {
   const brandOptions = brands.map(brand => ({
     value: String(brand.id),
     label: brand.name,
+  }));
+
+  const categoriesOptions = productCategories.map(category => ({
+    value: String(category.id),
+    label: category.name,
   }));
 
   const onSubmit = async data => {
@@ -108,7 +119,13 @@ const AddProductForm = () => {
                   {...field}
                   label="Category"
                   withAsterisk
-                  data={productCategories}
+                  placeholder={
+                    isCategoriesLoading ? 'Loading categories...' : 'Select category'
+                  }
+                  data={categoriesOptions}
+                  searchable
+                  disabled={isCategoriesLoading}
+                  rightSection={isCategoriesLoading ? <Loader size="xs" /> : null}
                   error={errors.category?.message}
                 />
               )}

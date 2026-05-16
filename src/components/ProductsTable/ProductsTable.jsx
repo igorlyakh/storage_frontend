@@ -118,7 +118,8 @@ const ProductsTable = ({ data }) => {
         ),
       },
       {
-        accessorKey: 'category',
+        id: 'category',
+        accessorFn: row => row.category?.name || 'WITHOUT CATEGORY',
         header: 'Category',
       },
       {
