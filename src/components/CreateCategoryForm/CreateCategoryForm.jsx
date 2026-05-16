@@ -1,5 +1,5 @@
 import { Button, Paper, Stack, TextInput, Title } from '@mantine/core';
-import { Controller, useForm } from 'react-hook-form'; // Импортируем Controller
+import { Controller, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { useCreateCategoryMutation } from '../../store/api/api';
 

@@ -1,5 +1,5 @@
 import { Button, Paper, Stack, TextInput, Title } from '@mantine/core';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { useCreateBrandMutation } from '../../store/api/api';
 
@@ -7,7 +7,7 @@ const CreateBrandForm = () => {
   const [createBrand, { isLoading }] = useCreateBrandMutation();
 
   const {
-    register,
+    control,
     handleSubmit,
     reset,
     formState: { errors },
@@ -46,20 +46,27 @@ const CreateBrandForm = () => {
 
       <form onSubmit={handleSubmit(onSubmit)}>
         <Stack gap={25}>
-          {' '}
-          <TextInput
-            label="Brand Name"
-            placeholder="Enter brand name"
-            withAsterisk
-            {...register('name', {
+          <Controller
+            name="name"
+            control={control}
+            rules={{
               required: 'Brand name is required',
               minLength: { value: 2, message: 'Minimum 2 characters' },
-            })}
-            error={errors.name?.message}
-            h={{ base: 42, sm: 36 }}
-            fz={{ base: 'md', sm: 'sm' }}
-            styles={{ label: { marginBottom: 8 } }}
+            }}
+            render={({ field }) => (
+              <TextInput
+                label="Brand Name"
+                placeholder="Enter brand name"
+                withAsterisk
+                error={errors.name?.message}
+                h={{ base: 42, sm: 36 }}
+                fz={{ base: 'md', sm: 'sm' }}
+                styles={{ label: { marginBottom: 8 } }}
+                {...field}
+              />
+            )}
           />
+
           <Button
             type="submit"
             fullWidth
