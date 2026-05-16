@@ -3,8 +3,8 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 export const api = createApi({
   reducerPath: 'api',
   baseQuery: fetchBaseQuery({
-    // baseUrl: 'https://storage-1dgt.onrender.com/api',
-    baseUrl: 'http://localhost:3001/api',
+    baseUrl: 'https://storage-1dgt.onrender.com/api',
+    // baseUrl: 'http://localhost:3001/api',
     prepareHeaders: (headers, { getState }) => {
       const token = getState().user.accessToken;
       if (token) {
