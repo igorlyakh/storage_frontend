@@ -193,6 +193,15 @@ const Navigation = () => {
             closeDrawer={close}
           />
           <NavMenu
+            title="Categories"
+            items={[
+              { label: 'All Categories', to: '/categories' },
+              { label: 'Create Category', to: '/categories/create' },
+            ]}
+            isMobile={isMobile}
+            closeDrawer={close}
+          />
+          <NavMenu
             title="Stores"
             items={[
               { label: 'All Stores', to: '/stores' },
