@@ -75,7 +75,8 @@ const CreateOrderTable = () => {
         ),
       },
       {
-        accessorKey: 'category',
+        id: 'category',
+        accessorFn: row => row.category?.name,
         header: 'Category',
       },
       {
