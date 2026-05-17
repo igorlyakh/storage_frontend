@@ -93,6 +93,18 @@ const ProductsTable = ({ data }) => {
   const columns = useMemo(() => {
     const cols = [
       {
+        accessorKey: 'article',
+        header: 'Article',
+        cell: ({ getValue }) => (
+          <Text
+            c="gray"
+            fw={600}
+          >
+            {getValue()}
+          </Text>
+        ),
+      },
+      {
         accessorKey: 'name',
         header: 'Product Name',
         cell: ({ row, table, getValue }) => (
