@@ -1,5 +1,6 @@
 import {
   Button,
+  InputBase,
   Loader,
   MultiSelect,
   NumberInput,
@@ -12,6 +13,7 @@ import {
 } from '@mantine/core';
 import { Controller, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
+import { IMaskInput } from 'react-imask';
 import {
   useAddProductMutation,
   useGetAllBrandsQuery,
@@ -34,6 +36,7 @@ const AddProductForm = () => {
     defaultValues: {
       name: '',
       category: '',
+      article: '',
       tag: productTags[0] || '',
       limitPerOrder: '',
       initialQuantity: 1,
@@ -102,6 +105,23 @@ const AddProductForm = () => {
                 placeholder="Enter product name"
                 withAsterisk
                 error={errors.name?.message}
+              />
+            )}
+          />
+
+          <Controller
+            name="article"
+            control={control}
+            rules={{ required: 'article is required!' }}
+            render={({ field }) => (
+              <InputBase
+                {...field}
+                component={IMaskInput}
+                mask="000000-00"
+                label="Article"
+                placeholder="000000-00"
+                withAsterisk
+                error={errors.article?.message}
               />
             )}
           />
