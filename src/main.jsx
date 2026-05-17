@@ -4,6 +4,7 @@ import '@mantine/core/styles.css';
 import '@mantine/dates/styles.css';
 import { ModalsProvider } from '@mantine/modals';
 import '@mantine/nprogress/styles.css';
+import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/react';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
@@ -17,6 +18,7 @@ import { persister, store } from './store/store.js';
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <SpeedInsights />
+    <Analytics />
     <MantineProvider>
       <ModalsProvider>
         <Provider store={store}>
