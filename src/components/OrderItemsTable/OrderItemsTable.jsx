@@ -63,8 +63,8 @@ const OrderItemsTable = ({ order }) => {
         ),
       },
       {
-        accessorFn: row => row.product.category,
         id: 'category',
+        accessorFn: row => row.product.category?.name || 'WITHOUT CATEGORY',
         header: 'Category',
       },
       {
