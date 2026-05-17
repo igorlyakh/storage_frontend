@@ -2,7 +2,7 @@ import { Badge, Group, MultiSelect, NumberInput, Text, TextInput } from '@mantin
 import { useEffect, useState } from 'react';
 import getBrandColor from '../../utils/getBrandColor';
 
-export const EditableTextCell = ({ initialValue, onUpdate }) => {
+export const EditableTextCell = ({ initialValue, onUpdate, fw, c = 'dark' }) => {
   const [value, setValue] = useState(initialValue);
 
   useEffect(() => {
@@ -12,14 +12,16 @@ export const EditableTextCell = ({ initialValue, onUpdate }) => {
   return (
     <TextInput
       fz={{ base: 14, sm: 16, md: 18 }}
-      fw={700}
+      fw={fw}
       value={value}
       onChange={e => setValue(e.currentTarget.value)}
       onBlur={() => {
         if (value !== initialValue) onUpdate(value);
       }}
       variant="unstyled"
-      styles={{ input: { padding: 0, height: 'auto', minHeight: 'auto' } }}
+      styles={{
+        input: { padding: 0, height: 'auto', minHeight: 'auto', color: c },
+      }}
     />
   );
 };

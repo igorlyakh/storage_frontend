@@ -95,20 +95,25 @@ const ProductsTable = ({ data }) => {
       {
         accessorKey: 'article',
         header: 'Article',
-        cell: ({ getValue }) => (
-          <Text
-            c="gray"
+        size: 90,
+        cell: ({ row, table, getValue }) => (
+          <EditableTextCell
             fw={600}
-          >
-            {getValue()}
-          </Text>
+            c="gray"
+            initialValue={getValue()}
+            onUpdate={newVal =>
+              table.options.meta.updateData(row.original, 'article', newVal)
+            }
+          />
         ),
       },
       {
         accessorKey: 'name',
         header: 'Product Name',
+        size: 140,
         cell: ({ row, table, getValue }) => (
           <EditableTextCell
+            fw={700}
             initialValue={getValue()}
             onUpdate={newVal =>
               table.options.meta.updateData(row.original, 'name', newVal)
@@ -119,6 +124,7 @@ const ProductsTable = ({ data }) => {
       {
         accessorKey: 'brands',
         header: 'Brands',
+        size: 180,
         cell: ({ row, table, getValue }) => (
           <EditableBrandsCell
             initialBrands={getValue() || []}
@@ -137,6 +143,7 @@ const ProductsTable = ({ data }) => {
       {
         accessorKey: 'stock.quantity',
         header: 'Stock',
+        size: 100,
         cell: ({ getValue }) => {
           const val = getValue() ?? 0;
           return (
@@ -155,6 +162,7 @@ const ProductsTable = ({ data }) => {
       cols.push({
         id: 'orderQuantity',
         header: 'To Order',
+        size: 120,
         cell: ({ row, table }) => {
           const product = row.original;
           const val = table.options.meta.orderQuantities[product.id] || null;
@@ -173,6 +181,7 @@ const ProductsTable = ({ data }) => {
       {
         accessorKey: 'isEnabled',
         header: 'Available',
+        size: 100,
         cell: ({ row, table, getValue }) => (
           <Switch
             checked={getValue()}
@@ -191,6 +200,7 @@ const ProductsTable = ({ data }) => {
       {
         accessorKey: 'updatedAt',
         header: 'Updated',
+        size: 140,
         cell: ({ getValue }) => (
           <Text size="sm">{dayjs(getValue()).format('DD.MM.YY HH:mm')}</Text>
         ),
@@ -198,6 +208,7 @@ const ProductsTable = ({ data }) => {
       {
         accessorKey: 'limitPerOrder',
         header: 'Limit',
+        size: 100,
         cell: ({ row, table, getValue }) => (
           <EditableNumberCell
             initialValue={getValue()}
@@ -210,6 +221,7 @@ const ProductsTable = ({ data }) => {
       {
         id: 'actions',
         header: 'Delete',
+        size: 80,
         cell: ({ row, table }) => (
           <Tooltip label="Delete Product">
             <ActionIcon
@@ -313,6 +325,7 @@ const ProductsTable = ({ data }) => {
           <Table
             verticalSpacing="sm"
             highlightOnHover
+            layout="fixed"
           >
             <Table.Thead bg="gray.0">
               {table.getHeaderGroups().map(headerGroup => (
@@ -325,8 +338,10 @@ const ProductsTable = ({ data }) => {
                     return (
                       <Table.Th
                         key={header.id}
-                        style={
-                          isNameCol
+                        style={{
+                          width: isNameCol ? '100%' : header.getSize(),
+                          minWidth: isNameCol ? 250 : header.getSize(),
+                          ...(isNameCol
                             ? {
                                 position: 'sticky',
                                 left: 0,
@@ -334,8 +349,8 @@ const ProductsTable = ({ data }) => {
                                 backgroundColor: 'var(--mantine-color-gray-0)',
                                 boxShadow: '2px 0 5px -2px rgba(0,0,0,0.1)',
                               }
-                            : undefined
-                        }
+                            : undefined),
+                        }}
                       >
                         {flexRender(header.column.columnDef.header, header.getContext())}
                       </Table.Th>
