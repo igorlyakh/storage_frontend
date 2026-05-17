@@ -28,6 +28,18 @@ const RequestPage = () => {
 
   const columns = [
     {
+      accessorKey: 'product.article',
+      header: 'Article',
+      cell: info => (
+        <Text
+          fw={500}
+          c="gray"
+        >
+          {info.getValue()}
+        </Text>
+      ),
+    },
+    {
       accessorKey: 'product.name',
       header: 'Product',
       cell: info => <Text fw={500}>{info.getValue()}</Text>,
@@ -50,7 +62,6 @@ const RequestPage = () => {
     getCoreRowModel: getCoreRowModel(),
   });
 
-  // Функция для смены статуса
   const handleUpdateStatus = async newStatus => {
     try {
       await updateStatus({ id, status: newStatus }).unwrap();
