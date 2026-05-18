@@ -46,13 +46,21 @@ const CreateOrderTable = () => {
 
   const handleQuantityChange = useCallback(
     (productId, val) => {
-      const newValue = Number(val) || 0;
-
       dispatch(
         api.util.updateQueryData('getAllProductsByBrand', undefined, draft => {
           const product = draft.find(p => p.id === productId);
           if (product) {
-            product.orderQuantity = newValue > 0 ? newValue : undefined;
+            if (val === '' || val === undefined || val === null) {
+              product.orderQuantity = undefined;
+            } else {
+              let newValue = Number(val);
+
+              if (newValue === 0 && product.orderQuantity === undefined) {
+                newValue = 1;
+              }
+
+              product.orderQuantity = newValue;
+            }
           }
         }),
       );
@@ -108,7 +116,7 @@ const CreateOrderTable = () => {
           const row = info.row.original;
           return (
             <NumberInput
-              value={row.orderQuantity || ''}
+              value={row.orderQuantity ?? ''}
               onChange={val => handleQuantityChange(row.id, val)}
               min={0}
               max={row.limitPerOrder || undefined}
