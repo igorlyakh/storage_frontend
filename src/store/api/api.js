@@ -136,6 +136,14 @@ export const api = createApi({
       query: id => `/warehouse/${id}`,
       providesTags: ['WarehouseRequests'],
     }),
+    updateWarehouseRequestItems: builder.mutation({
+      query: ({ id, items }) => ({
+        url: `/warehouse/${id}/items`,
+        method: 'PATCH',
+        body: { items },
+      }),
+      invalidatesTags: ['WarehouseRequests'],
+    }),
     getAllBrands: builder.query({
       query: () => '/brands',
       providesTags: ['Brands'],
@@ -224,4 +232,5 @@ export const {
   useExportExcelMutation,
   useGetAllCategoriesQuery,
   useCreateCategoryMutation,
+  useUpdateWarehouseRequestItemsMutation,
 } = api;

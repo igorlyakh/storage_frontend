@@ -1,11 +1,14 @@
 import {
+  ActionIcon,
   Badge,
   Box,
   Button,
   Center,
   Group,
   Loader,
+  NumberInput,
   Paper,
+  Select,
   Stack,
   Table,
   Text,
@@ -13,64 +16,204 @@ import {
 } from '@mantine/core';
 import { flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import dayjs from 'dayjs';
+import { Check, Edit, Plus, Trash, X } from 'lucide-react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useParams } from 'react-router-dom';
 import {
+  useGetAllProductsQuery,
   useGetWarehouseRequestByIdQuery,
+  useUpdateWarehouseRequestItemsMutation,
   useUpdateWarehouseRequestStatusMutation,
 } from '../../store/api/api';
 
 const RequestPage = () => {
   const { id } = useParams();
   const { data, isLoading, isError } = useGetWarehouseRequestByIdQuery(id);
+  const { data: allProducts } = useGetAllProductsQuery();
   const [updateStatus, { isLoading: isUpdating }] =
     useUpdateWarehouseRequestStatusMutation();
+  const [updateItems, { isLoading: isSavingItems }] =
+    useUpdateWarehouseRequestItemsMutation();
 
-  const columns = [
-    {
-      accessorKey: 'product.article',
-      header: 'Article',
-      cell: info => (
-        <Text
-          fw={500}
-          c="gray"
-        >
-          {info.getValue()}
-        </Text>
-      ),
-    },
-    {
-      accessorKey: 'product.name',
-      header: 'Product',
-      cell: info => <Text fw={500}>{info.getValue()}</Text>,
-    },
-    {
-      accessorKey: 'product.category.name',
-      header: 'Category',
-      cell: info => <Badge variant="outline">{info.getValue()}</Badge>,
-    },
-    {
-      accessorKey: 'quantity',
-      header: 'Quantity',
-      cell: info => <Text>{info.getValue()} pcs.</Text>,
-    },
-  ];
+  const [isEditing, setIsEditing] = useState(false);
+  const [draftItems, setDraftItems] = useState([]);
 
-  const table = useReactTable({
-    data: data?.items || [],
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-  });
+  const canEdit = !isEditing && data?.status !== 'COMPLETED';
+
+  useEffect(() => {
+    if (data?.items && !isEditing) {
+      setDraftItems(
+        data.items.map(item => ({
+          tempId: Math.random().toString(36).substr(2, 9),
+          productId: item.productId,
+          quantity: item.quantity,
+          product: item.product,
+        })),
+      );
+    }
+  }, [data, isEditing]);
 
   const handleUpdateStatus = async newStatus => {
     try {
       await updateStatus({ id, status: newStatus }).unwrap();
-      toast.success(`Status updated on: ${newStatus}`);
+      toast.success(`Status updated to: ${newStatus}`);
     } catch (error) {
-      toast.error('Error!');
+      toast.error('Error updating status!');
       console.error(error);
     }
   };
+
+  const handleSaveDraft = async () => {
+    try {
+      const payload = draftItems.map(i => ({
+        productId: i.productId,
+        quantity: i.quantity,
+      }));
+
+      await updateItems({ id, items: payload }).unwrap();
+      toast.success('Items updated successfully!');
+      setIsEditing(false);
+    } catch (error) {
+      toast.error('Error saving items!');
+      console.error(error);
+    }
+  };
+
+  const updateDraftItem = useCallback(
+    (index, field, value) => {
+      setDraftItems(prev => {
+        const newDraft = [...prev];
+        newDraft[index] = { ...newDraft[index], [field]: value };
+
+        if (field === 'productId') {
+          const selectedProd = allProducts?.find(p => p.id === value);
+          if (selectedProd) {
+            newDraft[index].product = selectedProd;
+          }
+        }
+        return newDraft;
+      });
+    },
+    [allProducts],
+  );
+
+  const removeDraftItem = useCallback(index => {
+    setDraftItems(prev => prev.filter((_, i) => i !== index));
+  }, []);
+
+  const addDraftItem = useCallback(() => {
+    setDraftItems(prev => [
+      ...prev,
+      {
+        tempId: Math.random().toString(36).substr(2, 9),
+        productId: '',
+        quantity: 1,
+        product: null,
+      },
+    ]);
+  }, []);
+
+  const productSelectData = useMemo(() => {
+    return (
+      allProducts?.map(p => ({
+        value: p.id,
+        label: `${p.article} - ${p.name}`,
+      })) || []
+    );
+  }, [allProducts]);
+
+  const columns = useMemo(
+    () => [
+      {
+        accessorKey: 'product.article',
+        header: 'Article',
+        cell: info => {
+          if (isEditing) return null;
+          return (
+            <Text
+              fw={500}
+              c="gray"
+            >
+              {info.getValue()}
+            </Text>
+          );
+        },
+      },
+      {
+        accessorKey: 'product.name',
+        header: 'Product',
+        cell: ({ row }) => {
+          const item = row.original;
+
+          if (isEditing) {
+            return (
+              <Select
+                placeholder="Select product"
+                data={productSelectData}
+                value={item.productId}
+                onChange={val => updateDraftItem(row.index, 'productId', val)}
+                searchable
+              />
+            );
+          }
+          return <Text fw={500}>{item.product?.name}</Text>;
+        },
+      },
+      {
+        accessorKey: 'product.category.name',
+        header: 'Category',
+        cell: ({ row }) => {
+          const item = row.original;
+          if (isEditing) return null;
+          return <Badge variant="outline">{item.product?.category?.name || 'N/A'}</Badge>;
+        },
+      },
+      {
+        accessorKey: 'quantity',
+        header: 'Quantity',
+        cell: ({ row }) => {
+          const item = row.original;
+
+          if (isEditing) {
+            return (
+              <NumberInput
+                value={item.quantity}
+                onChange={val => updateDraftItem(row.index, 'quantity', val)}
+                min={1}
+                w={100}
+              />
+            );
+          }
+          return <Text>{item.quantity} pcs.</Text>;
+        },
+      },
+      ...(isEditing
+        ? [
+            {
+              id: 'actions',
+              header: '',
+              cell: ({ row }) => (
+                <ActionIcon
+                  color="red"
+                  onClick={() => removeDraftItem(row.index)}
+                >
+                  <Trash size={18} />
+                </ActionIcon>
+              ),
+            },
+          ]
+        : []),
+    ],
+    [isEditing, productSelectData, updateDraftItem, removeDraftItem],
+  );
+
+  const table = useReactTable({
+    data: isEditing ? draftItems : data?.items || [],
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+    getRowId: (row, index) => row.tempId || index,
+  });
 
   const renderActionButton = () => {
     switch (data?.status) {
@@ -116,15 +259,13 @@ const RequestPage = () => {
     }
   };
 
-  if (isLoading) {
+  if (isLoading)
     return (
       <Center h={200}>
         <Loader color="blue" />
       </Center>
     );
-  }
-
-  if (isError || !data) {
+  if (isError || !data)
     return (
       <Text
         c="red"
@@ -133,7 +274,6 @@ const RequestPage = () => {
         No data!
       </Text>
     );
-  }
 
   return (
     <Stack
@@ -174,7 +314,6 @@ const RequestPage = () => {
           >
             <Group>
               {renderActionButton()}
-
               <Badge
                 size="xl"
                 color={getStatusColor(data.status)}
@@ -182,7 +321,6 @@ const RequestPage = () => {
                 {data.status}
               </Badge>
             </Group>
-
             <Text
               size="xs"
               c="dimmed"
@@ -192,6 +330,48 @@ const RequestPage = () => {
           </Stack>
         </Group>
       </Paper>
+
+      <Group justify="space-between">
+        <Title order={5}>Items</Title>
+        <Group>
+          {canEdit && (
+            <Button
+              leftSection={<Edit size={16} />}
+              variant="light"
+              onClick={() => setIsEditing(true)}
+            >
+              Edit Items
+            </Button>
+          )}
+          {isEditing && (
+            <>
+              <Button
+                leftSection={<Plus size={16} />}
+                variant="outline"
+                onClick={addDraftItem}
+              >
+                Add Item
+              </Button>
+              <Button
+                leftSection={<X size={16} />}
+                color="red"
+                variant="subtle"
+                onClick={() => setIsEditing(false)}
+              >
+                Cancel
+              </Button>
+              <Button
+                leftSection={<Check size={16} />}
+                color="green"
+                loading={isSavingItems}
+                onClick={handleSaveDraft}
+              >
+                Save Changes
+              </Button>
+            </>
+          )}
+        </Group>
+      </Group>
 
       <Paper
         withBorder
