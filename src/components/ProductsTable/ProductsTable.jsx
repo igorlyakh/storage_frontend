@@ -4,7 +4,10 @@ import {
   Box,
   Button,
   Group,
+  Modal,
+  NumberInput,
   Paper,
+  Stack,
   Switch,
   Table,
   Text,
@@ -20,14 +23,16 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import dayjs from 'dayjs';
-import { ChevronDown, ChevronRight, Trash } from 'lucide-react';
+import { ChevronDown, ChevronRight, Minus, Plus, Trash } from 'lucide-react';
 import { useCallback, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useSelector } from 'react-redux';
 
 import {
   useCreateWarehouseRequestMutation,
+  useDecreaseProductMutation,
   useGetAllBrandsQuery,
+  useIncreaseProductMutation,
   useUpdateProductsMutation,
 } from '../../store/api/api';
 import { userRoleSelector } from '../../store/selectors/selectors';
@@ -43,6 +48,7 @@ import {
 const ProductsTable = ({ data }) => {
   const userRole = useSelector(userRoleSelector);
   const isWarehouse = userRole === 'WAREHOUSE';
+  const isAdmin = userRole === 'ADMIN';
 
   const { data: allBrands = [] } = useGetAllBrandsQuery();
 
@@ -50,9 +56,15 @@ const ProductsTable = ({ data }) => {
   const [createWarehouseRequest, { isLoading: isSending }] =
     useCreateWarehouseRequestMutation();
 
+  const [increaseProduct, { isLoading: isIncreasing }] = useIncreaseProductMutation();
+  const [decreaseProduct, { isLoading: isDecreasing }] = useDecreaseProductMutation();
+
   const [orderQuantities, setOrderQuantities] = useState({});
   const [openedDelete, { open: openDelete, close: closeDelete }] = useDisclosure(false);
   const [productToDelete, setProductToDelete] = useState(null);
+
+  const [stockOpData, setStockOpData] = useState(null);
+  const [stockQuantity, setStockQuantity] = useState(1);
 
   const handleUpdateProduct = useCallback(
     async (product, field, newValue) => {
@@ -87,6 +99,34 @@ const ProductsTable = ({ data }) => {
       setOrderQuantities({});
     } catch {
       toast.error('Failed to send request');
+    }
+  };
+
+  const handleOpenStockOp = useCallback((product, type) => {
+    setStockOpData({ product, type });
+    setStockQuantity(1);
+  }, []);
+
+  const closeStockOp = () => {
+    setStockOpData(null);
+    setStockQuantity(1);
+  };
+
+  const confirmStockOp = async () => {
+    if (!stockOpData) return;
+    const { product, type } = stockOpData;
+
+    try {
+      const payload = { id: product.id, quantity: stockQuantity };
+      if (type === 'increase') {
+        await increaseProduct(payload).unwrap();
+      } else {
+        await decreaseProduct(payload).unwrap();
+      }
+      toast.success(`Stock ${type}d successfully!`);
+      closeStockOp();
+    } catch (error) {
+      toast.error(error?.data?.message || `Failed to ${type} stock`);
     }
   };
 
@@ -143,16 +183,51 @@ const ProductsTable = ({ data }) => {
       {
         accessorKey: 'stock.quantity',
         header: 'Stock',
-        size: 100,
-        cell: ({ getValue }) => {
+        size: isAdmin ? 140 : 100,
+        cell: ({ row, table, getValue }) => {
           const val = getValue() ?? 0;
+          const product = row.original;
+
           return (
-            <Text
-              c={val < 0 ? 'red' : 'dark'}
-              fw={val < 0 ? 700 : 400}
+            <Group
+              gap="xs"
+              wrap="nowrap"
             >
-              {val}
-            </Text>
+              <Text
+                c={val < 0 ? 'red' : 'dark'}
+                fw={val < 0 ? 700 : 400}
+              >
+                {val}
+              </Text>
+
+              {isAdmin && (
+                <Group
+                  gap={4}
+                  wrap="nowrap"
+                >
+                  <ActionIcon
+                    size="sm"
+                    variant="light"
+                    color="red"
+                    onClick={() =>
+                      table.options.meta.handleOpenStockOp(product, 'decrease')
+                    }
+                  >
+                    <Minus size={14} />
+                  </ActionIcon>
+                  <ActionIcon
+                    size="sm"
+                    variant="light"
+                    color="green"
+                    onClick={() =>
+                      table.options.meta.handleOpenStockOp(product, 'increase')
+                    }
+                  >
+                    <Plus size={14} />
+                  </ActionIcon>
+                </Group>
+              )}
+            </Group>
           );
         },
       },
@@ -237,7 +312,7 @@ const ProductsTable = ({ data }) => {
     );
 
     return cols;
-  }, [isWarehouse]);
+  }, [isWarehouse, isAdmin]);
 
   const defaultData = useMemo(() => [], []);
 
@@ -258,8 +333,9 @@ const ProductsTable = ({ data }) => {
         setProductToDelete(product);
         openDelete();
       },
+      handleOpenStockOp,
     }),
-    [orderQuantities, handleUpdateProduct, openDelete, allBrands],
+    [orderQuantities, handleUpdateProduct, openDelete, allBrands, handleOpenStockOp],
   );
 
   const table = useReactTable({
@@ -332,7 +408,6 @@ const ProductsTable = ({ data }) => {
                 <Table.Tr key={headerGroup.id}>
                   {headerGroup.headers.map(header => {
                     if (header.id === 'category') return null;
-
                     const isNameCol = header.id === 'name';
 
                     return (
@@ -404,7 +479,6 @@ const ProductsTable = ({ data }) => {
                   <Table.Tr key={row.id}>
                     {row.getVisibleCells().map(cell => {
                       if (cell.column.id === 'category') return null;
-
                       const isNameCol = cell.column.id === 'name';
 
                       return (
@@ -439,6 +513,42 @@ const ProductsTable = ({ data }) => {
         onClose={closeDelete}
         product={productToDelete}
       />
+
+      <Modal
+        opened={!!stockOpData}
+        onClose={closeStockOp}
+        title={
+          stockOpData
+            ? `${stockOpData.type === 'increase' ? 'Increase' : 'Decrease'} Stock: ${stockOpData.product?.name}`
+            : ''
+        }
+        centered
+      >
+        <Stack>
+          <NumberInput
+            label="Quantity"
+            value={stockQuantity}
+            onChange={val => setStockQuantity(val || 0)}
+            min={1}
+            data-autofocus
+          />
+          <Group justify="flex-end">
+            <Button
+              variant="default"
+              onClick={closeStockOp}
+            >
+              Cancel
+            </Button>
+            <Button
+              color={stockOpData?.type === 'increase' ? 'green' : 'red'}
+              onClick={confirmStockOp}
+              loading={isIncreasing || isDecreasing}
+            >
+              Confirm
+            </Button>
+          </Group>
+        </Stack>
+      </Modal>
     </>
   );
 };

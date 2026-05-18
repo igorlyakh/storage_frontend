@@ -84,6 +84,22 @@ export const api = createApi({
       query: id => ({ url: '/product', method: 'DELETE', body: id }),
       invalidatesTags: ['Products'],
     }),
+    increaseProduct: builder.mutation({
+      query: data => ({
+        url: '/warehouse/increase',
+        method: 'PATCH',
+        body: data,
+      }),
+      invalidatesTags: ['Products'],
+    }),
+    decreaseProduct: builder.mutation({
+      query: data => ({
+        url: '/warehouse/decrease',
+        method: 'PATCH',
+        body: data,
+      }),
+      invalidatesTags: ['Products'],
+    }),
     getAllUsers: builder.query({
       query: () => '/users',
       providesTags: ['Users'],
@@ -233,4 +249,6 @@ export const {
   useGetAllCategoriesQuery,
   useCreateCategoryMutation,
   useUpdateWarehouseRequestItemsMutation,
+  useDecreaseProductMutation,
+  useIncreaseProductMutation,
 } = api;
