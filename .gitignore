@@ -22,3 +22,9 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+*~
+
+# Dependency directories and files
+.env.dev
+.env.prod
+.env
