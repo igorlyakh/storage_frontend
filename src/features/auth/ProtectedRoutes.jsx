@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
-import { tokenSelector, userRoleSelector } from '../store/selectors/selectors';
+import { tokenSelector, userRoleSelector } from '../../store/selectors/selectors';
 
 const ProtectedRoutes = ({ children, redirectTo = '/', allowedRoles }) => {
   const userRole = useSelector(userRoleSelector);

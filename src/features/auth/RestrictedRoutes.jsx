@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
-import { tokenSelector } from '../store/selectors/selectors';
+import { tokenSelector } from '../../store/selectors/selectors';
 
 const RestrictedRouts = ({ children, redirectTo = '/' }) => {
   const userToken = useSelector(tokenSelector);
