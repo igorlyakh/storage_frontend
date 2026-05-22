@@ -88,6 +88,25 @@ const CreateOrderTable = () => {
         header: 'Category',
       },
       {
+        accessorKey: 'orderQuantity',
+        header: 'Quantity to Order',
+        cell: info => {
+          const row = info.row.original;
+          return (
+            <NumberInput
+              value={row.orderQuantity ?? ''}
+              onChange={val => handleQuantityChange(row.id, val)}
+              min={0}
+              max={row.limitPerOrder || undefined}
+              placeholder="0"
+              allowNegative={false}
+              allowDecimal={false}
+              w={{ base: 100, sm: 120 }}
+            />
+          );
+        },
+      },
+      {
         accessorKey: 'limitPerOrder',
         header: 'Limit',
         cell: info => {
@@ -106,25 +125,6 @@ const CreateOrderTable = () => {
             >
               No limit
             </Text>
-          );
-        },
-      },
-      {
-        accessorKey: 'orderQuantity',
-        header: 'Quantity to Order',
-        cell: info => {
-          const row = info.row.original;
-          return (
-            <NumberInput
-              value={row.orderQuantity ?? ''}
-              onChange={val => handleQuantityChange(row.id, val)}
-              min={0}
-              max={row.limitPerOrder || undefined}
-              placeholder="0"
-              allowNegative={false}
-              allowDecimal={false}
-              w={{ base: 100, sm: 120 }}
-            />
           );
         },
       },
