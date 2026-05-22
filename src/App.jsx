@@ -7,9 +7,9 @@ import { NavigationProgress, nprogress } from '@mantine/nprogress';
 import Layout from './components/layout/Layout';
 import PersistLogin from './features/auth/PersistLogin';
 
+import ProtectedRoutes from './features/auth/ProtectedRoutes';
+import RestrictedRouts from './features/auth/RestrictedRoutes';
 import CreateCategoryPage from './pages/CreateCategoryPage/CreateCategoryPage';
-import ProtectedRoutes from './pages/ProtectedRoutes';
-import RestrictedRouts from './pages/RestrictedRoutes';
 
 const HomePage = lazy(() => import('./pages/HomePage/HomePage'));
 const LoginPage = lazy(() => import('./pages/LoginPage/LoginPage'));
