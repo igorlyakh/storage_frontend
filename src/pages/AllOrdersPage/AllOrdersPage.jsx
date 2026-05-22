@@ -10,8 +10,8 @@ import {
   Title,
 } from '@mantine/core';
 import { useState } from 'react';
-import FilterPopover from '../../components/FilterPopover';
 import OrdersList from '../../components/OrdersList/OrdersList';
+import FilterPopover from '../../components/ui/FilterPopover';
 import { useGetAllOrdersQuery, useGetAllStoresQuery } from '../../store/api/api';
 
 const AllOrdersPage = () => {

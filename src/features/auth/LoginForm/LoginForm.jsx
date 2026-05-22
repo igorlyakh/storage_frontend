@@ -10,8 +10,8 @@ import {
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { useDispatch } from 'react-redux';
-import { useLoginMutation } from '../../store/api/api';
-import { setData } from '../../store/userSlice/userSlice';
+import { useLoginMutation } from '../../../store/api/api';
+import { setData } from '../../../store/userSlice/userSlice';
 
 const LoginForm = () => {
   const [login, { isLoading }] = useLoginMutation();

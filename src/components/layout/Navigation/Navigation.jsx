@@ -12,9 +12,9 @@ import { useDisclosure } from '@mantine/hooks';
 import toast from 'react-hot-toast';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { useLogoutMutation } from '../../store/api/api';
-import { tokenSelector, userRoleSelector } from '../../store/selectors/selectors';
-import { logOut } from '../../store/userSlice/userSlice';
+import { useLogoutMutation } from '../../../store/api/api';
+import { tokenSelector, userRoleSelector } from '../../../store/selectors/selectors';
+import { logOut } from '../../../store/userSlice/userSlice';
 
 const NavMenu = ({ title, items, isMobile, closeDrawer }) => {
   if (isMobile) {

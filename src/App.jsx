@@ -4,8 +4,8 @@ import { Route, Routes, useLocation } from 'react-router-dom';
 import { Center, Loader } from '@mantine/core';
 import { NavigationProgress, nprogress } from '@mantine/nprogress';
 
-import Layout from './components/Layout';
-import PersistLogin from './components/PersistLogin';
+import Layout from './components/layout/Layout';
+import PersistLogin from './features/auth/PersistLogin';
 
 import CreateCategoryPage from './pages/CreateCategoryPage/CreateCategoryPage';
 import ProtectedRoutes from './pages/ProtectedRoutes';

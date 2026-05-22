@@ -30,7 +30,7 @@ import {
   useCreateOrderMutation,
   useGetAllProductsByBrandQuery,
 } from '../../store/api/api';
-import { ConfirmOrderModal } from '../ConfirmationModal/ConfirmationModal';
+import { ConfirmOrderModal } from '../ui/ConfirmationModal/ConfirmationModal';
 
 const CreateOrderTable = () => {
   const dispatch = useDispatch();

@@ -2,9 +2,9 @@ import { Center, Loader } from '@mantine/core';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Outlet } from 'react-router-dom';
-import { useGetMeQuery } from '../../store/api/api';
-import { isLoginSelector, tokenSelector } from '../../store/selectors/selectors';
-import { setData } from '../../store/userSlice/userSlice';
+import { useGetMeQuery } from '../../../store/api/api';
+import { isLoginSelector, tokenSelector } from '../../../store/selectors/selectors';
+import { setData } from '../../../store/userSlice/userSlice';
 
 const PersistLogin = () => {
   const dispatch = useDispatch();
