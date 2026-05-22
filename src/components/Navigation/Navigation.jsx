@@ -14,7 +14,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { useLogoutMutation } from '../../store/api/api';
 import { tokenSelector, userRoleSelector } from '../../store/selectors/selectors';
-import { logoutAction } from '../../store/userSlice/userSlice';
+import { logOut } from '../../store/userSlice/userSlice';
 
 const NavMenu = ({ title, items, isMobile, closeDrawer }) => {
   if (isMobile) {
@@ -98,7 +98,7 @@ const Navigation = () => {
   const handler = async () => {
     try {
       await logout().unwrap();
-      dispatch(logoutAction());
+      dispatch(logOut());
       toast.success('You have successfully logged out!');
       close();
     } catch {

@@ -5,6 +5,8 @@ import { Center, Loader } from '@mantine/core';
 import { NavigationProgress, nprogress } from '@mantine/nprogress';
 
 import Layout from './components/Layout';
+import PersistLogin from './components/PersistLogin';
+
 import CreateCategoryPage from './pages/CreateCategoryPage/CreateCategoryPage';
 import ProtectedRoutes from './pages/ProtectedRoutes';
 import RestrictedRouts from './pages/RestrictedRoutes';
@@ -57,182 +59,184 @@ const App = () => {
         fallback={<SuspenseLoader />}
       >
         <Routes location={location}>
-          <Route
-            element={<Layout />}
-            path="/"
-          >
+          <Route element={<PersistLogin />}>
             <Route
-              index
-              element={<HomePage />}
-            />
+              element={<Layout />}
+              path="/"
+            >
+              <Route
+                index
+                element={<HomePage />}
+              />
+
+              <Route
+                path="login"
+                element={
+                  <RestrictedRouts redirectTo="/">
+                    <LoginPage />
+                  </RestrictedRouts>
+                }
+              />
+
+              <Route
+                path="orders"
+                element={
+                  <ProtectedRoutes allowedRoles={['STORE']}>
+                    <MyOrdersPage />
+                  </ProtectedRoutes>
+                }
+              />
+
+              <Route
+                path="orders/create"
+                element={
+                  <ProtectedRoutes allowedRoles={['STORE']}>
+                    <CreateOrderPage />
+                  </ProtectedRoutes>
+                }
+              />
+
+              <Route
+                path="orders/:id"
+                element={
+                  <ProtectedRoutes allowedRoles={['STORE', 'ADMIN', 'WAREHOUSE']}>
+                    <OrderPage />
+                  </ProtectedRoutes>
+                }
+              />
+
+              <Route
+                path="/all-orders"
+                element={
+                  <ProtectedRoutes allowedRoles={['ADMIN', 'WAREHOUSE']}>
+                    <AllOrdersPage />
+                  </ProtectedRoutes>
+                }
+              />
+
+              <Route
+                path="products"
+                element={
+                  <ProtectedRoutes allowedRoles={['ADMIN', 'WAREHOUSE']}>
+                    <ProductsPage />
+                  </ProtectedRoutes>
+                }
+              />
+
+              <Route
+                path="requests"
+                element={
+                  <ProtectedRoutes allowedRoles={['ADMIN', 'WAREHOUSE']}>
+                    <RequestsPage />
+                  </ProtectedRoutes>
+                }
+              />
+
+              <Route
+                path="requests/:id"
+                element={
+                  <ProtectedRoutes allowedRoles={['ADMIN', 'WAREHOUSE']}>
+                    <RequestPage />
+                  </ProtectedRoutes>
+                }
+              />
+
+              <Route
+                path="products/create"
+                element={
+                  <ProtectedRoutes allowedRoles={['ADMIN']}>
+                    <CreateProductPage />
+                  </ProtectedRoutes>
+                }
+              />
+
+              <Route
+                path="users"
+                element={
+                  <ProtectedRoutes allowedRoles={['ADMIN']}>
+                    <AllUsersPage />
+                  </ProtectedRoutes>
+                }
+              />
+
+              <Route
+                path="users/create"
+                element={
+                  <ProtectedRoutes allowedRoles={['ADMIN']}>
+                    <CreateUserPage />
+                  </ProtectedRoutes>
+                }
+              />
+
+              <Route
+                path="brands"
+                element={
+                  <ProtectedRoutes allowedRoles={['ADMIN']}>
+                    <BrandsPage />
+                  </ProtectedRoutes>
+                }
+              />
+
+              <Route
+                path="brands/create"
+                element={
+                  <ProtectedRoutes allowedRoles={['ADMIN']}>
+                    <CreateBrandPage />
+                  </ProtectedRoutes>
+                }
+              />
+
+              <Route
+                path="categories"
+                element={
+                  <ProtectedRoutes allowedRoles={['ADMIN']}>
+                    <CategoriesPage />
+                  </ProtectedRoutes>
+                }
+              />
+
+              <Route
+                path="categories/create"
+                element={
+                  <ProtectedRoutes allowedRoles={['ADMIN']}>
+                    <CreateCategoryPage />
+                  </ProtectedRoutes>
+                }
+              />
+
+              <Route
+                path="stores"
+                element={
+                  <ProtectedRoutes allowedRoles={['ADMIN']}>
+                    <StoresPage />
+                  </ProtectedRoutes>
+                }
+              />
+
+              <Route
+                path="stores/create"
+                element={
+                  <ProtectedRoutes allowedRoles={['ADMIN']}>
+                    <CreateStorePage />
+                  </ProtectedRoutes>
+                }
+              />
+
+              <Route
+                path="statistics"
+                element={
+                  <ProtectedRoutes allowedRoles={['ADMIN', 'WAREHOUSE']}>
+                    <StatisticPage />
+                  </ProtectedRoutes>
+                }
+              />
+            </Route>
 
             <Route
-              path="login"
-              element={
-                <RestrictedRouts redirectTo="/">
-                  <LoginPage />
-                </RestrictedRouts>
-              }
+              path="*"
+              element={<NotFoundPage />}
             />
-
-            <Route
-              path="orders"
-              element={
-                <ProtectedRoutes allowedRoles={['STORE']}>
-                  <MyOrdersPage />
-                </ProtectedRoutes>
-              }
-            />
-
-            <Route
-              path="orders/create"
-              element={
-                <ProtectedRoutes allowedRoles={['STORE']}>
-                  <CreateOrderPage />
-                </ProtectedRoutes>
-              }
-            />
-
-            <Route
-              path="orders/:id"
-              element={
-                <ProtectedRoutes allowedRoles={['STORE', 'ADMIN', 'WAREHOUSE']}>
-                  <OrderPage />
-                </ProtectedRoutes>
-              }
-            />
-
-            <Route
-              path="/all-orders"
-              element={
-                <ProtectedRoutes allowedRoles={['ADMIN', 'WAREHOUSE']}>
-                  <AllOrdersPage />
-                </ProtectedRoutes>
-              }
-            />
-
-            <Route
-              path="products"
-              element={
-                <ProtectedRoutes allowedRoles={['ADMIN', 'WAREHOUSE']}>
-                  <ProductsPage />
-                </ProtectedRoutes>
-              }
-            />
-
-            <Route
-              path="requests"
-              element={
-                <ProtectedRoutes allowedRoles={['ADMIN', 'WAREHOUSE']}>
-                  <RequestsPage />
-                </ProtectedRoutes>
-              }
-            />
-
-            <Route
-              path="requests/:id"
-              element={
-                <ProtectedRoutes allowedRoles={['ADMIN', 'WAREHOUSE']}>
-                  <RequestPage />
-                </ProtectedRoutes>
-              }
-            />
-
-            <Route
-              path="products/create"
-              element={
-                <ProtectedRoutes allowedRoles={['ADMIN']}>
-                  <CreateProductPage />
-                </ProtectedRoutes>
-              }
-            />
-
-            <Route
-              path="users"
-              element={
-                <ProtectedRoutes allowedRoles={['ADMIN']}>
-                  <AllUsersPage />
-                </ProtectedRoutes>
-              }
-            />
-
-            <Route
-              path="users/create"
-              element={
-                <ProtectedRoutes allowedRoles={['ADMIN']}>
-                  <CreateUserPage />
-                </ProtectedRoutes>
-              }
-            />
-
-            <Route
-              path="brands"
-              element={
-                <ProtectedRoutes allowedRoles={['ADMIN']}>
-                  <BrandsPage />
-                </ProtectedRoutes>
-              }
-            />
-
-            <Route
-              path="brands/create"
-              element={
-                <ProtectedRoutes allowedRoles={['ADMIN']}>
-                  <CreateBrandPage />
-                </ProtectedRoutes>
-              }
-            />
-
-            <Route
-              path="categories"
-              element={
-                <ProtectedRoutes allowedRoles={['ADMIN']}>
-                  <CategoriesPage />
-                </ProtectedRoutes>
-              }
-            />
-
-            <Route
-              path="categories/create"
-              element={
-                <ProtectedRoutes allowedRoles={['ADMIN']}>
-                  <CreateCategoryPage />
-                </ProtectedRoutes>
-              }
-            />
-
-            <Route
-              path="stores"
-              element={
-                <ProtectedRoutes allowedRoles={['ADMIN']}>
-                  <StoresPage />
-                </ProtectedRoutes>
-              }
-            />
-
-            <Route
-              path="stores/create"
-              element={
-                <ProtectedRoutes allowedRoles={['ADMIN']}>
-                  <CreateStorePage />
-                </ProtectedRoutes>
-              }
-            />
-
-            <Route
-              path="statistics"
-              element={
-                <ProtectedRoutes allowedRoles={['ADMIN', 'WAREHOUSE']}>
-                  <StatisticPage />
-                </ProtectedRoutes>
-              }
-            />
-          </Route>
-
-          <Route
-            path="*"
-            element={<NotFoundPage />}
-          />
+          </Route>{' '}
         </Routes>
       </Suspense>
     </>

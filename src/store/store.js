@@ -16,7 +16,7 @@ import { userReducer } from './userSlice/userSlice';
 const userPersisterConfig = {
   key: 'auth',
   storage,
-  whitelist: ['accessToken', 'role', 'adminScopes', 'username'],
+  whitelist: ['role', 'adminScopes', 'username'],
 };
 
 export const store = configureStore({

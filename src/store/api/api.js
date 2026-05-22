@@ -1,19 +1,61 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { Mutex } from 'async-mutex';
+import { logOut, updateToken } from '../userSlice/userSlice';
 
+const mutex = new Mutex();
 const apiUrl = import.meta.env.VITE_API_URL;
+
+const baseQuery = fetchBaseQuery({
+  baseUrl: apiUrl,
+  credentials: 'include',
+  prepareHeaders: (headers, { getState }) => {
+    const token = getState().user.accessToken;
+    if (token) {
+      headers.set('authorization', `Bearer ${token}`);
+    }
+    return headers;
+  },
+});
+
+const baseQueryWithReauth = async (args, api, extraOptions) => {
+  await mutex.waitForUnlock();
+
+  let result = await baseQuery(args, api, extraOptions);
+
+  if (result.error && result.error.status === 401) {
+    if (!mutex.isLocked()) {
+      const release = await mutex.acquire();
+      try {
+        const refreshResult = await baseQuery(
+          {
+            url: '/auth/refresh',
+            method: 'POST',
+            credentials: 'include',
+          },
+          api,
+          extraOptions,
+        );
+
+        if (refreshResult.data) {
+          api.dispatch(updateToken(refreshResult.data.accessToken));
+          result = await baseQuery(args, api, extraOptions);
+        } else {
+          api.dispatch(logOut());
+        }
+      } finally {
+        release();
+      }
+    } else {
+      await mutex.waitForUnlock();
+      result = await baseQuery(args, api, extraOptions);
+    }
+  }
+  return result;
+};
 
 export const api = createApi({
   reducerPath: 'api',
-  baseQuery: fetchBaseQuery({
-    baseUrl: apiUrl,
-    prepareHeaders: (headers, { getState }) => {
-      const token = getState().user.accessToken;
-      if (token) {
-        headers.set('authorization', `Bearer ${token}`);
-      }
-      return headers;
-    },
-  }),
+  baseQuery: baseQueryWithReauth,
   tagTypes: [
     'Users',
     'Orders',
@@ -173,7 +215,6 @@ export const api = createApi({
       query: name => ({ url: '/brands', method: 'DELETE', body: { name } }),
       invalidatesTags: ['Brands'],
     }),
-
     getStatisticsData: builder.query({
       query: ({ startDate, endDate, productId, storeId }) => {
         const params = {};
@@ -189,7 +230,6 @@ export const api = createApi({
       },
       providesTags: ['Statistics', 'Orders'],
     }),
-
     exportExcel: builder.mutation({
       query: ({ startDate, endDate, productId, storeId }) => {
         const params = {};
@@ -212,6 +252,9 @@ export const api = createApi({
     createCategory: builder.mutation({
       query: data => ({ url: '/category', method: 'POST', body: data }),
       invalidatesTags: ['Categories'],
+    }),
+    getMe: builder.query({
+      query: () => '/auth/me',
     }),
   }),
 });
@@ -252,4 +295,5 @@ export const {
   useUpdateWarehouseRequestItemsMutation,
   useDecreaseProductMutation,
   useIncreaseProductMutation,
+  useGetMeQuery,
 } = api;
