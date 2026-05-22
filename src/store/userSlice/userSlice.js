@@ -6,6 +6,7 @@ const initialState = {
   accessToken: null,
   store: null,
   adminScopes: null,
+  isLogin: false,
 };
 
 const userSlice = createSlice({
@@ -17,6 +18,7 @@ const userSlice = createSlice({
       state.role = action.payload.role;
       state.adminScopes = action.payload.adminScopes;
       state.accessToken = action.payload.accessToken;
+      state.isLogin = true;
     },
     updateToken: (state, action) => {
       state.accessToken = action.payload;
@@ -27,6 +29,7 @@ const userSlice = createSlice({
       state.role = null;
       state.adminScopes = null;
       state.store = null;
+      state.isLogin = false;
     },
   },
 });

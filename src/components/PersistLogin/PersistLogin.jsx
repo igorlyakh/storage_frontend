@@ -3,14 +3,16 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Outlet } from 'react-router-dom';
 import { useGetMeQuery } from '../../store/api/api';
+import { isLoginSelector, tokenSelector } from '../../store/selectors/selectors';
 import { setData } from '../../store/userSlice/userSlice';
 
 const PersistLogin = () => {
   const dispatch = useDispatch();
-  const token = useSelector(state => state.user.accessToken);
+  const token = useSelector(tokenSelector);
+  const isLogin = useSelector(isLoginSelector);
 
   const { data, isLoading } = useGetMeQuery(undefined, {
-    skip: !!token,
+    skip: !!token || !isLogin,
   });
 
   useEffect(() => {
