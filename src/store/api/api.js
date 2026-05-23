@@ -30,7 +30,6 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
           {
             url: '/auth/refresh',
             method: 'POST',
-            credentials: 'include',
           },
           api,
           extraOptions,
