@@ -1,6 +1,6 @@
 import { Button, Group, Modal, Text } from '@mantine/core';
 import toast from 'react-hot-toast';
-import { useDeleteUserMutation } from '../../store/api/api';
+import { useDeleteUserMutation } from '../../../store/api/api';
 
 const DeleteUserModal = ({ opened, onClose, user }) => {
   const [deleteUser, { isLoading }] = useDeleteUserMutation();
