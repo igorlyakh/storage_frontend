@@ -1,7 +1,7 @@
 import { Button, Modal, PasswordInput, Stack } from '@mantine/core';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
-import { useResetUserPasswordMutation } from '../../store/api/api';
+import { useResetUserPasswordMutation } from '../../../store/api/api';
 
 const ResetPasswordModal = ({ opened, onClose, user }) => {
   const [resetPassword, { isLoading }] = useResetUserPasswordMutation();
