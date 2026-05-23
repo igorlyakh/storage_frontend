@@ -1,6 +1,6 @@
 import { Button, Group, Modal, Text } from '@mantine/core';
 import toast from 'react-hot-toast';
-import { useDeleteBrandMutation } from '../../store/api/api';
+import { useDeleteBrandMutation } from '../../../store/api/api';
 
 const DeleteBrandModal = ({ opened, onClose, brand }) => {
   const [deleteBrand, { isLoading }] = useDeleteBrandMutation();
