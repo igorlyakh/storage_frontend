@@ -3,7 +3,8 @@ import { Mutex } from 'async-mutex';
 import { logOut, updateToken } from '../userSlice/userSlice';
 
 const mutex = new Mutex();
-const apiUrl = import.meta.env.VITE_API_URL;
+// const apiUrl = import.meta.env.VITE_API_URL;
+const apiUrl = '/api';
 
 const baseQuery = fetchBaseQuery({
   baseUrl: apiUrl,
