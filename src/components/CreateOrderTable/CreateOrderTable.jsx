@@ -8,6 +8,7 @@ import {
   Paper,
   Table,
   Text,
+  TextInput,
   Textarea,
 } from '@mantine/core';
 import { modals } from '@mantine/modals';
@@ -19,7 +20,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import { ChevronDown, ChevronRight } from 'lucide-react';
+import { ChevronDown, ChevronRight, User } from 'lucide-react';
 import { useCallback, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useDispatch } from 'react-redux';
@@ -40,6 +41,7 @@ const CreateOrderTable = () => {
     useGetAllProductsByBrandQuery();
   const [createOrder, { isLoading }] = useCreateOrderMutation();
 
+  const [name, setName] = useState('');
   const [customRequest, setCustomRequest] = useState('');
 
   const rowData = useMemo(() => products.filter(p => p.isEnabled), [products]);
@@ -159,6 +161,7 @@ const CreateOrderTable = () => {
     }));
 
     const payload = {
+      name: name.trim(),
       items: payloadItems,
       ...(customRequest.trim() && { customRequest: customRequest.trim() }),
     };
@@ -193,6 +196,7 @@ const CreateOrderTable = () => {
         ),
       });
 
+      setName('');
       setCustomRequest('');
 
       dispatch(
@@ -209,6 +213,10 @@ const CreateOrderTable = () => {
   };
 
   const handleSendOrder = () => {
+    if (!name.trim()) {
+      return toast.error('Please enter your name');
+    }
+
     const itemsToOrder = rowData.filter(p => p.orderQuantity > 0);
 
     if (itemsToOrder.length === 0 && !customRequest.trim()) {
@@ -241,6 +249,17 @@ const CreateOrderTable = () => {
 
   return (
     <div style={{ width: '100%', marginTop: 20 }}>
+      <TextInput
+        label="Your Name / Responsible Person"
+        placeholder="Enter your name"
+        value={name}
+        onChange={e => setName(e.currentTarget.value)}
+        required
+        maxWith={400}
+        mb="lg"
+        leftSection={<User size={16} />}
+      />
+
       <Box
         pos="relative"
         minHeight={200}
