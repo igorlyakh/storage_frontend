@@ -26,6 +26,12 @@ const CreateProductPage = () => {
 
   const tagOptions = productTags.map(tag => ({ value: tag, label: tag }));
 
+  const packageTypeOptions = [
+    { value: 'PALLET', label: 'Pallet' },
+    { value: 'BOX', label: 'Box' },
+    { value: 'PACKAGE', label: 'Package' },
+  ];
+
   const fields = [
     {
       name: 'name',
@@ -66,6 +72,7 @@ const CreateProductPage = () => {
       placeholder: isBrandsLoading ? 'Loading...' : 'Select brands',
       options: brandOptions,
       loading: isBrandsLoading,
+      rules: { required: 'Brands are required!' },
     },
     {
       name: 'limitPerOrder',
@@ -74,11 +81,26 @@ const CreateProductPage = () => {
       placeholder: 'Enter limit',
     },
     {
-      name: 'initialQuantity',
+      name: 'packageType',
+      type: 'select',
+      label: 'Package Type',
+      placeholder: 'Select type',
+      options: packageTypeOptions,
+      rules: { required: 'Package type is required!' },
+    },
+    {
+      name: 'itemsPerPackage',
       type: 'number',
-      label: 'Initial Quantity',
-      placeholder: 'Enter quantity',
-      rules: { required: 'Quantity is required' },
+      label: 'Items per Package',
+      placeholder: 'E.g., 24',
+      rules: { required: 'Items per package is required!' },
+    },
+    {
+      name: 'initialPackagesCount',
+      type: 'number',
+      label: 'Initial Packages Count',
+      placeholder: 'E.g., 5',
+      rules: { required: 'Packages count is required!' },
     },
   ];
 
@@ -91,7 +113,8 @@ const CreateProductPage = () => {
         data.limitPerOrder === null
           ? null
           : Number(data.limitPerOrder),
-      initialQuantity: Number(data.initialQuantity) || 0,
+      initialPackagesCount: Number(data.initialPackagesCount) || 0,
+      itemsPerPackage: Number(data.itemsPerPackage) || 0,
     };
 
     try {
@@ -113,15 +136,17 @@ const CreateProductPage = () => {
         submitLabel="Create Product"
         fields={fields}
         gridCols={2}
-        paperWidth={{ base: '100%', sm: 500, md: 600 }}
+        paperWidth={{ base: '100%', sm: 500, md: 700 }}
         defaultValues={{
           name: '',
           category: '',
           article: '',
           tag: productTags[0] || '',
           limitPerOrder: '',
-          initialQuantity: 1,
           brandsIds: [],
+          packageType: 'PALLET',
+          itemsPerPackage: 0,
+          initialPackagesCount: 0,
         }}
         onSubmit={onSubmit}
         isLoading={isSubmitting}
