@@ -181,8 +181,40 @@ const ProductsTable = ({ data }) => {
         header: 'Category',
       },
       {
+        accessorKey: 'packageType',
+        header: 'Pkg Type',
+        size: 100,
+        cell: ({ getValue }) => {
+          const val = getValue();
+          if (!val)
+            return (
+              <Text
+                c="dimmed"
+                size="sm"
+              >
+                -
+              </Text>
+            );
+          return (
+            <Badge
+              size="sm"
+              variant="light"
+              color="indigo"
+            >
+              {val}
+            </Badge>
+          );
+        },
+      },
+      {
+        accessorKey: 'stock.packageCount',
+        header: 'Packages',
+        size: 90,
+        cell: ({ getValue }) => <Text c="orange.7">{getValue() ?? 0}</Text>,
+      },
+      {
         accessorKey: 'stock.quantity',
-        header: 'Stock',
+        header: 'Stock (Qty)',
         size: isAdmin ? 140 : 100,
         cell: ({ row, table, getValue }) => {
           const val = getValue() ?? 0;
@@ -195,7 +227,7 @@ const ProductsTable = ({ data }) => {
             >
               <Text
                 c={val < 0 ? 'red' : 'dark'}
-                fw={val < 0 ? 700 : 400}
+                fw={val < 0 ? 700 : 500}
               >
                 {val}
               </Text>
@@ -397,7 +429,7 @@ const ProductsTable = ({ data }) => {
         radius="md"
         overflow="hidden"
       >
-        <Table.ScrollContainer minWidth={900}>
+        <Table.ScrollContainer minWidth={1050}>
           <Table
             verticalSpacing="sm"
             highlightOnHover
