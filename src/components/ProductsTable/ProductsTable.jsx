@@ -290,13 +290,20 @@ const ProductsTable = ({ data }) => {
         size: 160,
         cell: ({ row, table }) => {
           const product = row.original;
+
+          const defaultUnit =
+            product.packageType && product.packageType !== 'PIECE'
+              ? product.packageType
+              : 'PIECE';
+
           const orderData = table.options.meta.orderQuantities[product.id] || {
             quantity: '',
-            unit: 'PIECE',
+            unit: defaultUnit,
           };
 
           const unitOptions = [{ value: 'PIECE', label: 'pcs' }];
-          if (product.itemsPerPackage > 0 && product.packageType) {
+
+          if (product.packageType && product.packageType !== 'PIECE') {
             unitOptions.push({
               value: product.packageType,
               label: product.packageType.toLowerCase() + 's',
