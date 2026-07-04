@@ -11,16 +11,22 @@ const MANTINE_COLORS = [
   'violet',
 ];
 
+const colorCache = new Map();
+let nextColorIndex = 0;
+
 const getBrandColor = name => {
   if (!name) return 'gray';
 
-  let hash = 0;
-  for (let i = 0; i < name.length; i++) {
-    hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  if (colorCache.has(name)) {
+    return colorCache.get(name);
   }
 
-  const index = Math.abs(hash) % MANTINE_COLORS.length;
-  return MANTINE_COLORS[index];
+  const color = MANTINE_COLORS[nextColorIndex % MANTINE_COLORS.length];
+
+  colorCache.set(name, color);
+  nextColorIndex++;
+
+  return color;
 };
 
 export default getBrandColor;

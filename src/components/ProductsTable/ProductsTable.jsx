@@ -166,7 +166,7 @@ const ProductsTable = ({ data }) => {
       {
         accessorKey: 'brands',
         header: 'Brands',
-        size: 140, // Чуть сжали
+        size: 140,
         cell: ({ row, table, getValue }) => (
           <EditableBrandsCell
             initialBrands={getValue() || []}
@@ -185,7 +185,7 @@ const ProductsTable = ({ data }) => {
       {
         accessorKey: 'packageType',
         header: 'Pkg Type',
-        size: 100, // Сжали
+        size: 100,
         cell: ({ row, table, getValue }) => (
           <EditableSelectCell
             initialValue={getValue() || 'PIECE'}
@@ -204,7 +204,7 @@ const ProductsTable = ({ data }) => {
       {
         accessorKey: 'itemsPerPackage',
         header: 'Qty/Pkg',
-        size: 70, // Сжали
+        size: 70,
         cell: ({ row, table, getValue }) => (
           <EditableNumberCell
             initialValue={getValue() ?? 0}
@@ -218,7 +218,7 @@ const ProductsTable = ({ data }) => {
       {
         accessorKey: 'stock.packageCount',
         header: 'Packages',
-        size: 80, // Сжали
+        size: 80,
         cell: ({ getValue }) => (
           <Text
             fw={600}
@@ -323,7 +323,7 @@ const ProductsTable = ({ data }) => {
       {
         accessorKey: 'updatedAt',
         header: 'Updated',
-        size: 120, // Сжали, дата поместится
+        size: 120,
         cell: ({ getValue }) => (
           <Text size="sm">{dayjs(getValue()).format('DD.MM.YY HH:mm')}</Text>
         ),
@@ -331,7 +331,7 @@ const ProductsTable = ({ data }) => {
       {
         accessorKey: 'limitPerOrder',
         header: 'Limit',
-        size: 80, // Сжали
+        size: 80,
         cell: ({ row, table, getValue }) => (
           <EditableNumberCell
             initialValue={getValue()}
@@ -344,7 +344,7 @@ const ProductsTable = ({ data }) => {
       {
         id: 'actions',
         header: 'Delete',
-        size: 60, // Сжали
+        size: 60,
         cell: ({ row, table }) => (
           <Tooltip label="Delete Product">
             <ActionIcon
