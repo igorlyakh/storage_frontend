@@ -7,6 +7,7 @@ import {
   Modal,
   NumberInput,
   Paper,
+  Select,
   Stack,
   Switch,
   Table,
@@ -41,7 +42,6 @@ import DeleteProductModal from './DeleteProductModal';
 import {
   EditableBrandsCell,
   EditableNumberCell,
-  EditableOrderCell,
   EditableSelectCell,
   EditableTextCell,
 } from './EditableCells';
@@ -61,6 +61,7 @@ const ProductsTable = ({ data }) => {
   const [decreaseProduct, { isLoading: isDecreasing }] = useDecreaseProductMutation();
 
   const [orderQuantities, setOrderQuantities] = useState({});
+
   const [openedDelete, { open: openDelete, close: closeDelete }] = useDisclosure(false);
   const [productToDelete, setProductToDelete] = useState(null);
 
@@ -80,19 +81,22 @@ const ProductsTable = ({ data }) => {
   );
 
   const handleSendOrder = async () => {
-    const itemsToOrder = Object.entries(orderQuantities).map(([productId, quantity]) => {
-      const product = data.find(p => String(p.id) === String(productId));
-      return { product, quantity };
-    });
+    const payloadItems = Object.entries(orderQuantities)
+      .map(([productId, orderData]) => {
+        const product = data.find(p => String(p.id) === String(productId));
+        if (!product) return null;
 
-    if (itemsToOrder.length === 0) {
+        return {
+          productId: product.id,
+          quantity: orderData.quantity,
+          unit: orderData.unit,
+        };
+      })
+      .filter(Boolean);
+
+    if (payloadItems.length === 0) {
       return toast.error('Please specify quantity for at least one product');
     }
-
-    const payloadItems = itemsToOrder.map(item => ({
-      productId: item.product.id,
-      quantity: item.quantity,
-    }));
 
     try {
       await createWarehouseRequest({ items: payloadItems }).unwrap();
@@ -142,7 +146,6 @@ const ProductsTable = ({ data }) => {
             gap={0}
             py={6}
           >
-            {/* Name */}
             <EditableTextCell
               fw={700}
               initialValue={getValue()}
@@ -150,11 +153,10 @@ const ProductsTable = ({ data }) => {
                 table.options.meta.updateData(row.original, 'name', newVal)
               }
             />
-            {/* Article */}
             <EditableTextCell
               fz={12}
               fw={500}
-              c="gray"
+              c="dimmed"
               initialValue={row.original.article}
               onUpdate={newVal =>
                 table.options.meta.updateData(row.original, 'article', newVal)
@@ -285,16 +287,60 @@ const ProductsTable = ({ data }) => {
       cols.push({
         id: 'orderQuantity',
         header: 'To Order',
-        size: 110,
+        size: 160,
         cell: ({ row, table }) => {
           const product = row.original;
-          const val = table.options.meta.orderQuantities[product.id] || null;
+          const orderData = table.options.meta.orderQuantities[product.id] || {
+            quantity: '',
+            unit: 'PIECE',
+          };
+
+          const unitOptions = [{ value: 'PIECE', label: 'pcs' }];
+          if (product.itemsPerPackage > 0 && product.packageType) {
+            unitOptions.push({
+              value: product.packageType,
+              label: product.packageType.toLowerCase() + 's',
+            });
+          }
 
           return (
-            <EditableOrderCell
-              initialValue={val}
-              onUpdate={newVal => table.options.meta.setOrderQuantity(product.id, newVal)}
-            />
+            <Group
+              gap={4}
+              wrap="nowrap"
+            >
+              <NumberInput
+                value={orderData.quantity}
+                onChange={val =>
+                  table.options.meta.setOrderQuantity(product.id, val, orderData.unit)
+                }
+                min={0}
+                hideControls
+                placeholder="0"
+                w={60}
+                size="sm"
+                styles={{
+                  input: {
+                    backgroundColor:
+                      orderData.quantity > 0 ? 'var(--mantine-color-green-0)' : undefined,
+                    fontWeight: orderData.quantity > 0 ? 'bold' : 'normal',
+                  },
+                }}
+              />
+              <Select
+                data={unitOptions}
+                value={orderData.unit}
+                onChange={newUnit =>
+                  table.options.meta.setOrderQuantity(
+                    product.id,
+                    orderData.quantity || null,
+                    newUnit,
+                  )
+                }
+                w={80}
+                size="sm"
+                allowDeselect={false}
+              />
+            </Group>
           );
         },
       });
@@ -368,11 +414,14 @@ const ProductsTable = ({ data }) => {
     () => ({
       allBrands,
       orderQuantities,
-      setOrderQuantity: (id, val) => {
+      setOrderQuantity: (id, quantity, unit) => {
         setOrderQuantities(prev => {
           const next = { ...prev };
-          if (val > 0) next[id] = val;
-          else delete next[id];
+          if (quantity > 0) {
+            next[id] = { quantity, unit: unit || next[id]?.unit || 'PIECE' };
+          } else {
+            delete next[id];
+          }
           return next;
         });
       },
