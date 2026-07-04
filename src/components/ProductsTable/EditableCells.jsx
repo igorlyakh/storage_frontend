@@ -1,4 +1,12 @@
-import { Badge, Group, MultiSelect, NumberInput, Text, TextInput } from '@mantine/core';
+import {
+  Badge,
+  Group,
+  MultiSelect,
+  NumberInput,
+  Select,
+  Text,
+  TextInput,
+} from '@mantine/core';
 import { useEffect, useState } from 'react';
 import getBrandColor from '../../utils/getBrandColor';
 
@@ -26,7 +34,7 @@ export const EditableTextCell = ({ initialValue, onUpdate, fw, c = 'dark' }) => 
   );
 };
 
-export const EditableNumberCell = ({ initialValue, onUpdate }) => {
+export const EditableNumberCell = ({ initialValue, onUpdate, allowZero = false }) => {
   const [value, setValue] = useState(initialValue);
 
   useEffect(() => {
@@ -39,15 +47,48 @@ export const EditableNumberCell = ({ initialValue, onUpdate }) => {
       onChange={val => setValue(val === '' ? null : Number(val))}
       onBlur={() => {
         if (value !== initialValue) {
-          const valueToSend = value === 0 ? null : value;
+          const valueToSend = value === 0 && !allowZero ? null : value;
           onUpdate(valueToSend);
         }
       }}
       variant="unstyled"
       hideControls
-      placeholder="No limit"
+      placeholder="0"
       fz={{ base: 14, sm: 16 }}
       styles={{ input: { padding: 0, height: 'auto', minHeight: 'auto' } }}
+    />
+  );
+};
+
+export const EditableSelectCell = ({ initialValue, options, onUpdate }) => {
+  const [value, setValue] = useState(initialValue);
+
+  useEffect(() => {
+    setValue(initialValue);
+  }, [initialValue]);
+
+  return (
+    <Select
+      data={options}
+      value={value || null}
+      onChange={val => {
+        setValue(val);
+        if (val !== initialValue) onUpdate(val);
+      }}
+      variant="unstyled"
+      placeholder="-"
+      styles={{
+        input: {
+          padding: 0,
+          height: 'auto',
+          minHeight: 'auto',
+          cursor: 'pointer',
+          fontWeight: 600,
+          color: 'var(--mantine-color-indigo-7)',
+          borderBottom: '1px dashed transparent',
+          '&:hover': { borderBottomColor: 'var(--mantine-color-gray-4)' },
+        },
+      }}
     />
   );
 };

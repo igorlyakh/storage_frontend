@@ -42,6 +42,7 @@ import {
   EditableBrandsCell,
   EditableNumberCell,
   EditableOrderCell,
+  EditableSelectCell,
   EditableTextCell,
 } from './EditableCells';
 
@@ -150,7 +151,7 @@ const ProductsTable = ({ data }) => {
       {
         accessorKey: 'name',
         header: 'Product Name',
-        size: 140,
+        size: 200,
         cell: ({ row, table, getValue }) => (
           <EditableTextCell
             fw={700}
@@ -164,7 +165,7 @@ const ProductsTable = ({ data }) => {
       {
         accessorKey: 'brands',
         header: 'Brands',
-        size: 180,
+        size: 150,
         cell: ({ row, table, getValue }) => (
           <EditableBrandsCell
             initialBrands={getValue() || []}
@@ -183,34 +184,48 @@ const ProductsTable = ({ data }) => {
       {
         accessorKey: 'packageType',
         header: 'Pkg Type',
-        size: 100,
-        cell: ({ getValue }) => {
-          const val = getValue();
-          if (!val)
-            return (
-              <Text
-                c="dimmed"
-                size="sm"
-              >
-                -
-              </Text>
-            );
-          return (
-            <Badge
-              size="sm"
-              variant="light"
-              color="indigo"
-            >
-              {val}
-            </Badge>
-          );
-        },
+        size: 110,
+        cell: ({ row, table, getValue }) => (
+          <EditableSelectCell
+            initialValue={getValue() || 'PIECE'}
+            options={[
+              { value: 'PALLET', label: 'PALLET' },
+              { value: 'BOX', label: 'BOX' },
+              { value: 'PACKAGE', label: 'PACKAGE' },
+              { value: 'PIECE', label: 'PIECE' },
+            ]}
+            onUpdate={newVal =>
+              table.options.meta.updateData(row.original, 'packageType', newVal)
+            }
+          />
+        ),
+      },
+      {
+        accessorKey: 'itemsPerPackage',
+        header: 'Qty/Pkg',
+        size: 80,
+        cell: ({ row, table, getValue }) => (
+          <EditableNumberCell
+            initialValue={getValue() ?? 0}
+            allowZero={true}
+            onUpdate={newVal =>
+              table.options.meta.updateData(row.original, 'itemsPerPackage', newVal)
+            }
+          />
+        ),
       },
       {
         accessorKey: 'stock.packageCount',
         header: 'Packages',
         size: 90,
-        cell: ({ getValue }) => <Text c="orange.7">{getValue() ?? 0}</Text>,
+        cell: ({ getValue }) => (
+          <Text
+            fw={600}
+            c="orange.7"
+          >
+            {getValue() ?? 0}
+          </Text>
+        ),
       },
       {
         accessorKey: 'stock.quantity',
@@ -429,7 +444,7 @@ const ProductsTable = ({ data }) => {
         radius="md"
         overflow="hidden"
       >
-        <Table.ScrollContainer minWidth={1050}>
+        <Table.ScrollContainer minWidth={1150}>
           <Table
             verticalSpacing="sm"
             highlightOnHover
