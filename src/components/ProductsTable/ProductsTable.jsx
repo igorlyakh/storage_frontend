@@ -134,38 +134,39 @@ const ProductsTable = ({ data }) => {
   const columns = useMemo(() => {
     const cols = [
       {
-        accessorKey: 'article',
-        header: 'Article',
-        size: 90,
-        cell: ({ row, table, getValue }) => (
-          <EditableTextCell
-            fw={600}
-            c="gray"
-            initialValue={getValue()}
-            onUpdate={newVal =>
-              table.options.meta.updateData(row.original, 'article', newVal)
-            }
-          />
-        ),
-      },
-      {
         accessorKey: 'name',
-        header: 'Product Name',
-        size: 200,
+        header: 'Product Details',
+        size: 300,
         cell: ({ row, table, getValue }) => (
-          <EditableTextCell
-            fw={700}
-            initialValue={getValue()}
-            onUpdate={newVal =>
-              table.options.meta.updateData(row.original, 'name', newVal)
-            }
-          />
+          <Stack
+            gap={0}
+            py={6}
+          >
+            {/* Name */}
+            <EditableTextCell
+              fw={700}
+              initialValue={getValue()}
+              onUpdate={newVal =>
+                table.options.meta.updateData(row.original, 'name', newVal)
+              }
+            />
+            {/* Article */}
+            <EditableTextCell
+              fz={12}
+              fw={500}
+              c="gray"
+              initialValue={row.original.article}
+              onUpdate={newVal =>
+                table.options.meta.updateData(row.original, 'article', newVal)
+              }
+            />
+          </Stack>
         ),
       },
       {
         accessorKey: 'brands',
         header: 'Brands',
-        size: 150,
+        size: 140, // Чуть сжали
         cell: ({ row, table, getValue }) => (
           <EditableBrandsCell
             initialBrands={getValue() || []}
@@ -184,7 +185,7 @@ const ProductsTable = ({ data }) => {
       {
         accessorKey: 'packageType',
         header: 'Pkg Type',
-        size: 110,
+        size: 100, // Сжали
         cell: ({ row, table, getValue }) => (
           <EditableSelectCell
             initialValue={getValue() || 'PIECE'}
@@ -203,7 +204,7 @@ const ProductsTable = ({ data }) => {
       {
         accessorKey: 'itemsPerPackage',
         header: 'Qty/Pkg',
-        size: 80,
+        size: 70, // Сжали
         cell: ({ row, table, getValue }) => (
           <EditableNumberCell
             initialValue={getValue() ?? 0}
@@ -217,7 +218,7 @@ const ProductsTable = ({ data }) => {
       {
         accessorKey: 'stock.packageCount',
         header: 'Packages',
-        size: 90,
+        size: 80, // Сжали
         cell: ({ getValue }) => (
           <Text
             fw={600}
@@ -230,7 +231,7 @@ const ProductsTable = ({ data }) => {
       {
         accessorKey: 'stock.quantity',
         header: 'Stock (Qty)',
-        size: isAdmin ? 140 : 100,
+        size: isAdmin ? 130 : 90,
         cell: ({ row, table, getValue }) => {
           const val = getValue() ?? 0;
           const product = row.original;
@@ -284,7 +285,7 @@ const ProductsTable = ({ data }) => {
       cols.push({
         id: 'orderQuantity',
         header: 'To Order',
-        size: 120,
+        size: 110,
         cell: ({ row, table }) => {
           const product = row.original;
           const val = table.options.meta.orderQuantities[product.id] || null;
@@ -303,7 +304,7 @@ const ProductsTable = ({ data }) => {
       {
         accessorKey: 'isEnabled',
         header: 'Available',
-        size: 100,
+        size: 90,
         cell: ({ row, table, getValue }) => (
           <Switch
             checked={getValue()}
@@ -322,7 +323,7 @@ const ProductsTable = ({ data }) => {
       {
         accessorKey: 'updatedAt',
         header: 'Updated',
-        size: 140,
+        size: 120, // Сжали, дата поместится
         cell: ({ getValue }) => (
           <Text size="sm">{dayjs(getValue()).format('DD.MM.YY HH:mm')}</Text>
         ),
@@ -330,7 +331,7 @@ const ProductsTable = ({ data }) => {
       {
         accessorKey: 'limitPerOrder',
         header: 'Limit',
-        size: 100,
+        size: 80, // Сжали
         cell: ({ row, table, getValue }) => (
           <EditableNumberCell
             initialValue={getValue()}
@@ -343,7 +344,7 @@ const ProductsTable = ({ data }) => {
       {
         id: 'actions',
         header: 'Delete',
-        size: 80,
+        size: 60, // Сжали
         cell: ({ row, table }) => (
           <Tooltip label="Delete Product">
             <ActionIcon
@@ -444,9 +445,9 @@ const ProductsTable = ({ data }) => {
         radius="md"
         overflow="hidden"
       >
-        <Table.ScrollContainer minWidth={1150}>
+        <Table.ScrollContainer minWidth={1000}>
           <Table
-            verticalSpacing="sm"
+            verticalSpacing="xs"
             highlightOnHover
             layout="fixed"
           >
@@ -462,7 +463,7 @@ const ProductsTable = ({ data }) => {
                         key={header.id}
                         style={{
                           width: isNameCol ? '100%' : header.getSize(),
-                          minWidth: isNameCol ? 250 : header.getSize(),
+                          minWidth: isNameCol ? 300 : header.getSize(),
                           ...(isNameCol
                             ? {
                                 position: 'sticky',

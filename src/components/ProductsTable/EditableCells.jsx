@@ -5,12 +5,12 @@ import {
   NumberInput,
   Select,
   Text,
-  TextInput,
+  Textarea,
 } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import getBrandColor from '../../utils/getBrandColor';
 
-export const EditableTextCell = ({ initialValue, onUpdate, fw, c = 'dark' }) => {
+export const EditableTextCell = ({ initialValue, onUpdate, fw, fz, c = 'dark' }) => {
   const [value, setValue] = useState(initialValue);
 
   useEffect(() => {
@@ -18,8 +18,11 @@ export const EditableTextCell = ({ initialValue, onUpdate, fw, c = 'dark' }) => 
   }, [initialValue]);
 
   return (
-    <TextInput
-      fz={{ base: 14, sm: 16, md: 18 }}
+    <Textarea
+      autosize
+      minRows={1}
+      maxRows={3}
+      fz={fz}
       fw={fw}
       value={value}
       onChange={e => setValue(e.currentTarget.value)}
@@ -28,7 +31,14 @@ export const EditableTextCell = ({ initialValue, onUpdate, fw, c = 'dark' }) => 
       }}
       variant="unstyled"
       styles={{
-        input: { padding: 0, height: 'auto', minHeight: 'auto', color: c },
+        input: {
+          padding: 0,
+          height: 'auto',
+          minHeight: 'auto',
+          color: c,
+          lineHeight: 1.3,
+          overflow: 'hidden',
+        },
       }}
     />
   );
