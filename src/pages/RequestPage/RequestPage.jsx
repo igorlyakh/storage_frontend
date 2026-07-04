@@ -48,6 +48,7 @@ const RequestPage = () => {
           tempId: Math.random().toString(36).substr(2, 9),
           productId: item.productId,
           quantity: item.quantity,
+          packageType: item.packageType || 'PIECE',
           product: item.product,
         })),
       );
@@ -69,6 +70,7 @@ const RequestPage = () => {
       const payload = draftItems.map(i => ({
         productId: i.productId,
         quantity: i.quantity,
+        packageType: i.packageType,
       }));
 
       await updateItems({ id, items: payload }).unwrap();
@@ -90,6 +92,7 @@ const RequestPage = () => {
           const selectedProd = allProducts?.find(p => p.id === value);
           if (selectedProd) {
             newDraft[index].product = selectedProd;
+            newDraft[index].packageType = selectedProd.packageType || 'PIECE';
           }
         }
         return newDraft;
@@ -109,6 +112,7 @@ const RequestPage = () => {
         tempId: Math.random().toString(36).substr(2, 9),
         productId: '',
         quantity: 1,
+        packageType: 'PIECE',
         product: null,
       },
     ]);
@@ -170,6 +174,40 @@ const RequestPage = () => {
         },
       },
       {
+        accessorKey: 'packageType',
+        header: 'Pkg Type',
+        cell: ({ row }) => {
+          const item = row.original;
+
+          if (isEditing) {
+            return (
+              <Select
+                data={[
+                  { value: 'PALLET', label: 'PALLET' },
+                  { value: 'BOX', label: 'BOX' },
+                  { value: 'PACKAGE', label: 'PACKAGE' },
+                  { value: 'PIECE', label: 'PIECE' },
+                ]}
+                value={item.packageType || 'PIECE'}
+                onChange={val => updateDraftItem(row.index, 'packageType', val)}
+                allowDeselect={false}
+                w={110}
+              />
+            );
+          }
+
+          return (
+            <Badge
+              size="sm"
+              variant="light"
+              color="indigo"
+            >
+              {item.packageType || 'PIECE'}
+            </Badge>
+          );
+        },
+      },
+      {
         accessorKey: 'quantity',
         header: 'Quantity',
         cell: ({ row }) => {
@@ -185,7 +223,17 @@ const RequestPage = () => {
               />
             );
           }
-          return <Text>{item.quantity} pcs.</Text>;
+
+          const unitLabel =
+            item.packageType && item.packageType !== 'PIECE'
+              ? item.packageType.toLowerCase() + 's'
+              : 'pcs.';
+
+          return (
+            <Text>
+              {item.quantity} {unitLabel}
+            </Text>
+          );
         },
       },
       ...(isEditing

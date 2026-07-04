@@ -89,7 +89,7 @@ const ProductsTable = ({ data }) => {
         return {
           productId: product.id,
           quantity: orderData.quantity,
-          unit: orderData.unit,
+          packageType: orderData.unit,
         };
       })
       .filter(Boolean);
