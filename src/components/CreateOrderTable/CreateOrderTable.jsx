@@ -207,8 +207,7 @@ const CreateOrderTable = () => {
         }),
       );
     } catch (error) {
-      toast.error('Failed to create order');
-      console.error(error);
+      toast.error(error.data.message);
     }
   };
 

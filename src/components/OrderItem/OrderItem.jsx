@@ -82,7 +82,7 @@ const OrderItem = ({ store, status, sended, updated, id }) => {
           color={getStatusColor(status)}
           size="sm"
         >
-          {status}
+          {status.replace('_', ' ')}
         </Badge>
       </Group>
 

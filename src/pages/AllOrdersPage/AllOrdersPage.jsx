@@ -32,7 +32,7 @@ const AllOrdersPage = () => {
 
   const statusOptions = [
     { value: 'NEW', label: 'NEW' },
-    { value: 'IN_PROGRESS', label: 'IN_PROGRESS' },
+    { value: 'IN_PROGRESS', label: 'IN PROGRESS' },
     { value: 'SENT', label: 'SENT' },
     { value: 'COMPLETED', label: 'COMPLETED' },
   ];
