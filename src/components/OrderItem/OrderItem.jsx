@@ -17,6 +17,8 @@ const getStatusColor = status => {
       return 'orange';
     case 'COMPLETED':
       return 'green';
+    case 'BACKORDER':
+      return 'purple';
     default:
       return 'gray';
   }

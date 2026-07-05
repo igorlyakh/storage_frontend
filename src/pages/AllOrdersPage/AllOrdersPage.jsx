@@ -16,7 +16,7 @@ import { useGetAllOrdersQuery, useGetAllStoresQuery } from '../../store/api/api'
 
 const AllOrdersPage = () => {
   const [page, setPage] = useState(1);
-  const [statuses, setStatuses] = useState(['NEW', 'IN_PROGRESS']);
+  const [statuses, setStatuses] = useState(['NEW', 'IN_PROGRESS', 'BACKORDER']);
   const [storeIds, setStoreIds] = useState([]);
 
   const [startDate, setStartDate] = useState('');
@@ -35,6 +35,7 @@ const AllOrdersPage = () => {
     { value: 'IN_PROGRESS', label: 'IN PROGRESS' },
     { value: 'SENT', label: 'SENT' },
     { value: 'COMPLETED', label: 'COMPLETED' },
+    { value: 'BACKORDER', label: 'BACKORDER' },
   ];
 
   const { data, isFetching } = useGetAllOrdersQuery(

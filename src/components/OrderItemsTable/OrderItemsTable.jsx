@@ -1,4 +1,4 @@
-import { Badge, Button, Group, Paper, Table, Text } from '@mantine/core';
+import { Badge, Button, Checkbox, Group, Paper, Table, Text } from '@mantine/core';
 import {
   flexRender,
   getCoreRowModel,
@@ -31,36 +31,53 @@ const OrderItemsTable = ({ order }) => {
   const canEditAndSend = hasAccess && !isCompletedOrSent;
 
   const [shippedQuantities, setShippedQuantities] = useState({});
+  const [checkedItems, setCheckedItems] = useState({});
 
   useEffect(() => {
-    const initial = {};
+    const initialQty = {};
+    const initialChecked = {};
+
     items.forEach(item => {
-      initial[item.id] =
+      initialQty[item.id] =
         item.shippedQty !== null && item.shippedQty !== undefined
           ? item.shippedQty
           : item.requestedQty;
+
+      initialChecked[item.id] = false;
     });
-    setShippedQuantities(initial);
+
+    setShippedQuantities(initialQty);
+    setCheckedItems(initialChecked);
   }, [items]);
 
   const handleUpdateShipped = (itemId, val) => {
     setShippedQuantities(prev => ({ ...prev, [itemId]: val }));
   };
 
-  const columns = useMemo(
-    () => [
+  const handleUpdateChecked = (itemId, val) => {
+    setCheckedItems(prev => ({ ...prev, [itemId]: val }));
+  };
+
+  const columns = useMemo(() => {
+    const baseColumns = [
       {
         accessorFn: row => row.product.name,
         id: 'name',
         header: 'Product Name',
-        cell: info => (
-          <Text
-            fz={{ base: 14, sm: 16 }}
-            fw={700}
-          >
-            {info.getValue()}
-          </Text>
-        ),
+        cell: info => {
+          const item = info.row.original;
+          const isChecked = checkedItems[item.id] ?? false;
+
+          return (
+            <Text
+              fz={{ base: 14, sm: 16 }}
+              fw={700}
+              c={canEditAndSend && isChecked ? 'green.9' : undefined}
+            >
+              {info.getValue()}
+            </Text>
+          );
+        },
       },
       {
         id: 'category',
@@ -78,6 +95,7 @@ const OrderItemsTable = ({ order }) => {
         cell: ({ row }) => {
           const item = row.original;
           const currentVal = shippedQuantities[item.id] ?? item.requestedQty;
+          const isChecked = checkedItems[item.id] ?? false;
 
           if (!canEditAndSend) {
             if (item.shippedQty === null || item.shippedQty === undefined) {
@@ -97,14 +115,33 @@ const OrderItemsTable = ({ order }) => {
             <EditableShippedCell
               initialValue={currentVal}
               onUpdate={val => handleUpdateShipped(item.id, val)}
-              disabled={!hasAccess}
+              disabled={!hasAccess || !isChecked}
             />
           );
         },
       },
-    ],
-    [canEditAndSend, shippedQuantities, hasAccess],
-  );
+    ];
+
+    if (canEditAndSend) {
+      baseColumns.unshift({
+        id: 'select',
+        header: 'Picked',
+        cell: ({ row }) => {
+          const item = row.original;
+          return (
+            <Checkbox
+              color="green"
+              checked={checkedItems[item.id] || false}
+              onChange={e => handleUpdateChecked(item.id, e.currentTarget.checked)}
+              disabled={!hasAccess}
+            />
+          );
+        },
+      });
+    }
+
+    return baseColumns;
+  }, [canEditAndSend, shippedQuantities, checkedItems, hasAccess]);
 
   const table = useReactTable({
     data: items,
@@ -127,6 +164,7 @@ const OrderItemsTable = ({ order }) => {
     const payloadItems = items.map(item => ({
       productId: item.product.id,
       quantity: shippedQuantities[item.id] ?? item.requestedQty,
+      isChecked: checkedItems[item.id] ?? false,
     }));
 
     try {
@@ -205,8 +243,20 @@ const OrderItemsTable = ({ order }) => {
                   );
                 }
 
+                const item = row.original;
+                const isChecked = checkedItems[item.id] ?? false;
+
                 return (
-                  <Table.Tr key={row.id}>
+                  <Table.Tr
+                    key={row.id}
+                    style={{
+                      backgroundColor:
+                        canEditAndSend && isChecked
+                          ? 'var(--mantine-color-green-0)'
+                          : undefined,
+                      transition: 'background-color 0.2s ease',
+                    }}
+                  >
                     {row.getVisibleCells().map(cell => {
                       if (cell.column.id === 'category') return null;
                       return (
