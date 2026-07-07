@@ -9,10 +9,11 @@ import {
   Tooltip,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { Key, Trash } from 'lucide-react';
+import { Key, Pencil, Trash } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import DataTable from '../../components/ui/DataTable';
 import DeleteUserModal from '../../components/ui/DeleteUserModal';
+import EditUserModal from '../../components/ui/EditUserModal';
 import ResetPasswordModal from '../../components/ui/ResetPasswordModal';
 import { useGetAllUsersQuery } from '../../store/api/api';
 
@@ -25,6 +26,7 @@ const roleSortOrder = {
 const UsersPage = () => {
   const { data: users = [], isLoading } = useGetAllUsersQuery();
 
+  const [openedEdit, { open: openEdit, close: closeEdit }] = useDisclosure(false);
   const [openedReset, { open: openReset, close: closeReset }] = useDisclosure(false);
   const [openedDelete, { open: openDelete, close: closeDelete }] = useDisclosure(false);
   const [selectedUser, setSelectedUser] = useState(null);
@@ -74,6 +76,19 @@ const UsersPage = () => {
           const user = info.row.original;
           return (
             <Group gap="xs">
+              <Tooltip label="Edit User">
+                <ActionIcon
+                  variant="light"
+                  color="grape"
+                  onClick={() => {
+                    setSelectedUser(user);
+                    openEdit();
+                  }}
+                >
+                  <Pencil size={16} />
+                </ActionIcon>
+              </Tooltip>
+
               <Tooltip label="Reset Password">
                 <ActionIcon
                   variant="light"
@@ -104,7 +119,7 @@ const UsersPage = () => {
         },
       },
     ],
-    [openReset, openDelete],
+    [openEdit, openReset, openDelete],
   );
 
   return (
@@ -127,6 +142,12 @@ const UsersPage = () => {
           initialState={{ sorting: [{ id: 'role', desc: false }] }}
         />
       </Box>
+
+      <EditUserModal
+        opened={openedEdit}
+        onClose={closeEdit}
+        user={selectedUser}
+      />
 
       <ResetPasswordModal
         opened={openedReset}

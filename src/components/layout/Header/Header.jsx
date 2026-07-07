@@ -10,7 +10,10 @@ const Header = () => {
       py="sm"
       bg="dark.9"
       c="white"
-      style={{ borderBottom: '1px solid var(--mantine-color-dark-4)' }}
+      style={{
+        borderBottom: '1px solid var(--mantine-color-dark-5)',
+        boxShadow: '0 2px 12px rgba(0, 0, 0, 0.15)',
+      }}
     >
       <Group
         justify="space-between"

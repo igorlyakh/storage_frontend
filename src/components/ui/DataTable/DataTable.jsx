@@ -1,10 +1,11 @@
-import { Paper, Table, Text } from '@mantine/core';
+import { Paper, Stack, Table, Text } from '@mantine/core';
 import {
   flexRender,
   getCoreRowModel,
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
+import { Inbox } from 'lucide-react';
 
 const DataTable = ({ data, columns, initialState = {} }) => {
   const table = useReactTable({
@@ -18,19 +19,32 @@ const DataTable = ({ data, columns, initialState = {} }) => {
   return (
     <Paper
       withBorder
-      radius="md"
-      overflow="hidden"
+      radius="lg"
+      shadow="xs"
+      style={{ overflow: 'hidden' }}
     >
       <Table.ScrollContainer minWidth={500}>
         <Table
-          verticalSpacing="sm"
+          verticalSpacing="md"
+          horizontalSpacing="lg"
           highlightOnHover
         >
-          <Table.Thead bg="gray.0">
+          <Table.Thead>
             {table.getHeaderGroups().map(headerGroup => (
               <Table.Tr key={headerGroup.id}>
                 {headerGroup.headers.map(header => (
-                  <Table.Th key={header.id}>
+                  <Table.Th
+                    key={header.id}
+                    style={{
+                      backgroundColor: 'var(--mantine-color-gray-0)',
+                      borderBottom: '1px solid var(--mantine-color-gray-3)',
+                      textTransform: 'uppercase',
+                      fontSize: 11,
+                      letterSpacing: 0.5,
+                      color: 'var(--mantine-color-gray-6)',
+                      fontWeight: 700,
+                    }}
+                  >
                     {flexRender(header.column.columnDef.header, header.getContext())}
                   </Table.Th>
                 ))}
@@ -52,10 +66,23 @@ const DataTable = ({ data, columns, initialState = {} }) => {
               <Table.Tr>
                 <Table.Td
                   colSpan={columns.length}
-                  align="center"
                   py="xl"
                 >
-                  <Text c="dimmed">No records found</Text>
+                  <Stack
+                    align="center"
+                    gap={4}
+                  >
+                    <Inbox
+                      size={28}
+                      color="var(--mantine-color-gray-4)"
+                    />
+                    <Text
+                      c="dimmed"
+                      size="sm"
+                    >
+                      No records found
+                    </Text>
+                  </Stack>
                 </Table.Td>
               </Table.Tr>
             )}

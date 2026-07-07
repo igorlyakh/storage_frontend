@@ -1,26 +1,46 @@
-import {
-  Box,
-  CloseButton,
-  Group,
-  LoadingOverlay,
-  Pagination,
-  Stack,
-  Text,
-  TextInput,
-  Title,
-} from '@mantine/core';
-import { useState } from 'react';
+import { Box, Group, LoadingOverlay, Pagination, Stack, Title } from '@mantine/core';
+import { DatePickerInput } from '@mantine/dates';
+import dayjs from 'dayjs';
+import { useSearchParams } from 'react-router-dom';
 import OrdersList from '../../components/OrdersList/OrdersList';
 import FilterPopover from '../../components/ui/FilterPopover';
 import { useGetAllOrdersQuery, useGetAllStoresQuery } from '../../store/api/api';
 
-const AllOrdersPage = () => {
-  const [page, setPage] = useState(1);
-  const [statuses, setStatuses] = useState(['NEW', 'IN_PROGRESS', 'BACKORDER']);
-  const [storeIds, setStoreIds] = useState([]);
+const DEFAULT_STATUSES = ['NEW', 'IN_PROGRESS', 'BACKORDER'];
 
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
+const AllOrdersPage = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const page = Number(searchParams.get('page')) || 1;
+  const statuses = searchParams.has('statuses')
+    ? searchParams.get('statuses').split(',').filter(Boolean)
+    : DEFAULT_STATUSES;
+  const storeIds = searchParams.has('storeIds')
+    ? searchParams
+        .get('storeIds')
+        .split(',')
+        .filter(Boolean)
+        .map(Number)
+    : [];
+  const startDate = searchParams.get('startDate') || '';
+  const endDate = searchParams.get('endDate') || '';
+
+  const updateParams = updates => {
+    setSearchParams(prev => {
+      const next = new URLSearchParams(prev);
+      Object.entries(updates).forEach(([key, value]) => {
+        const isEmptyArray = Array.isArray(value) && value.length === 0;
+        if (value === undefined || value === null || value === '' || isEmptyArray) {
+          next.delete(key);
+        } else if (Array.isArray(value)) {
+          next.set(key, value.join(','));
+        } else {
+          next.set(key, String(value));
+        }
+      });
+      return next;
+    });
+  };
 
   const { data: storesData } = useGetAllStoresQuery();
   const stores = storesData || [];
@@ -57,13 +77,19 @@ const AllOrdersPage = () => {
   const meta = data?.meta;
 
   const handleStatusesChange = newStatuses => {
-    setStatuses(newStatuses);
-    setPage(1);
+    updateParams({ statuses: newStatuses, page: undefined });
   };
 
   const handleStoresChange = newStores => {
-    setStoreIds(newStores);
-    setPage(1);
+    updateParams({ storeIds: newStores, page: undefined });
+  };
+
+  const handleDateRangeChange = ([start, end]) => {
+    updateParams({
+      startDate: start ? dayjs(start).format('YYYY-MM-DD') : undefined,
+      endDate: end ? dayjs(end).format('YYYY-MM-DD') : undefined,
+      page: undefined,
+    });
   };
 
   return (
@@ -91,51 +117,14 @@ const AllOrdersPage = () => {
           onChange={handleStoresChange}
         />
 
-        <Group
-          gap="xs"
-          align="center"
-        >
-          <TextInput
-            type="date"
-            placeholder="From"
-            value={startDate}
-            onChange={e => {
-              setStartDate(e.target.value);
-              setPage(1);
-            }}
-            w={{ base: '100%', sm: 140 }}
-          />
-
-          <Text
-            size="sm"
-            c="dimmed"
-          >
-            -
-          </Text>
-
-          <TextInput
-            type="date"
-            placeholder="To"
-            value={endDate}
-            onChange={e => {
-              setEndDate(e.target.value);
-              setPage(1);
-            }}
-            w={{ base: '100%', sm: 140 }}
-          />
-
-          {(startDate || endDate) && (
-            <CloseButton
-              size="lg"
-              onClick={() => {
-                setStartDate('');
-                setEndDate('');
-                setPage(1);
-              }}
-              title="Clear dates"
-            />
-          )}
-        </Group>
+        <DatePickerInput
+          type="range"
+          placeholder="Filter by date"
+          value={[startDate ? new Date(startDate) : null, endDate ? new Date(endDate) : null]}
+          onChange={handleDateRangeChange}
+          clearable
+          w={{ base: '100%', sm: 260 }}
+        />
       </Group>
 
       <Box
@@ -157,7 +146,7 @@ const AllOrdersPage = () => {
         >
           <Pagination
             value={page}
-            onChange={setPage}
+            onChange={newPage => updateParams({ page: newPage })}
             total={meta.lastPage}
             disabled={isFetching}
             color="blue"

@@ -5,7 +5,10 @@ import Header from '../Header';
 
 const Layout = () => {
   return (
-    <Box style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+    <Box
+      bg="gray.0"
+      style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}
+    >
       <Header />
       <Box
         component="main"

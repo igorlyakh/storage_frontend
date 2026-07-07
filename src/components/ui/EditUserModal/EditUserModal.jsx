@@ -1,12 +1,14 @@
-import { Container } from '@mantine/core';
+import { Modal } from '@mantine/core';
 import toast from 'react-hot-toast';
-import DynamicForm from '../../components/ui/DynamicForm';
-import { productTags } from '../../constants/productTags';
-import { useCreateUserMutation, useGetAllStoresQuery } from '../../store/api/api';
+import DynamicForm from '../DynamicForm';
+import { productTags } from '../../../constants/productTags';
+import { useGetAllStoresQuery, useUpdateUserMutation } from '../../../store/api/api';
 
-const CreateUserPage = () => {
+const EditUserModal = ({ opened, onClose, user }) => {
   const { data: stores = [], isLoading: isStoresLoading } = useGetAllStoresQuery();
-  const [createUser, { isLoading: isSubmitting }] = useCreateUserMutation();
+  const [updateUser, { isLoading: isSubmitting }] = useUpdateUserMutation();
+
+  if (!user) return null;
 
   const storeOptions = stores.map(store => ({
     value: String(store.id),
@@ -20,16 +22,6 @@ const CreateUserPage = () => {
       label: 'Username',
       placeholder: 'Enter username',
       rules: { required: 'Username is required' },
-    },
-    {
-      name: 'password',
-      type: 'password',
-      label: 'Password',
-      placeholder: '••••••••',
-      rules: {
-        required: 'Password is required',
-        minLength: { value: 6, message: 'At least 6 chars' },
-      },
     },
     {
       name: 'role',
@@ -64,43 +56,50 @@ const CreateUserPage = () => {
 
   const onSubmit = async (data, reset) => {
     const payload = {
-      ...data,
+      id: user.id,
+      username: data.username,
+      role: data.role,
       storeId: data.role === 'STORE' ? Number(data.storeId) : null,
       adminScopes: data.role === 'ADMIN' ? data.adminScopes : [],
     };
 
     try {
-      await createUser(payload).unwrap();
-      toast.success('User created!');
+      await updateUser(payload).unwrap();
+      toast.success('User updated!');
       reset();
+      onClose();
     } catch (error) {
-      toast.error(error.data?.message || error.message || 'Failed to create user');
+      toast.error(error.data?.message || error.message || 'Failed to update user');
     }
   };
 
   return (
-    <Container
-      size="sm"
-      py="xl"
+    <Modal
+      opened={opened}
+      onClose={onClose}
+      title={`Edit user: ${user.username}`}
+      centered
+      size={{ base: '95%', sm: 500 }}
+      padding={0}
     >
       <DynamicForm
-        title="Create New User"
-        submitLabel="Create User"
+        key={user.id}
+        title=""
+        submitLabel="Save Changes"
         fields={fields}
-        gridCols={2}
-        paperWidth={{ base: '100%', sm: 500, md: 600 }}
+        gridCols={1}
+        paperWidth="100%"
         defaultValues={{
-          username: '',
-          password: '',
-          role: 'STORE',
-          storeId: '',
-          adminScopes: [],
+          username: user.username || '',
+          role: user.role || 'STORE',
+          storeId: user.storeId ? String(user.storeId) : user.store?.id ? String(user.store.id) : '',
+          adminScopes: user.adminScopes || [],
         }}
         onSubmit={onSubmit}
         isLoading={isSubmitting}
       />
-    </Container>
+    </Modal>
   );
 };
 
-export default CreateUserPage;
+export default EditUserModal;

@@ -423,18 +423,30 @@ const RequestPage = () => {
 
       <Paper
         withBorder
-        radius="md"
+        radius="lg"
+        shadow="xs"
         overflow="hidden"
       >
         <Table
           verticalSpacing="sm"
           highlightOnHover
         >
-          <Table.Thead bg="gray.0">
+          <Table.Thead>
             {table.getHeaderGroups().map(headerGroup => (
               <Table.Tr key={headerGroup.id}>
                 {headerGroup.headers.map(header => (
-                  <Table.Th key={header.id}>
+                  <Table.Th
+                    key={header.id}
+                    style={{
+                      backgroundColor: 'var(--mantine-color-gray-0)',
+                      borderBottom: '1px solid var(--mantine-color-gray-3)',
+                      textTransform: 'uppercase',
+                      fontSize: 11,
+                      letterSpacing: 0.5,
+                      color: 'var(--mantine-color-gray-6)',
+                      fontWeight: 700,
+                    }}
+                  >
                     {flexRender(header.column.columnDef.header, header.getContext())}
                   </Table.Th>
                 ))}

@@ -1,11 +1,24 @@
-import { Box, Container, LoadingOverlay, Text, Title } from '@mantine/core';
+import {
+  ActionIcon,
+  Box,
+  Container,
+  LoadingOverlay,
+  Text,
+  Title,
+  Tooltip,
+} from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
 import dayjs from 'dayjs';
-import { useMemo } from 'react';
+import { Pencil } from 'lucide-react';
+import { useMemo, useState } from 'react';
 import DataTable from '../../components/ui/DataTable';
+import EditCategoryModal from '../../components/ui/EditCategoryModal';
 import { useGetAllCategoriesQuery } from '../../store/api/api';
 
 const CategoriesPage = () => {
   const { data: categories = [], isLoading } = useGetAllCategoriesQuery();
+  const [openedEdit, { open: openEdit, close: closeEdit }] = useDisclosure(false);
+  const [selectedCategory, setSelectedCategory] = useState(null);
 
   const columns = useMemo(
     () => [
@@ -21,8 +34,26 @@ const CategoriesPage = () => {
           <Text size="sm">{dayjs(info.getValue()).format('DD.MM.YY HH:mm')}</Text>
         ),
       },
+      {
+        id: 'actions',
+        header: 'Actions',
+        cell: info => (
+          <Tooltip label="Edit Category">
+            <ActionIcon
+              color="blue"
+              variant="light"
+              onClick={() => {
+                setSelectedCategory(info.row.original);
+                openEdit();
+              }}
+            >
+              <Pencil size={16} />
+            </ActionIcon>
+          </Tooltip>
+        ),
+      },
     ],
-    [],
+    [openEdit],
   );
 
   return (
@@ -51,6 +82,13 @@ const CategoriesPage = () => {
           initialState={{ sorting: [{ id: 'name', desc: false }] }}
         />
       </Box>
+
+      <EditCategoryModal
+        key={selectedCategory?.id}
+        opened={openedEdit}
+        onClose={closeEdit}
+        category={selectedCategory}
+      />
     </Container>
   );
 };

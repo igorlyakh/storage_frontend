@@ -7,6 +7,7 @@ const initialState = {
   store: null,
   adminScopes: null,
   isLogin: false,
+  justLoggedIn: false,
 };
 
 const userSlice = createSlice({
@@ -19,6 +20,10 @@ const userSlice = createSlice({
       state.adminScopes = action.payload.adminScopes;
       state.accessToken = action.payload.accessToken;
       state.isLogin = true;
+      state.justLoggedIn = true;
+    },
+    clearJustLoggedIn: state => {
+      state.justLoggedIn = false;
     },
     updateToken: (state, action) => {
       state.accessToken = action.payload;
@@ -30,10 +35,11 @@ const userSlice = createSlice({
       state.adminScopes = null;
       state.store = null;
       state.isLogin = false;
+      state.justLoggedIn = false;
     },
   },
 });
 
-export const { setData, updateToken, logOut } = userSlice.actions;
+export const { setData, updateToken, logOut, clearJustLoggedIn } = userSlice.actions;
 
 export const userReducer = userSlice.reducer;

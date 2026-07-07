@@ -1,5 +1,6 @@
 import { Container } from '@mantine/core';
 import toast from 'react-hot-toast';
+import { useSelector } from 'react-redux';
 import DynamicForm from '../../components/ui/DynamicForm';
 import { productTags } from '../../constants/productTags';
 import {
@@ -7,12 +8,14 @@ import {
   useGetAllBrandsQuery,
   useGetAllCategoriesQuery,
 } from '../../store/api/api';
+import { adminScopesSelector } from '../../store/selectors/selectors';
 
 const CreateProductPage = () => {
   const { data: brands = [], isLoading: isBrandsLoading } = useGetAllBrandsQuery();
   const { data: productCategories = [], isLoading: isCategoriesLoading } =
     useGetAllCategoriesQuery();
   const [addProduct, { isLoading: isSubmitting }] = useAddProductMutation();
+  const adminScopes = useSelector(adminScopesSelector);
 
   const brandOptions = brands.map(brand => ({
     value: String(brand.id),
@@ -24,7 +27,9 @@ const CreateProductPage = () => {
     label: category.name,
   }));
 
-  const tagOptions = productTags.map(tag => ({ value: tag, label: tag }));
+  const availableTags = adminScopes?.length ? adminScopes : productTags;
+  const tagOptions = availableTags.map(tag => ({ value: tag, label: tag }));
+  const isSingleScope = availableTags.length === 1;
 
   const packageTypeOptions = [
     { value: 'PALLET', label: 'Pallet' },
@@ -63,6 +68,7 @@ const CreateProductPage = () => {
       type: 'select',
       label: 'Admin Tag',
       options: tagOptions,
+      disabled: isSingleScope,
       rules: { required: 'Tag is required!' },
     },
     {
@@ -141,7 +147,7 @@ const CreateProductPage = () => {
           name: '',
           category: '',
           article: '',
-          tag: productTags[0] || '',
+          tag: availableTags[0] || '',
           limitPerOrder: '',
           brandsIds: [],
           packageType: 'PALLET',

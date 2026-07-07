@@ -2,7 +2,6 @@ import {
   Box,
   Button,
   Checkbox,
-  CloseButton,
   Divider,
   Group,
   LoadingOverlay,
@@ -10,12 +9,15 @@ import {
   Popover,
   ScrollArea,
   Stack,
-  TextInput,
   Title,
 } from '@mantine/core';
-import { useState } from 'react';
+import { DatePickerInput } from '@mantine/dates';
+import dayjs from 'dayjs';
+import { useSearchParams } from 'react-router-dom';
 import OrdersList from '../../components/OrdersList/OrdersList';
 import { useGetMyOrdersQuery } from '../../store/api/api';
+
+const DEFAULT_STATUSES = ['NEW', 'IN_PROGRESS', 'SENT', 'BACKORDER'];
 
 const FilterPopover = ({ label, options, values, onChange }) => {
   const handleToggle = val => {
@@ -100,9 +102,30 @@ const FilterPopover = ({ label, options, values, onChange }) => {
 };
 
 const MyOrdersPage = () => {
-  const [page, setPage] = useState(1);
-  const [statuses, setStatuses] = useState(['NEW', 'IN_PROGRESS', 'SENT', 'BACKORDER']);
-  const [date, setDate] = useState('');
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const page = Number(searchParams.get('page')) || 1;
+  const statuses = searchParams.has('statuses')
+    ? searchParams.get('statuses').split(',').filter(Boolean)
+    : DEFAULT_STATUSES;
+  const date = searchParams.get('date') || '';
+
+  const updateParams = updates => {
+    setSearchParams(prev => {
+      const next = new URLSearchParams(prev);
+      Object.entries(updates).forEach(([key, value]) => {
+        const isEmptyArray = Array.isArray(value) && value.length === 0;
+        if (value === undefined || value === null || value === '' || isEmptyArray) {
+          next.delete(key);
+        } else if (Array.isArray(value)) {
+          next.set(key, value.join(','));
+        } else {
+          next.set(key, String(value));
+        }
+      });
+      return next;
+    });
+  };
 
   const statusOptions = [
     { value: 'NEW', label: 'NEW' },
@@ -129,8 +152,7 @@ const MyOrdersPage = () => {
   const meta = data?.meta;
 
   const handleStatusesChange = newStatuses => {
-    setStatuses(newStatuses);
-    setPage(1);
+    updateParams({ statuses: newStatuses, page: undefined });
   };
 
   return (
@@ -151,30 +173,18 @@ const MyOrdersPage = () => {
           onChange={handleStatusesChange}
         />
 
-        <Group
-          gap="xs"
-          align="center"
-        >
-          <TextInput
-            type="date"
-            value={date}
-            onChange={e => {
-              setDate(e.target.value);
-              setPage(1);
-            }}
-            w={{ base: '100%', sm: 180 }}
-          />
-          {date && (
-            <CloseButton
-              size="lg"
-              onClick={() => {
-                setDate('');
-                setPage(1);
-              }}
-              title="Clear date"
-            />
-          )}
-        </Group>
+        <DatePickerInput
+          placeholder="Filter by date"
+          value={date ? new Date(date) : null}
+          onChange={val =>
+            updateParams({
+              date: val ? dayjs(val).format('YYYY-MM-DD') : undefined,
+              page: undefined,
+            })
+          }
+          clearable
+          w={{ base: '100%', sm: 200 }}
+        />
       </Group>
 
       <Box
@@ -196,7 +206,7 @@ const MyOrdersPage = () => {
         >
           <Pagination
             value={page}
-            onChange={setPage}
+            onChange={newPage => updateParams({ page: newPage })}
             total={meta.lastPage}
             disabled={isFetching}
             color="blue"

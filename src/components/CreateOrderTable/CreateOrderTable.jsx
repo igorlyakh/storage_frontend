@@ -6,6 +6,7 @@ import {
   LoadingOverlay,
   NumberInput,
   Paper,
+  Select,
   Table,
   Text,
   TextInput,
@@ -30,26 +31,49 @@ import {
   api,
   useCreateOrderMutation,
   useGetAllProductsByBrandQuery,
+  useGetAllProductsQuery,
+  useGetAllStoresQuery,
 } from '../../store/api/api';
 import { ConfirmOrderModal } from '../ui/ConfirmationModal/ConfirmationModal';
 
-const CreateOrderTable = () => {
+const CreateOrderTable = ({ writeOff = false }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { data: products = [], isFetching: isProductsLoading } =
-    useGetAllProductsByBrandQuery();
+  const productsQueryName = writeOff ? 'getAllProducts' : 'getAllProductsByBrand';
+
+  const { data: byBrandProducts = [], isFetching: isByBrandLoading } =
+    useGetAllProductsByBrandQuery(undefined, { skip: writeOff });
+  const { data: allProducts = [], isFetching: isAllLoading } = useGetAllProductsQuery(
+    undefined,
+    { skip: !writeOff },
+  );
+
+  const products = writeOff ? allProducts : byBrandProducts;
+  const isProductsLoading = writeOff ? isAllLoading : isByBrandLoading;
+
+  const { data: stores = [], isLoading: isStoresLoading } = useGetAllStoresQuery(
+    undefined,
+    { skip: !writeOff },
+  );
+
   const [createOrder, { isLoading }] = useCreateOrderMutation();
 
   const [name, setName] = useState('');
   const [customRequest, setCustomRequest] = useState('');
+  const [storeId, setStoreId] = useState(null);
 
   const rowData = useMemo(() => products.filter(p => p.isEnabled), [products]);
+
+  const storeOptions = stores.map(store => ({
+    value: String(store.id),
+    label: store.name,
+  }));
 
   const handleQuantityChange = useCallback(
     (productId, val) => {
       dispatch(
-        api.util.updateQueryData('getAllProductsByBrand', undefined, draft => {
+        api.util.updateQueryData(productsQueryName, undefined, draft => {
           const product = draft.find(p => p.id === productId);
           if (product) {
             if (val === '' || val === undefined || val === null) {
@@ -67,7 +91,7 @@ const CreateOrderTable = () => {
         }),
       );
     },
-    [dispatch],
+    [dispatch, productsQueryName],
   );
 
   const columns = useMemo(
@@ -99,7 +123,7 @@ const CreateOrderTable = () => {
               value={row.orderQuantity ?? ''}
               onChange={val => handleQuantityChange(row.id, val)}
               min={0}
-              max={row.limitPerOrder || undefined}
+              max={!writeOff && row.limitPerOrder ? row.limitPerOrder : undefined}
               placeholder="0"
               allowNegative={false}
               allowDecimal={false}
@@ -112,6 +136,17 @@ const CreateOrderTable = () => {
         accessorKey: 'limitPerOrder',
         header: 'Limit',
         cell: info => {
+          if (writeOff) {
+            return (
+              <Text
+                c="dimmed"
+                size="sm"
+              >
+                No limit
+              </Text>
+            );
+          }
+
           const limit = info.getValue();
           return limit ? (
             <Badge
@@ -131,7 +166,7 @@ const CreateOrderTable = () => {
         },
       },
     ],
-    [handleQuantityChange],
+    [handleQuantityChange, writeOff],
   );
 
   const table = useReactTable({
@@ -140,10 +175,6 @@ const CreateOrderTable = () => {
     initialState: {
       grouping: ['category'],
       expanded: false,
-      sorting: [
-        { id: 'category', desc: false },
-        { id: 'name', desc: false },
-      ],
     },
     autoResetExpanded: false,
     getCoreRowModel: getCoreRowModel(),
@@ -164,6 +195,7 @@ const CreateOrderTable = () => {
       name: name.trim(),
       items: payloadItems,
       ...(customRequest.trim() && { customRequest: customRequest.trim() }),
+      ...(writeOff && { storeId: Number(storeId) }),
     };
 
     try {
@@ -180,13 +212,15 @@ const CreateOrderTable = () => {
               size="sm"
               mb="md"
             >
-              Your order has been sent successfully! The warehouse has been notified.
+              {writeOff
+                ? 'Write-off order has been created successfully.'
+                : 'Your order has been sent successfully! The warehouse has been notified.'}
             </Text>
             <Button
               fullWidth
               onClick={() => {
                 modals.closeAll();
-                navigate('/orders', { replace: true });
+                navigate(writeOff ? '/all-orders' : '/orders', { replace: true });
               }}
               color="green"
             >
@@ -198,16 +232,17 @@ const CreateOrderTable = () => {
 
       setName('');
       setCustomRequest('');
+      setStoreId(null);
 
       dispatch(
-        api.util.updateQueryData('getAllProductsByBrand', undefined, draft => {
+        api.util.updateQueryData(productsQueryName, undefined, draft => {
           draft.forEach(p => {
             delete p.orderQuantity;
           });
         }),
       );
     } catch (error) {
-      toast.error(error.data.message);
+      toast.error(error.data?.message || 'Failed to create order');
     }
   };
 
@@ -216,17 +251,27 @@ const CreateOrderTable = () => {
       return toast.error('Please enter your name');
     }
 
+    if (writeOff && !storeId) {
+      return toast.error('Please select a store');
+    }
+
+    if (writeOff && !customRequest.trim()) {
+      return toast.error('Please specify a reason for the write-off');
+    }
+
     const itemsToOrder = rowData.filter(p => p.orderQuantity > 0);
 
     if (itemsToOrder.length === 0 && !customRequest.trim()) {
       return toast.error('Please specify quantity or write a custom request');
     }
 
-    for (const item of itemsToOrder) {
-      if (item.limitPerOrder !== null && item.orderQuantity > item.limitPerOrder) {
-        return toast.error(
-          `Limit exceeded for "${item.name}". Maximum allowed is ${item.limitPerOrder}.`,
-        );
+    if (!writeOff) {
+      for (const item of itemsToOrder) {
+        if (item.limitPerOrder !== null && item.orderQuantity > item.limitPerOrder) {
+          return toast.error(
+            `Limit exceeded for "${item.name}". Maximum allowed is ${item.limitPerOrder}.`,
+          );
+        }
       }
     }
 
@@ -248,16 +293,33 @@ const CreateOrderTable = () => {
 
   return (
     <div style={{ width: '100%', marginTop: 20 }}>
-      <TextInput
-        label="Your Name / Responsible Person"
-        placeholder="Enter your name"
-        value={name}
-        onChange={e => setName(e.currentTarget.value)}
-        required
-        maxWith={400}
+      <Group
+        align="flex-end"
         mb="lg"
-        leftSection={<User size={16} />}
-      />
+        grow
+      >
+        <TextInput
+          label="Your Name / Responsible Person"
+          placeholder="Enter your name"
+          value={name}
+          onChange={e => setName(e.currentTarget.value)}
+          required
+          leftSection={<User size={16} />}
+        />
+
+        {writeOff && (
+          <Select
+            label="Store"
+            placeholder={isStoresLoading ? 'Loading...' : 'Select store'}
+            data={storeOptions}
+            value={storeId}
+            onChange={setStoreId}
+            searchable
+            required
+            disabled={isStoresLoading}
+          />
+        )}
+      </Group>
 
       <Box
         pos="relative"
@@ -271,22 +333,33 @@ const CreateOrderTable = () => {
 
         <Paper
           withBorder
-          radius="md"
+          radius="lg"
           overflow="hidden"
-          shadow="sm"
+          shadow="xs"
         >
           <Table.ScrollContainer minWidth={600}>
             <Table
               verticalSpacing="sm"
               highlightOnHover
             >
-              <Table.Thead bg="gray.0">
+              <Table.Thead>
                 {table.getHeaderGroups().map(headerGroup => (
                   <Table.Tr key={headerGroup.id}>
                     {headerGroup.headers.map(header => {
                       if (header.id === 'category') return null;
                       return (
-                        <Table.Th key={header.id}>
+                        <Table.Th
+                          key={header.id}
+                          style={{
+                            backgroundColor: 'var(--mantine-color-gray-0)',
+                            borderBottom: '1px solid var(--mantine-color-gray-3)',
+                            textTransform: 'uppercase',
+                            fontSize: 11,
+                            letterSpacing: 0.5,
+                            color: 'var(--mantine-color-gray-6)',
+                            fontWeight: 700,
+                          }}
+                        >
                           {flexRender(
                             header.column.columnDef.header,
                             header.getContext(),
@@ -372,7 +445,7 @@ const CreateOrderTable = () => {
                         size="md"
                         c="blue.9"
                       >
-                        Other
+                        {writeOff ? 'Reason' : 'Other'}
                       </Text>
                     </Group>
                   </Table.Td>
@@ -380,7 +453,11 @@ const CreateOrderTable = () => {
                 <Table.Tr>
                   <Table.Td colSpan={columns.length - 1}>
                     <Textarea
-                      placeholder="Didn't find what you need? Describe it here..."
+                      placeholder={
+                        writeOff
+                          ? 'Describe the reason for this write-off (required)...'
+                          : "Didn't find what you need? Describe it here..."
+                      }
                       value={customRequest}
                       onChange={e => setCustomRequest(e.currentTarget.value)}
                       autosize
@@ -410,7 +487,7 @@ const CreateOrderTable = () => {
           onClick={handleSendOrder}
           w={{ base: '100%', sm: 'auto' }}
         >
-          Send Order
+          {writeOff ? 'Create Write-off' : 'Send Order'}
         </Button>
       </Group>
     </div>

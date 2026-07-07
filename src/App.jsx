@@ -6,6 +6,8 @@ import { NavigationProgress, nprogress } from '@mantine/nprogress';
 
 import Layout from './components/layout/Layout';
 import PersistLogin from './features/auth/PersistLogin';
+import LowStockNotifier from './features/notifications/LowStockNotifier';
+import { useOrderNotifications } from './features/notifications/useOrderNotifications';
 
 import ProtectedRoutes from './features/auth/ProtectedRoutes';
 import RestrictedRouts from './features/auth/RestrictedRoutes';
@@ -20,6 +22,8 @@ const CreateOrderPage = lazy(() => import('./pages/CreateOrderPage/CreateOrderPa
 const CreateProductPage = lazy(() => import('./pages/CreateProductPage'));
 const CreateStorePage = lazy(() => import('./pages/CreateStorePage'));
 const CreateUserPage = lazy(() => import('./pages/CreateUserPage'));
+const CreateWriteOffPage = lazy(() => import('./pages/CreateWriteOffPage'));
+const OrderingPage = lazy(() => import('./pages/OrderingPage'));
 const MyOrdersPage = lazy(() => import('./pages/MyOrdersPage'));
 const OrderPage = lazy(() => import('./pages/OrderPage/OrderPage'));
 const ProductsPage = lazy(() => import('./pages/ProductsPage/ProductsPage'));
@@ -50,9 +54,12 @@ const SuspenseLoader = () => {
 const App = () => {
   const location = useLocation();
 
+  useOrderNotifications();
+
   return (
     <>
       <NavigationProgress />
+      <LowStockNotifier />
 
       <Suspense
         key={location.pathname}
@@ -137,6 +144,15 @@ const App = () => {
                 element={
                   <ProtectedRoutes allowedRoles={['ADMIN', 'WAREHOUSE']}>
                     <RequestPage />
+                  </ProtectedRoutes>
+                }
+              />
+
+              <Route
+                path="write-off/create"
+                element={
+                  <ProtectedRoutes allowedRoles={['ADMIN', 'WAREHOUSE']}>
+                    <CreateWriteOffPage />
                   </ProtectedRoutes>
                 }
               />
@@ -227,6 +243,15 @@ const App = () => {
                 element={
                   <ProtectedRoutes allowedRoles={['ADMIN', 'WAREHOUSE']}>
                     <StatisticPage />
+                  </ProtectedRoutes>
+                }
+              />
+
+              <Route
+                path="ordering"
+                element={
+                  <ProtectedRoutes allowedRoles={['ADMIN']}>
+                    <OrderingPage />
                   </ProtectedRoutes>
                 }
               />

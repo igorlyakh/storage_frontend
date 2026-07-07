@@ -2,6 +2,7 @@ import {
   ActionIcon,
   Box,
   Container,
+  Group,
   LoadingOverlay,
   Text,
   Title,
@@ -9,14 +10,16 @@ import {
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import dayjs from 'dayjs';
-import { Trash } from 'lucide-react';
+import { Pencil, Trash } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import DataTable from '../../components/ui/DataTable';
 import DeleteBrandModal from '../../components/ui/DeleteBrandModal';
+import EditBrandModal from '../../components/ui/EditBrandModal';
 import { useGetAllBrandsQuery } from '../../store/api/api';
 
 const BrandsPage = () => {
   const { data: brands = [], isLoading } = useGetAllBrandsQuery();
+  const [openedEdit, { open: openEdit, close: closeEdit }] = useDisclosure(false);
   const [openedDelete, { open: openDelete, close: closeDelete }] = useDisclosure(false);
   const [selectedBrand, setSelectedBrand] = useState(null);
 
@@ -38,22 +41,36 @@ const BrandsPage = () => {
         id: 'actions',
         header: 'Actions',
         cell: info => (
-          <Tooltip label="Delete Brand">
-            <ActionIcon
-              color="red"
-              variant="light"
-              onClick={() => {
-                setSelectedBrand(info.row.original);
-                openDelete();
-              }}
-            >
-              <Trash size={16} />
-            </ActionIcon>
-          </Tooltip>
+          <Group gap="xs">
+            <Tooltip label="Edit Brand">
+              <ActionIcon
+                color="blue"
+                variant="light"
+                onClick={() => {
+                  setSelectedBrand(info.row.original);
+                  openEdit();
+                }}
+              >
+                <Pencil size={16} />
+              </ActionIcon>
+            </Tooltip>
+            <Tooltip label="Delete Brand">
+              <ActionIcon
+                color="red"
+                variant="light"
+                onClick={() => {
+                  setSelectedBrand(info.row.original);
+                  openDelete();
+                }}
+              >
+                <Trash size={16} />
+              </ActionIcon>
+            </Tooltip>
+          </Group>
         ),
       },
     ],
-    [openDelete],
+    [openEdit, openDelete],
   );
 
   return (
@@ -83,6 +100,13 @@ const BrandsPage = () => {
           initialState={{ sorting: [{ id: 'name', desc: false }] }}
         />
       </Box>
+
+      <EditBrandModal
+        key={selectedBrand?.id}
+        opened={openedEdit}
+        onClose={closeEdit}
+        brand={selectedBrand}
+      />
 
       <DeleteBrandModal
         opened={openedDelete}

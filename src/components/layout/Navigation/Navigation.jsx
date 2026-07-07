@@ -16,7 +16,9 @@ import { useLogoutMutation } from '../../../store/api/api';
 import { tokenSelector, userRoleSelector } from '../../../store/selectors/selectors';
 import { logOut } from '../../../store/userSlice/userSlice';
 
-const NavMenu = ({ title, items, isMobile, closeDrawer }) => {
+const NavMenu = ({ title, items, sections, isMobile, closeDrawer }) => {
+  const groupedSections = sections || [{ label: null, items }];
+
   if (isMobile) {
     return (
       <Accordion
@@ -33,21 +35,39 @@ const NavMenu = ({ title, items, isMobile, closeDrawer }) => {
             </Text>
           </Accordion.Control>
           <Accordion.Panel>
-            <Stack gap={4}>
-              {items.map(item => (
-                <Button
-                  key={item.to}
-                  component={Link}
-                  to={item.to}
-                  variant="subtle"
-                  color="dark"
-                  fullWidth
-                  justify="flex-start"
-                  onClick={closeDrawer}
-                  size="sm"
+            <Stack gap="sm">
+              {groupedSections.map(section => (
+                <Stack
+                  key={section.label || 'default'}
+                  gap={4}
                 >
-                  {item.label}
-                </Button>
+                  {section.label && (
+                    <Text
+                      size="xs"
+                      fw={700}
+                      c="dimmed"
+                      tt="uppercase"
+                      px={12}
+                    >
+                      {section.label}
+                    </Text>
+                  )}
+                  {section.items.map(item => (
+                    <Button
+                      key={item.to}
+                      component={Link}
+                      to={item.to}
+                      variant="subtle"
+                      color="dark"
+                      fullWidth
+                      justify="flex-start"
+                      onClick={closeDrawer}
+                      size="sm"
+                    >
+                      {item.label}
+                    </Button>
+                  ))}
+                </Stack>
               ))}
             </Stack>
           </Accordion.Panel>
@@ -74,14 +94,20 @@ const NavMenu = ({ title, items, isMobile, closeDrawer }) => {
         </Button>
       </Menu.Target>
       <Menu.Dropdown>
-        {items.map(item => (
-          <Menu.Item
-            key={item.to}
-            component={Link}
-            to={item.to}
-          >
-            {item.label}
-          </Menu.Item>
+        {groupedSections.map((section, index) => (
+          <div key={section.label || 'default'}>
+            {section.label && <Menu.Label>{section.label}</Menu.Label>}
+            {section.items.map(item => (
+              <Menu.Item
+                key={item.to}
+                component={Link}
+                to={item.to}
+              >
+                {item.label}
+              </Menu.Item>
+            ))}
+            {index < groupedSections.length - 1 && <Menu.Divider />}
+          </div>
         ))}
       </Menu.Dropdown>
     </Menu>
@@ -172,45 +198,60 @@ const Navigation = () => {
         </Button>
       )}
 
+      {['ADMIN', 'WAREHOUSE'].includes(role) && (
+        <Button
+          component={Link}
+          to="/write-off/create"
+          variant="subtle"
+          color={isMobile ? 'dark' : 'gray.0'}
+          fullWidth={isMobile}
+          justify={isMobile ? 'flex-start' : 'center'}
+          onClick={isMobile ? close : undefined}
+        >
+          Write-off
+        </Button>
+      )}
+
       {role === 'ADMIN' && (
-        <>
-          <NavMenu
-            title="Users"
-            items={[
-              { label: 'All Users', to: '/users' },
-              { label: 'Create User', to: '/users/create' },
-            ]}
-            isMobile={isMobile}
-            closeDrawer={close}
-          />
-          <NavMenu
-            title="Brands"
-            items={[
-              { label: 'All Brands', to: '/brands' },
-              { label: 'Create Brand', to: '/brands/create' },
-            ]}
-            isMobile={isMobile}
-            closeDrawer={close}
-          />
-          <NavMenu
-            title="Categories"
-            items={[
-              { label: 'All Categories', to: '/categories' },
-              { label: 'Create Category', to: '/categories/create' },
-            ]}
-            isMobile={isMobile}
-            closeDrawer={close}
-          />
-          <NavMenu
-            title="Stores"
-            items={[
-              { label: 'All Stores', to: '/stores' },
-              { label: 'Create Store', to: '/stores/create' },
-            ]}
-            isMobile={isMobile}
-            closeDrawer={close}
-          />
-        </>
+        <NavMenu
+          title="Management"
+          sections={[
+            {
+              label: 'Users',
+              items: [
+                { label: 'All Users', to: '/users' },
+                { label: 'Create User', to: '/users/create' },
+              ],
+            },
+            {
+              label: 'Brands',
+              items: [
+                { label: 'All Brands', to: '/brands' },
+                { label: 'Create Brand', to: '/brands/create' },
+              ],
+            },
+            {
+              label: 'Categories',
+              items: [
+                { label: 'All Categories', to: '/categories' },
+                { label: 'Create Category', to: '/categories/create' },
+              ],
+            },
+            {
+              label: 'Stores',
+              items: [
+                { label: 'All Stores', to: '/stores' },
+                { label: 'Create Store', to: '/stores/create' },
+              ],
+            },
+            {
+              label: 'Products',
+              items: [{ label: 'Reorder Products', to: '/ordering' }],
+            },
+          ]}
+          isMobile={isMobile}
+          closeDrawer={close}
+        />
       )}
 
       {['ADMIN', 'WAREHOUSE'].includes(role) && (

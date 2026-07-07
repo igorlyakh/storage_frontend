@@ -1,1 +1,1 @@
-export const productTags = ['NCG', 'ADMINISTRATIVE'];
+export const productTags = ['NCG', 'ADMINISTRATIVE', 'RFID'];

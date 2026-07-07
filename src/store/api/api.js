@@ -171,6 +171,18 @@ export const api = createApi({
       query: data => ({ url: '/stores', method: 'POST', body: data }),
       invalidatesTags: ['Stores'],
     }),
+    updateStore: builder.mutation({
+      query: ({ id, ...data }) => ({
+        url: `/stores/${id}`,
+        method: 'PATCH',
+        body: data,
+      }),
+      invalidatesTags: ['Stores', 'Products'],
+    }),
+    deleteStore: builder.mutation({
+      query: id => ({ url: `/stores/${id}`, method: 'DELETE' }),
+      invalidatesTags: ['Stores'],
+    }),
     getWarehouseRequests: builder.query({
       query: () => '/warehouse/requests',
       providesTags: ['WarehouseRequests'],
@@ -215,6 +227,14 @@ export const api = createApi({
       query: name => ({ url: '/brands', method: 'DELETE', body: { name } }),
       invalidatesTags: ['Brands'],
     }),
+    updateBrand: builder.mutation({
+      query: ({ id, name }) => ({
+        url: `/brands/${id}`,
+        method: 'PATCH',
+        body: { name },
+      }),
+      invalidatesTags: ['Brands'],
+    }),
     getStatisticsData: builder.query({
       query: ({ startDate, endDate, productId, storeId }) => {
         const params = {};
@@ -253,8 +273,39 @@ export const api = createApi({
       query: data => ({ url: '/category', method: 'POST', body: data }),
       invalidatesTags: ['Categories'],
     }),
+    updateCategory: builder.mutation({
+      query: ({ id, name }) => ({
+        url: `/category/${id}`,
+        method: 'PATCH',
+        body: { name },
+      }),
+      invalidatesTags: ['Categories'],
+    }),
+    reorderCategories: builder.mutation({
+      query: ids => ({ url: '/category/reorder', method: 'PATCH', body: { ids } }),
+      invalidatesTags: ['Categories'],
+    }),
+    reorderProducts: builder.mutation({
+      query: ids => ({ url: '/product/reorder', method: 'PATCH', body: { ids } }),
+      invalidatesTags: ['Products'],
+    }),
     getMe: builder.query({
       query: () => '/auth/me',
+    }),
+    updateUser: builder.mutation({
+      query: ({ id, ...data }) => ({
+        url: `/users/${id}`,
+        method: 'PATCH',
+        body: data,
+      }),
+      invalidatesTags: ['Users'],
+    }),
+    getLowStockProducts: builder.query({
+      query: (threshold = 20) => ({
+        url: '/product/low-stock',
+        params: { threshold },
+      }),
+      providesTags: ['Products'],
     }),
   }),
 });
@@ -274,6 +325,8 @@ export const {
   useGetAllStoresQuery,
   useCreateUserMutation,
   useCreateStoreMutation,
+  useUpdateStoreMutation,
+  useDeleteStoreMutation,
   useCreateOrderMutation,
   useProcessOrderMutation,
   useSendOrderMutation,
@@ -288,12 +341,19 @@ export const {
   useGetAllBrandsQuery,
   useDeleteBrandMutation,
   useCreateBrandMutation,
+  useUpdateBrandMutation,
   useGetStatisticsDataQuery,
   useExportExcelMutation,
   useGetAllCategoriesQuery,
   useCreateCategoryMutation,
+  useUpdateCategoryMutation,
   useUpdateWarehouseRequestItemsMutation,
   useDecreaseProductMutation,
   useIncreaseProductMutation,
   useGetMeQuery,
+  useUpdateUserMutation,
+  useGetLowStockProductsQuery,
+  useLazyGetLowStockProductsQuery,
+  useReorderCategoriesMutation,
+  useReorderProductsMutation,
 } = api;

@@ -94,7 +94,7 @@ const DynamicForm = ({
                   {...commonProps}
                   error={errorMsg}
                   data={field.options || []}
-                  disabled={field.loading}
+                  disabled={field.loading || field.disabled}
                   searchable={field.searchable}
                   rightSection={field.loading ? <Loader size="xs" /> : null}
                   value={controllerField.value ? String(controllerField.value) : null}
@@ -140,13 +140,15 @@ const DynamicForm = ({
       mx="auto"
       w={paperWidth}
     >
-      <Title
-        order={3}
-        mb={30}
-        ta="center"
-      >
-        {title}
-      </Title>
+      {title && (
+        <Title
+          order={3}
+          mb={30}
+          ta="center"
+        >
+          {title}
+        </Title>
+      )}
 
       <form onSubmit={handleSubmit(handleFormSubmit)}>
         <Stack gap={25}>

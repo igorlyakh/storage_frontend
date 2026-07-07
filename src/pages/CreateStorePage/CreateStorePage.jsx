@@ -24,12 +24,14 @@ const CreateStorePage = () => {
       },
     },
     {
-      name: 'brandIds',
-      type: 'multiselect',
-      label: 'Assigned Brands',
-      placeholder: isBrandsLoading ? 'Loading brands...' : 'Select brands',
+      name: 'brandId',
+      type: 'select',
+      label: 'Brand',
+      placeholder: isBrandsLoading ? 'Loading brands...' : 'Select brand',
       options: brandOptions,
       loading: isBrandsLoading,
+      searchable: true,
+      rules: { required: 'Brand is required' },
     },
   ];
 
@@ -53,7 +55,7 @@ const CreateStorePage = () => {
         submitLabel="Create Store"
         paperWidth={{ base: '100%', sm: 450 }}
         fields={fields}
-        defaultValues={{ name: '', brandIds: [] }}
+        defaultValues={{ name: '', brandId: '' }}
         onSubmit={onSubmit}
         isLoading={isSubmitting}
       />
