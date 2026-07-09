@@ -1,17 +1,20 @@
 import { Button, Group, Modal, Text } from '@mantine/core';
 import toast from 'react-hot-toast';
+import { Trans, useTranslation } from 'react-i18next';
 import { useDeleteBrandMutation } from '../../../store/api/api';
+import { getApiErrorMessage } from '../../../utils/apiError';
 
 const DeleteBrandModal = ({ opened, onClose, brand }) => {
+  const { t } = useTranslation('brands');
   const [deleteBrand, { isLoading }] = useDeleteBrandMutation();
 
   const handleDelete = async () => {
     try {
       await deleteBrand(brand.name).unwrap();
-      toast.success(`Brand "${brand.name}" deleted`);
+      toast.success(t('deleteModal.deleted', { name: brand.name }));
       onClose();
     } catch (error) {
-      toast.error(error.data?.message || 'Failed to delete brand');
+      toast.error(getApiErrorMessage(t, error, 'deleteModal.deleteFailed'));
     }
   };
 
@@ -21,7 +24,7 @@ const DeleteBrandModal = ({ opened, onClose, brand }) => {
     <Modal
       opened={opened}
       onClose={onClose}
-      title="Confirm Deletion"
+      title={t('common:actions.confirmDeletion')}
       centered
       padding={{ base: 'md', sm: 'lg' }}
       size={{ base: '95%', sm: 400 }}
@@ -30,8 +33,12 @@ const DeleteBrandModal = ({ opened, onClose, brand }) => {
         size="sm"
         mb="lg"
       >
-        Are you sure you want to delete brand <b>{brand.name}</b>? This action cannot be
-        undone.
+        <Trans
+          t={t}
+          i18nKey="deleteModal.confirmText"
+          values={{ name: brand.name }}
+          components={{ bold: <b /> }}
+        />
       </Text>
       <Group
         justify="flex-end"
@@ -44,7 +51,7 @@ const DeleteBrandModal = ({ opened, onClose, brand }) => {
           disabled={isLoading}
           w={{ base: '100%', sm: 'auto' }}
         >
-          Cancel
+          {t('common:actions.cancel')}
         </Button>
         <Button
           color="red"
@@ -52,7 +59,7 @@ const DeleteBrandModal = ({ opened, onClose, brand }) => {
           loading={isLoading}
           w={{ base: '100%', sm: 'auto' }}
         >
-          Delete Brand
+          {t('deleteModal.delete')}
         </Button>
       </Group>
     </Modal>

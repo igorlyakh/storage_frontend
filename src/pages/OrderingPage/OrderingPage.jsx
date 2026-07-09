@@ -9,6 +9,7 @@ import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-ki
 import { Center, Container, Grid, Loader, Paper, Select, Stack, Text, Title } from '@mantine/core';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import SortableRow from '../../components/ui/SortableRow';
 import {
@@ -20,6 +21,7 @@ import {
 import CategoryProductsOrderList from './CategoryProductsOrderList';
 
 const OrderingPage = () => {
+  const { t } = useTranslation('products');
   const dispatch = useDispatch();
   const { data: categories = [], isLoading: isCategoriesLoading } =
     useGetAllCategoriesQuery();
@@ -49,7 +51,7 @@ const OrderingPage = () => {
 
     reorderCategories(newOrder.map(c => c.id))
       .unwrap()
-      .catch(() => toast.error('Failed to save category order'));
+      .catch(() => toast.error(t('reorder.categoryOrderFailed')));
   };
 
   const categoryOptions = categories.map(c => ({ value: c.id, label: c.name }));
@@ -69,14 +71,14 @@ const OrderingPage = () => {
         order={2}
         mb="xs"
       >
-        Reorder Products &amp; Categories
+        {t('reorder.title')}
       </Title>
       <Text
         c="dimmed"
         size="sm"
         mb="lg"
       >
-        Drag items to change the order shown to everyone across the app.
+        {t('reorder.description')}
       </Text>
 
       <Grid>
@@ -90,7 +92,7 @@ const OrderingPage = () => {
               fw={600}
               mb="sm"
             >
-              Categories
+              {t('reorder.categories')}
             </Text>
             {isCategoriesLoading ? (
               <Center py="lg">
@@ -131,13 +133,13 @@ const OrderingPage = () => {
               fw={600}
               mb="sm"
             >
-              Products in category
+              {t('reorder.productsInCategory')}
             </Text>
             <Select
               data={categoryOptions}
               value={effectiveCategoryId}
               onChange={setSelectedCategoryId}
-              placeholder="Select category"
+              placeholder={t('reorder.selectCategory')}
               mb="md"
               searchable
               allowDeselect={false}

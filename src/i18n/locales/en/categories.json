@@ -1,0 +1,28 @@
+{
+  "management": "Categories Management",
+  "columns": {
+    "name": "Category Name",
+    "createdAt": "Created At",
+    "actions": "Actions"
+  },
+  "tooltips": {
+    "edit": "Edit Category"
+  },
+  "create": {
+    "title": "Create New Category",
+    "submit": "Create Category",
+    "nameLabel": "Category Name",
+    "namePlaceholder": "Enter category name",
+    "nameRequired": "Category name is required",
+    "minLength": "Minimum 2 characters",
+    "created": "Category \"{{name}}\" created!",
+    "createFailed": "Failed to create category"
+  },
+  "edit": {
+    "title": "Edit category: {{name}}",
+    "nameLabel": "Category Name",
+    "nameRequired": "Category name is required",
+    "updated": "Category updated!",
+    "updateFailed": "Failed to update category"
+  }
+}

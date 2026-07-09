@@ -1,7 +1,10 @@
 import { Button, Center, Container, Group, Stack, Text, Title } from '@mantine/core';
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
 const NotFoundPage = () => {
+  const { t } = useTranslation('notFound');
+
   return (
     <Center
       minHeight="100vh"
@@ -36,7 +39,7 @@ const NotFoundPage = () => {
             fz={{ base: 24, sm: 34 }}
             style={{ zIndex: 1 }}
           >
-            Oops! Page not found
+            {t('title')}
           </Title>
 
           <Text
@@ -46,8 +49,7 @@ const NotFoundPage = () => {
             maw={540}
             style={{ zIndex: 1 }}
           >
-            The page you are looking for might have been removed, had its name changed, or
-            is temporarily unavailable.
+            {t('description')}
           </Text>
 
           <Group
@@ -65,7 +67,7 @@ const NotFoundPage = () => {
               color="blue"
               w={{ base: '100%', sm: 'auto' }}
             >
-              Back to Home
+              {t('backHome')}
             </Button>
           </Group>
         </Stack>

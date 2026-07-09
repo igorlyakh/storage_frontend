@@ -14,6 +14,7 @@ import {
 } from '@mantine/core';
 import { Controller, useForm, useWatch } from 'react-hook-form';
 import { IMaskInput } from 'react-imask';
+import { useTranslation } from 'react-i18next';
 
 const DynamicForm = ({
   title,
@@ -21,10 +22,11 @@ const DynamicForm = ({
   defaultValues = {},
   onSubmit,
   isLoading,
-  submitLabel = 'Submit',
+  submitLabel,
   paperWidth = { base: '100%', sm: 400 },
   gridCols = 1,
 }) => {
+  const { t } = useTranslation('common');
   const {
     control,
     handleSubmit,
@@ -172,7 +174,7 @@ const DynamicForm = ({
             fz={{ base: 'md', sm: 'sm' }}
             mt={20}
           >
-            {submitLabel}
+            {submitLabel || t('actions.submit')}
           </Button>
         </Stack>
       </form>

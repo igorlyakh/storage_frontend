@@ -24,6 +24,7 @@ import {
 import { ChevronDown, ChevronRight, User } from 'lucide-react';
 import { useCallback, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
@@ -34,9 +35,11 @@ import {
   useGetAllProductsQuery,
   useGetAllStoresQuery,
 } from '../../store/api/api';
+import { getApiErrorMessage } from '../../utils/apiError';
 import { ConfirmOrderModal } from '../ui/ConfirmationModal/ConfirmationModal';
 
 const CreateOrderTable = ({ writeOff = false }) => {
+  const { t } = useTranslation('orders');
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -98,7 +101,7 @@ const CreateOrderTable = ({ writeOff = false }) => {
     () => [
       {
         accessorKey: 'name',
-        header: 'Product Name',
+        header: t('create.productName'),
         cell: info => (
           <Text
             fw={700}
@@ -111,11 +114,11 @@ const CreateOrderTable = ({ writeOff = false }) => {
       {
         id: 'category',
         accessorFn: row => row.category?.name,
-        header: 'Category',
+        header: t('create.category'),
       },
       {
         accessorKey: 'orderQuantity',
-        header: 'Quantity to Order',
+        header: t('create.quantityToOrder'),
         cell: info => {
           const row = info.row.original;
           return (
@@ -134,7 +137,7 @@ const CreateOrderTable = ({ writeOff = false }) => {
       },
       {
         accessorKey: 'limitPerOrder',
-        header: 'Limit',
+        header: t('create.limit'),
         cell: info => {
           if (writeOff) {
             return (
@@ -142,7 +145,7 @@ const CreateOrderTable = ({ writeOff = false }) => {
                 c="dimmed"
                 size="sm"
               >
-                No limit
+                {t('create.noLimit')}
               </Text>
             );
           }
@@ -153,20 +156,20 @@ const CreateOrderTable = ({ writeOff = false }) => {
               color="gray"
               variant="light"
             >
-              Max {limit}
+              {t('create.maxLimit', { limit })}
             </Badge>
           ) : (
             <Text
               c="dimmed"
               size="sm"
             >
-              No limit
+              {t('create.noLimit')}
             </Text>
           );
         },
       },
     ],
-    [handleQuantityChange, writeOff],
+    [handleQuantityChange, writeOff, t],
   );
 
   const table = useReactTable({
@@ -202,7 +205,7 @@ const CreateOrderTable = ({ writeOff = false }) => {
       await createOrder(payload).unwrap();
 
       modals.open({
-        title: 'Order Status',
+        title: t('create.orderStatusTitle'),
         centered: true,
         withCloseButton: false,
         closeOnClickOutside: false,
@@ -212,9 +215,7 @@ const CreateOrderTable = ({ writeOff = false }) => {
               size="sm"
               mb="md"
             >
-              {writeOff
-                ? 'Write-off order has been created successfully.'
-                : 'Your order has been sent successfully! The warehouse has been notified.'}
+              {writeOff ? t('create.writeOffSuccess') : t('create.orderSuccess')}
             </Text>
             <Button
               fullWidth
@@ -224,7 +225,7 @@ const CreateOrderTable = ({ writeOff = false }) => {
               }}
               color="green"
             >
-              Understood
+              {t('create.understood')}
             </Button>
           </>
         ),
@@ -242,34 +243,34 @@ const CreateOrderTable = ({ writeOff = false }) => {
         }),
       );
     } catch (error) {
-      toast.error(error.data?.message || 'Failed to create order');
+      toast.error(getApiErrorMessage(t, error, 'create.createFailed'));
     }
   };
 
   const handleSendOrder = () => {
     if (!name.trim()) {
-      return toast.error('Please enter your name');
+      return toast.error(t('create.nameRequired'));
     }
 
     if (writeOff && !storeId) {
-      return toast.error('Please select a store');
+      return toast.error(t('create.storeRequired'));
     }
 
     if (writeOff && !customRequest.trim()) {
-      return toast.error('Please specify a reason for the write-off');
+      return toast.error(t('create.writeOffReasonRequired'));
     }
 
     const itemsToOrder = rowData.filter(p => p.orderQuantity > 0);
 
     if (itemsToOrder.length === 0 && !customRequest.trim()) {
-      return toast.error('Please specify quantity or write a custom request');
+      return toast.error(t('create.specifyQuantity'));
     }
 
     if (!writeOff) {
       for (const item of itemsToOrder) {
         if (item.limitPerOrder !== null && item.orderQuantity > item.limitPerOrder) {
           return toast.error(
-            `Limit exceeded for "${item.name}". Maximum allowed is ${item.limitPerOrder}.`,
+            t('create.limitExceeded', { name: item.name, limit: item.limitPerOrder }),
           );
         }
       }
@@ -299,8 +300,8 @@ const CreateOrderTable = ({ writeOff = false }) => {
         grow
       >
         <TextInput
-          label="Your Name / Responsible Person"
-          placeholder="Enter your name"
+          label={t('create.yourName')}
+          placeholder={t('create.enterYourName')}
           value={name}
           onChange={e => setName(e.currentTarget.value)}
           required
@@ -309,8 +310,8 @@ const CreateOrderTable = ({ writeOff = false }) => {
 
         {writeOff && (
           <Select
-            label="Store"
-            placeholder={isStoresLoading ? 'Loading...' : 'Select store'}
+            label={t('create.store')}
+            placeholder={isStoresLoading ? t('create.loadingOptions') : t('create.selectStore')}
             data={storeOptions}
             value={storeId}
             onChange={setStoreId}
@@ -445,7 +446,7 @@ const CreateOrderTable = ({ writeOff = false }) => {
                         size="md"
                         c="blue.9"
                       >
-                        {writeOff ? 'Reason' : 'Other'}
+                        {writeOff ? t('create.reason') : t('create.other')}
                       </Text>
                     </Group>
                   </Table.Td>
@@ -455,8 +456,8 @@ const CreateOrderTable = ({ writeOff = false }) => {
                     <Textarea
                       placeholder={
                         writeOff
-                          ? 'Describe the reason for this write-off (required)...'
-                          : "Didn't find what you need? Describe it here..."
+                          ? t('create.writeOffPlaceholder')
+                          : t('create.customRequestPlaceholder')
                       }
                       value={customRequest}
                       onChange={e => setCustomRequest(e.currentTarget.value)}
@@ -487,7 +488,7 @@ const CreateOrderTable = ({ writeOff = false }) => {
           onClick={handleSendOrder}
           w={{ base: '100%', sm: 'auto' }}
         >
-          {writeOff ? 'Create Write-off' : 'Send Order'}
+          {writeOff ? t('create.createWriteOff') : t('create.sendOrder')}
         </Button>
       </Group>
     </div>

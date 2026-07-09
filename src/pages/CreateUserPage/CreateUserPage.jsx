@@ -1,40 +1,43 @@
 import { Container } from '@mantine/core';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import DynamicForm from '../../components/ui/DynamicForm';
 import { productTags } from '../../constants/productTags';
 import { useCreateUserMutation, useGetAllStoresQuery } from '../../store/api/api';
+import { getApiErrorMessage } from '../../utils/apiError';
 
 const CreateUserPage = () => {
+  const { t } = useTranslation('users');
   const { data: stores = [], isLoading: isStoresLoading } = useGetAllStoresQuery();
   const [createUser, { isLoading: isSubmitting }] = useCreateUserMutation();
 
   const storeOptions = stores.map(store => ({
     value: String(store.id),
-    label: store.name || `Store #${store.id}`,
+    label: store.name || t('storeFallback', { id: store.id }),
   }));
 
   const fields = [
     {
       name: 'username',
       type: 'text',
-      label: 'Username',
-      placeholder: 'Enter username',
-      rules: { required: 'Username is required' },
+      label: t('create.usernameLabel'),
+      placeholder: t('create.usernamePlaceholder'),
+      rules: { required: t('create.usernameRequired') },
     },
     {
       name: 'password',
       type: 'password',
-      label: 'Password',
+      label: t('create.passwordLabel'),
       placeholder: '••••••••',
       rules: {
-        required: 'Password is required',
-        minLength: { value: 6, message: 'At least 6 chars' },
+        required: t('create.passwordRequired'),
+        minLength: { value: 6, message: t('create.passwordMinLength') },
       },
     },
     {
       name: 'role',
       type: 'select',
-      label: 'Access Role',
+      label: t('create.roleLabel'),
       options: [
         { value: 'ADMIN', label: 'ADMIN' },
         { value: 'WAREHOUSE', label: 'WAREHOUSE' },
@@ -44,20 +47,20 @@ const CreateUserPage = () => {
     {
       name: 'adminScopes',
       type: 'multiselect',
-      label: 'Admin Scopes',
-      placeholder: '-- Choose scopes --',
-      rules: { required: 'Scopes are required for ADMIN role' },
+      label: t('create.adminScopesLabel'),
+      placeholder: t('create.chooseScopesPlaceholder'),
+      rules: { required: t('create.scopesRequired') },
       options: productTags.map(tag => ({ value: tag, label: tag })),
       condition: values => values.role === 'ADMIN',
     },
     {
       name: 'storeId',
       type: 'select',
-      label: 'Assigned Store',
-      placeholder: '-- Choose --',
+      label: t('create.assignedStoreLabel'),
+      placeholder: t('create.choosePlaceholder'),
       options: storeOptions,
       loading: isStoresLoading,
-      rules: { required: 'Store is required for STORE role' },
+      rules: { required: t('create.storeRequired') },
       condition: values => values.role === 'STORE',
     },
   ];
@@ -71,10 +74,10 @@ const CreateUserPage = () => {
 
     try {
       await createUser(payload).unwrap();
-      toast.success('User created!');
+      toast.success(t('create.created'));
       reset();
     } catch (error) {
-      toast.error(error.data?.message || error.message || 'Failed to create user');
+      toast.error(getApiErrorMessage(t, error, 'create.createFailed'));
     }
   };
 
@@ -84,8 +87,8 @@ const CreateUserPage = () => {
       py="xl"
     >
       <DynamicForm
-        title="Create New User"
-        submitLabel="Create User"
+        title={t('create.title')}
+        submitLabel={t('create.submit')}
         fields={fields}
         gridCols={2}
         paperWidth={{ base: '100%', sm: 500, md: 600 }}

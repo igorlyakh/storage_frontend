@@ -1,0 +1,34 @@
+{
+  "sendRequestBar": {
+    "selectedProducts": "Выбрано товаров: {{count}}",
+    "sendRequest": "Отправить заявку",
+    "quantityRequired": "Укажите количество хотя бы для одного товара",
+    "requestSent": "Заявка успешно отправлена!",
+    "sendFailed": "Не удалось отправить заявку"
+  },
+  "stockModal": {
+    "increaseTitle": "Увеличить остаток: {{name}}",
+    "decreaseTitle": "Уменьшить остаток: {{name}}",
+    "quantity": "Количество",
+    "cancel": "Отмена",
+    "confirm": "Подтвердить",
+    "increaseSuccess": "Остаток успешно увеличен!",
+    "decreaseSuccess": "Остаток успешно уменьшен!",
+    "increaseFailed": "Не удалось увеличить остаток",
+    "decreaseFailed": "Не удалось уменьшить остаток"
+  },
+  "lowStock": {
+    "title": "Предупреждение о низком остатке",
+    "description": "У следующих товаров в вашем разделе осталось <bold>20 или меньше</bold> единиц на складе:",
+    "left": "осталось: {{count}}",
+    "close": "Закрыть",
+    "pleaseWait": "Подождите ({{seconds}})",
+    "none": "Сейчас нет товаров с низким остатком."
+  },
+  "notifications": {
+    "newOrder": "Новый заказ от {{store}}",
+    "aStore": "магазина",
+    "newOrderTitle": "НОВЫЙ ЗАКАЗ: {{count}}",
+    "statusChanged": "Статус заказа «{{name}}» изменён на {{status}}"
+  }
+}

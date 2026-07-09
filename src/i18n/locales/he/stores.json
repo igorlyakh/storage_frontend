@@ -1,0 +1,44 @@
+{
+  "management": "ניהול חנויות",
+  "columns": {
+    "name": "שם החנות",
+    "brand": "מותג",
+    "noBrand": "ללא מותג",
+    "createdAt": "נוצרה בתאריך",
+    "actions": "פעולות"
+  },
+  "tooltips": {
+    "edit": "ערוך חנות",
+    "delete": "מחק חנות"
+  },
+  "create": {
+    "title": "צור חנות חדשה",
+    "submit": "צור חנות",
+    "nameLabel": "שם החנות",
+    "namePlaceholder": "לדוגמה, Store-1",
+    "nameRequired": "שם החנות נדרש",
+    "nameMinLength": "השם חייב להכיל לפחות 3 תווים",
+    "brandLabel": "מותג",
+    "loadingBrands": "טוען מותגים...",
+    "selectBrand": "בחר מותג",
+    "brandRequired": "מותג נדרש",
+    "created": "!החנות נוצרה בהצלחה",
+    "createFailed": "יצירת החנות נכשלה"
+  },
+  "edit": {
+    "title": "{{name}} :עריכת חנות",
+    "nameLabel": "שם החנות",
+    "nameRequired": "שם החנות נדרש",
+    "brandLabel": "מותג",
+    "brandRequired": "מותג נדרש",
+    "updated": "!החנות עודכנה",
+    "updateFailed": "עדכון החנות נכשל"
+  },
+  "deleteModal": {
+    "confirmText": "?<bold>{{name}}</bold> האם אתה בטוח שברצונך למחוק את החנות. פעולה זו <bold2>תמחק לצמיתות את כל היסטוריית ההזמנות</bold2> של חנות זו. פעולה זו אינה הפיכה",
+    "delete": "מחק חנות",
+    "deleted": "החנות \"{{name}}\" נמחקה",
+    "deleteFailed": "מחיקת החנות נכשלה"
+  },
+  "storeFallback": "{{id}} 'חנות מס"
+}

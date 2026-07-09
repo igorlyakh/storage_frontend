@@ -1,0 +1,45 @@
+{
+  "globalTitle": "Общая статистика",
+  "requestsTitle": "Статистика заявок",
+  "exportExcel": "Экспорт в Excel",
+  "selectDateRangePrompt": "Выберите период, чтобы увидеть статистику.",
+  "filters": {
+    "dateRangeLabel": "Период (обязательно)",
+    "dateRangePlaceholder": "Выберите даты",
+    "dateRangeRequired": "Пожалуйста, выберите период",
+    "quickSelect": "Быстрый выбор:",
+    "today": "Сегодня",
+    "thisMonth": "Этот месяц",
+    "thisYear": "Этот год",
+    "storeFilter": "Фильтр по магазину",
+    "allStores": "Все магазины",
+    "productFilter": "Фильтр по товару",
+    "allProducts": "Все товары",
+    "scopeFilter": "Фильтр по разделу",
+    "allScopes": "Все разделы"
+  },
+  "metrics": {
+    "orders": "Заказы",
+    "requested": "Запрошено",
+    "shipped": "Отправлено",
+    "fulfillmentRate": "Процент выполнения",
+    "requests": "Заявки",
+    "quantity": "Количество",
+    "completionRate": "Процент завершения"
+  },
+  "chart": {
+    "totalOrdersCount": "Всего заказов",
+    "itemsRequested": "Запрошено товаров",
+    "itemsShipped": "Отправлено товаров",
+    "quantityRequested": "Запрошенное количество",
+    "totalRequestsCount": "Всего заявок",
+    "totalByStore": "Всего по магазинам",
+    "totalByScope": "Всего по разделам",
+    "dynamicsOverTime": "Динамика по времени",
+    "noData": "Нет данных",
+    "ordersLabel": "Заказы",
+    "requestedQtyLabel": "Запрошено, шт",
+    "shippedQtyLabel": "Отправлено, шт"
+  },
+  "exportFallbackAll": "Все"
+}

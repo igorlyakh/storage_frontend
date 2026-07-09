@@ -1,0 +1,28 @@
+{
+  "management": "ניהול קטגוריות",
+  "columns": {
+    "name": "שם הקטגוריה",
+    "createdAt": "נוצרה בתאריך",
+    "actions": "פעולות"
+  },
+  "tooltips": {
+    "edit": "ערוך קטגוריה"
+  },
+  "create": {
+    "title": "צור קטגוריה חדשה",
+    "submit": "צור קטגוריה",
+    "nameLabel": "שם הקטגוריה",
+    "namePlaceholder": "הזן שם קטגוריה",
+    "nameRequired": "שם הקטגוריה נדרש",
+    "minLength": "לפחות 2 תווים",
+    "created": "!הקטגוריה \"{{name}}\" נוצרה",
+    "createFailed": "יצירת הקטגוריה נכשלה"
+  },
+  "edit": {
+    "title": "{{name}} :עריכת קטגוריה",
+    "nameLabel": "שם הקטגוריה",
+    "nameRequired": "שם הקטגוריה נדרש",
+    "updated": "!הקטגוריה עודכנה",
+    "updateFailed": "עדכון הקטגוריה נכשל"
+  }
+}

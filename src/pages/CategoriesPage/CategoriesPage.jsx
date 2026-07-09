@@ -11,11 +11,13 @@ import { useDisclosure } from '@mantine/hooks';
 import dayjs from 'dayjs';
 import { Pencil } from 'lucide-react';
 import { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import DataTable from '../../components/ui/DataTable';
 import EditCategoryModal from '../../components/ui/EditCategoryModal';
 import { useGetAllCategoriesQuery } from '../../store/api/api';
 
 const CategoriesPage = () => {
+  const { t } = useTranslation('categories');
   const { data: categories = [], isLoading } = useGetAllCategoriesQuery();
   const [openedEdit, { open: openEdit, close: closeEdit }] = useDisclosure(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -24,21 +26,21 @@ const CategoriesPage = () => {
     () => [
       {
         accessorKey: 'name',
-        header: 'Category Name',
+        header: t('columns.name'),
         cell: info => <Text fw={500}>{info.getValue()}</Text>,
       },
       {
         accessorKey: 'createdAt',
-        header: 'Created At',
+        header: t('columns.createdAt'),
         cell: info => (
           <Text size="sm">{dayjs(info.getValue()).format('DD.MM.YY HH:mm')}</Text>
         ),
       },
       {
         id: 'actions',
-        header: 'Actions',
+        header: t('columns.actions'),
         cell: info => (
-          <Tooltip label="Edit Category">
+          <Tooltip label={t('tooltips.edit')}>
             <ActionIcon
               color="blue"
               variant="light"
@@ -53,7 +55,7 @@ const CategoriesPage = () => {
         ),
       },
     ],
-    [openEdit],
+    [openEdit, t],
   );
 
   return (
@@ -73,7 +75,7 @@ const CategoriesPage = () => {
           order={2}
           mb={10}
         >
-          Categories Management
+          {t('management')}
         </Title>
 
         <DataTable

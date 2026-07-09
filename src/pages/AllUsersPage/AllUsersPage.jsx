@@ -11,6 +11,7 @@ import {
 import { useDisclosure } from '@mantine/hooks';
 import { Key, Pencil, Trash } from 'lucide-react';
 import { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import DataTable from '../../components/ui/DataTable';
 import DeleteUserModal from '../../components/ui/DeleteUserModal';
 import EditUserModal from '../../components/ui/EditUserModal';
@@ -24,6 +25,7 @@ const roleSortOrder = {
 };
 
 const UsersPage = () => {
+  const { t } = useTranslation('users');
   const { data: users = [], isLoading } = useGetAllUsersQuery();
 
   const [openedEdit, { open: openEdit, close: closeEdit }] = useDisclosure(false);
@@ -35,12 +37,12 @@ const UsersPage = () => {
     () => [
       {
         accessorKey: 'username',
-        header: 'Username',
+        header: t('columns.username'),
         cell: info => <Text fw={500}>{info.getValue()}</Text>,
       },
       {
         accessorKey: 'role',
-        header: 'Role',
+        header: t('columns.role'),
         sortingFn: (rowA, rowB, columnId) => {
           const valA = rowA.getValue(columnId);
           const valB = rowB.getValue(columnId);
@@ -66,17 +68,17 @@ const UsersPage = () => {
       },
       {
         accessorKey: 'store.name',
-        header: 'Store',
-        cell: info => <Text>{info.getValue() || 'LOGISTICS'}</Text>,
+        header: t('columns.store'),
+        cell: info => <Text>{info.getValue() || t('columns.logistics')}</Text>,
       },
       {
         id: 'actions',
-        header: 'Actions',
+        header: t('columns.actions'),
         cell: info => {
           const user = info.row.original;
           return (
             <Group gap="xs">
-              <Tooltip label="Edit User">
+              <Tooltip label={t('tooltips.editUser')}>
                 <ActionIcon
                   variant="light"
                   color="grape"
@@ -89,7 +91,7 @@ const UsersPage = () => {
                 </ActionIcon>
               </Tooltip>
 
-              <Tooltip label="Reset Password">
+              <Tooltip label={t('tooltips.resetPassword')}>
                 <ActionIcon
                   variant="light"
                   color="blue"
@@ -102,7 +104,7 @@ const UsersPage = () => {
                 </ActionIcon>
               </Tooltip>
 
-              <Tooltip label="Delete User">
+              <Tooltip label={t('tooltips.deleteUser')}>
                 <ActionIcon
                   variant="light"
                   color="red"
@@ -119,7 +121,7 @@ const UsersPage = () => {
         },
       },
     ],
-    [openEdit, openReset, openDelete],
+    [openEdit, openReset, openDelete, t],
   );
 
   return (

@@ -2,6 +2,7 @@ import { ActionIcon, Group, NumberInput, Select, Stack, Switch, Text, Tooltip } 
 import dayjs from 'dayjs';
 import { Minus, Plus, Trash } from 'lucide-react';
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import {
   EditableBrandsCell,
@@ -11,11 +12,13 @@ import {
 } from './EditableCells';
 
 export const useProductColumns = ({ isAdmin, isWarehouse }) => {
+  const { t } = useTranslation('products');
+
   return useMemo(() => {
     const cols = [
       {
         accessorKey: 'name',
-        header: 'Product Details',
+        header: t('columns.productDetails'),
         size: 300,
         cell: ({ row, table, getValue }) => (
           <Stack
@@ -43,7 +46,7 @@ export const useProductColumns = ({ isAdmin, isWarehouse }) => {
       },
       {
         accessorKey: 'brands',
-        header: 'Brands',
+        header: t('columns.brands'),
         size: 140,
         cell: ({ row, table, getValue }) => (
           <EditableBrandsCell
@@ -57,12 +60,12 @@ export const useProductColumns = ({ isAdmin, isWarehouse }) => {
       },
       {
         id: 'category',
-        accessorFn: row => row.category?.name || 'WITHOUT CATEGORY',
-        header: 'Category',
+        accessorFn: row => row.category?.name || t('columns.withoutCategory'),
+        header: t('columns.category'),
       },
       {
         accessorKey: 'packageType',
-        header: 'Pkg Type',
+        header: t('columns.pkgType'),
         size: 100,
         cell: ({ row, table, getValue }) => (
           <EditableSelectCell
@@ -81,7 +84,7 @@ export const useProductColumns = ({ isAdmin, isWarehouse }) => {
       },
       {
         accessorKey: 'itemsPerPackage',
-        header: 'Qty/Pkg',
+        header: t('columns.qtyPerPkg'),
         size: 70,
         cell: ({ row, table, getValue }) => (
           <EditableNumberCell
@@ -95,7 +98,7 @@ export const useProductColumns = ({ isAdmin, isWarehouse }) => {
       },
       {
         accessorKey: 'stock.packageCount',
-        header: 'Packages',
+        header: t('columns.packages'),
         size: 80,
         cell: ({ getValue }) => (
           <Text
@@ -108,7 +111,7 @@ export const useProductColumns = ({ isAdmin, isWarehouse }) => {
       },
       {
         accessorKey: 'stock.quantity',
-        header: 'Stock (Qty)',
+        header: t('columns.stockQty'),
         size: isAdmin ? 130 : 90,
         cell: ({ row, table, getValue }) => {
           const val = getValue() ?? 0;
@@ -162,7 +165,7 @@ export const useProductColumns = ({ isAdmin, isWarehouse }) => {
     if (isWarehouse) {
       cols.push({
         id: 'orderQuantity',
-        header: 'To Order',
+        header: t('columns.toOrder'),
         size: 160,
         cell: ({ row, table }) => {
           const product = row.original;
@@ -177,12 +180,12 @@ export const useProductColumns = ({ isAdmin, isWarehouse }) => {
             unit: defaultUnit,
           };
 
-          const unitOptions = [{ value: 'PIECE', label: 'pcs' }];
+          const unitOptions = [{ value: 'PIECE', label: t('columns.pcsUnit') }];
 
           if (product.packageType && product.packageType !== 'PIECE') {
             unitOptions.push({
               value: product.packageType,
-              label: product.packageType.toLowerCase() + 's',
+              label: t(`create.packageTypes.${product.packageType}`, product.packageType),
             });
           }
 
@@ -232,7 +235,7 @@ export const useProductColumns = ({ isAdmin, isWarehouse }) => {
     cols.push(
       {
         accessorKey: 'isEnabled',
-        header: 'Available',
+        header: t('columns.available'),
         size: 90,
         cell: ({ row, table, getValue }) => (
           <Switch
@@ -251,7 +254,7 @@ export const useProductColumns = ({ isAdmin, isWarehouse }) => {
       },
       {
         accessorKey: 'updatedAt',
-        header: 'Updated',
+        header: t('columns.updated'),
         size: 120,
         cell: ({ getValue }) => (
           <Text size="sm">{dayjs(getValue()).format('DD.MM.YY HH:mm')}</Text>
@@ -259,7 +262,7 @@ export const useProductColumns = ({ isAdmin, isWarehouse }) => {
       },
       {
         accessorKey: 'limitPerOrder',
-        header: 'Limit',
+        header: t('columns.limit'),
         size: 80,
         cell: ({ row, table, getValue }) => (
           <EditableNumberCell
@@ -272,10 +275,10 @@ export const useProductColumns = ({ isAdmin, isWarehouse }) => {
       },
       {
         id: 'actions',
-        header: 'Delete',
+        header: t('columns.delete'),
         size: 60,
         cell: ({ row, table }) => (
-          <Tooltip label="Delete Product">
+          <Tooltip label={t('columns.deleteTooltip')}>
             <ActionIcon
               color="red"
               variant="light"
@@ -289,5 +292,5 @@ export const useProductColumns = ({ isAdmin, isWarehouse }) => {
     );
 
     return cols;
-  }, [isWarehouse, isAdmin]);
+  }, [isWarehouse, isAdmin, t]);
 };

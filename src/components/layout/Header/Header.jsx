@@ -1,5 +1,6 @@
 import { Box, Group, Title } from '@mantine/core';
 import { Link } from 'react-router-dom';
+import LanguageSwitcher from '../../../features/language/LanguageSwitcher';
 import Navigation from '../Navigation';
 
 const Header = () => {
@@ -29,7 +30,13 @@ const Header = () => {
           Stock Assistant
         </Title>
 
-        <Navigation />
+        <Group
+          gap="sm"
+          align="center"
+        >
+          <LanguageSwitcher />
+          <Navigation />
+        </Group>
       </Group>
     </Box>
   );

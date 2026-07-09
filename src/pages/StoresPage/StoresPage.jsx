@@ -13,6 +13,7 @@ import { useDisclosure } from '@mantine/hooks';
 import dayjs from 'dayjs';
 import { Pencil, Trash } from 'lucide-react';
 import { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import DataTable from '../../components/ui/DataTable';
 import DeleteStoreModal from '../../components/ui/DeleteStoreModal';
 import EditStoreModal from '../../components/ui/EditStoreModal';
@@ -20,6 +21,7 @@ import { useGetAllStoresQuery } from '../../store/api/api';
 import getBrandColor from '../../utils/getBrandColor';
 
 const StoresPage = () => {
+  const { t } = useTranslation('stores');
   const { data: stores = [], isLoading } = useGetAllStoresQuery();
 
   const [openedEdit, { open: openEdit, close: closeEdit }] = useDisclosure(false);
@@ -30,12 +32,12 @@ const StoresPage = () => {
     () => [
       {
         accessorKey: 'name',
-        header: 'Store Name',
+        header: t('columns.name'),
         cell: info => <Text fw={500}>{info.getValue()}</Text>,
       },
       {
         accessorKey: 'brand.name',
-        header: 'Brand',
+        header: t('columns.brand'),
         cell: info => {
           const brandName = info.getValue();
           return brandName ? (
@@ -51,26 +53,26 @@ const StoresPage = () => {
               size="xs"
               c="dimmed"
             >
-              No brand
+              {t('columns.noBrand')}
             </Text>
           );
         },
       },
       {
         accessorKey: 'createdAt',
-        header: 'Created At',
+        header: t('columns.createdAt'),
         cell: info => (
           <Text size="sm">{dayjs(info.getValue()).format('DD.MM.YY HH:mm')}</Text>
         ),
       },
       {
         id: 'actions',
-        header: 'Actions',
+        header: t('columns.actions'),
         cell: info => {
           const store = info.row.original;
           return (
             <Group gap="xs">
-              <Tooltip label="Edit Store">
+              <Tooltip label={t('tooltips.edit')}>
                 <ActionIcon
                   variant="light"
                   color="blue"
@@ -82,7 +84,7 @@ const StoresPage = () => {
                   <Pencil size={16} />
                 </ActionIcon>
               </Tooltip>
-              <Tooltip label="Delete Store">
+              <Tooltip label={t('tooltips.delete')}>
                 <ActionIcon
                   variant="light"
                   color="red"
@@ -99,7 +101,7 @@ const StoresPage = () => {
         },
       },
     ],
-    [openEdit, openDelete],
+    [openEdit, openDelete, t],
   );
 
   return (
@@ -119,7 +121,7 @@ const StoresPage = () => {
           order={2}
           mb={10}
         >
-          Stores Management
+          {t('management')}
         </Title>
 
         <DataTable

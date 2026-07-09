@@ -7,6 +7,7 @@ import {
 } from '@tanstack/react-table';
 import { useCallback, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
 import {
@@ -17,6 +18,7 @@ import {
   useUpdateProductsMutation,
 } from '../../store/api/api';
 import { userRoleSelector } from '../../store/selectors/selectors';
+import { getApiErrorMessage } from '../../utils/apiError';
 
 import { useProductColumns } from './columns';
 import DeleteProductModal from './DeleteProductModal';
@@ -25,6 +27,7 @@ import SendRequestBar from './SendRequestBar';
 import StockOperationModal from './StockOperationModal';
 
 const ProductsTable = ({ data }) => {
+  const { t } = useTranslation(['products', 'warehouse']);
   const userRole = useSelector(userRoleSelector);
   const isWarehouse = userRole === 'WAREHOUSE';
   const isAdmin = userRole === 'ADMIN';
@@ -50,12 +53,12 @@ const ProductsTable = ({ data }) => {
     async (product, field, newValue) => {
       try {
         await updateProducts({ ...product, [field]: newValue }).unwrap();
-        toast.success('Product updated!');
+        toast.success(t('updated'));
       } catch {
-        toast.error('Failed to update product');
+        toast.error(t('updateFailed'));
       }
     },
-    [updateProducts],
+    [updateProducts, t],
   );
 
   const handleSendOrder = async () => {
@@ -73,15 +76,15 @@ const ProductsTable = ({ data }) => {
       .filter(Boolean);
 
     if (payloadItems.length === 0) {
-      return toast.error('Please specify quantity for at least one product');
+      return toast.error(t('warehouse:sendRequestBar.quantityRequired'));
     }
 
     try {
       await createWarehouseRequest({ items: payloadItems }).unwrap();
-      toast.success('Request sent successfully!');
+      toast.success(t('warehouse:sendRequestBar.requestSent'));
       setOrderQuantities({});
     } catch {
-      toast.error('Failed to send request');
+      toast.error(t('warehouse:sendRequestBar.sendFailed'));
     }
   };
 
@@ -106,10 +109,10 @@ const ProductsTable = ({ data }) => {
       } else {
         await decreaseProduct(payload).unwrap();
       }
-      toast.success(`Stock ${type}d successfully!`);
+      toast.success(t(`warehouse:stockModal.${type}Success`));
       closeStockOp();
     } catch (error) {
-      toast.error(error?.data?.message || `Failed to ${type} stock`);
+      toast.error(getApiErrorMessage(t, error, `warehouse:stockModal.${type}Failed`));
     }
   };
 

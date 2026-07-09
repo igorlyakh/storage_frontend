@@ -1,0 +1,55 @@
+{
+  "columns": {
+    "username": "Username",
+    "role": "Role",
+    "store": "Store",
+    "logistics": "LOGISTICS",
+    "actions": "Actions"
+  },
+  "tooltips": {
+    "editUser": "Edit User",
+    "resetPassword": "Reset Password",
+    "deleteUser": "Delete User"
+  },
+  "create": {
+    "title": "Create New User",
+    "submit": "Create User",
+    "usernameLabel": "Username",
+    "usernamePlaceholder": "Enter username",
+    "usernameRequired": "Username is required",
+    "passwordLabel": "Password",
+    "passwordRequired": "Password is required",
+    "passwordMinLength": "At least 6 chars",
+    "roleLabel": "Access Role",
+    "adminScopesLabel": "Admin Scopes",
+    "chooseScopesPlaceholder": "-- Choose scopes --",
+    "scopesRequired": "Scopes are required for ADMIN role",
+    "assignedStoreLabel": "Assigned Store",
+    "choosePlaceholder": "-- Choose --",
+    "storeRequired": "Store is required for STORE role",
+    "created": "User created!",
+    "createFailed": "Failed to create user"
+  },
+  "edit": {
+    "title": "Edit user: {{username}}",
+    "submit": "Save Changes",
+    "updated": "User updated!",
+    "updateFailed": "Failed to update user"
+  },
+  "deleteModal": {
+    "confirmText": "Are you sure you want to delete user <bold>{{username}}</bold>? This action cannot be undone.",
+    "deleteUser": "Delete User",
+    "deleted": "User deleted successfully",
+    "deleteFailed": "Failed to delete user"
+  },
+  "resetPassword": {
+    "title": "Reset password for {{username}}",
+    "newPasswordLabel": "New Password",
+    "newPasswordPlaceholder": "Enter new password",
+    "confirmButton": "Confirm New Password",
+    "tooShort": "Password too short",
+    "updated": "Password updated!",
+    "updateFailed": "Failed to update password"
+  },
+  "storeFallback": "Store #{{id}}"
+}

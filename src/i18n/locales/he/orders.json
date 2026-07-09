@@ -1,0 +1,90 @@
+{
+  "myOrders": "ההזמנות שלי",
+  "allOrders": "כל ההזמנות",
+  "filters": {
+    "statuses": "סטטוסים",
+    "stores": "חנויות",
+    "filterByDate": "סינון לפי תאריך",
+    "selectAll": "בחר הכל",
+    "clear": "נקה",
+    "allPrefix": "כל {{label}}",
+    "withCount": "{{label}} ({{count}})"
+  },
+  "status": {
+    "NEW": "חדש",
+    "IN_PROGRESS": "בטיפול",
+    "SENT": "נשלח",
+    "COMPLETED": "הושלם",
+    "BACKORDER": "בהמתנה למלאי"
+  },
+  "noOrdersFound": "לא נמצאו הזמנות",
+  "storeFallback": "חנות מס' {{id}}",
+  "card": {
+    "from": ":מאת",
+    "sended": ":נוצר",
+    "updated": ":עודכן",
+    "processOrder": "טפל בהזמנה",
+    "accept": "אישור",
+    "toOrder": "להזמנה",
+    "processed": "!ההזמנה נכנסה לטיפול",
+    "processError": "שגיאה בטיפול בהזמנה",
+    "completed": "!ההזמנה הושלמה בהצלחה",
+    "completeError": "שגיאה בהשלמת ההזמנה"
+  },
+  "detail": {
+    "backToOrders": "חזרה להזמנות",
+    "orderDetails": "פרטי הזמנה",
+    "orderedBy": "הוזמן על ידי"
+  },
+  "table": {
+    "productName": "שם המוצר",
+    "category": "קטגוריה",
+    "withoutCategory": "ללא קטגוריה",
+    "requestedQuantity": "כמות מבוקשת",
+    "shippedQuantity": "כמות שנשלחה",
+    "picked": "נאסף",
+    "other": "אחר",
+    "sendOrder": "שלח הזמנה",
+    "orderSent": "!ההזמנה נשלחה בהצלחה",
+    "sendFailed": "שליחת ההזמנה נכשלה"
+  },
+  "create": {
+    "yourName": "שם / איש קשר אחראי",
+    "enterYourName": "הזן את שמך",
+    "store": "חנות",
+    "loadingOptions": "טוען...",
+    "selectStore": "בחר חנות",
+    "productName": "שם המוצר",
+    "category": "קטגוריה",
+    "quantityToOrder": "כמות להזמנה",
+    "limit": "מגבלה",
+    "noLimit": "ללא מגבלה",
+    "maxLimit": "מקסימום {{limit}}",
+    "reason": "סיבה",
+    "other": "אחר",
+    "writeOffPlaceholder": "(תאר את הסיבה למחיקת המלאי (שדה חובה",
+    "customRequestPlaceholder": "לא מצאת מה שחיפשת? תאר זאת כאן...",
+    "sendOrder": "שלח הזמנה",
+    "createWriteOff": "צור מחיקת מלאי",
+    "writeOffSuccess": "בקשת מחיקת המלאי נוצרה בהצלחה.",
+    "orderSuccess": "!ההזמנה שלך נשלחה בהצלחה! המחסן קיבל עדכון",
+    "understood": "הבנתי",
+    "orderStatusTitle": "סטטוס הזמנה",
+    "createFailed": "יצירת ההזמנה נכשלה",
+    "nameRequired": "נא להזין את שמך",
+    "storeRequired": "נא לבחור חנות",
+    "writeOffReasonRequired": "נא לציין סיבה למחיקת המלאי",
+    "specifyQuantity": "נא לציין כמות או לכתוב בקשה מותאמת אישית",
+    "limitExceeded": ".חריגה מהמגבלה עבור \"{{name}}\". המקסימום המותר הוא {{limit}}"
+  },
+  "writeOffTitle": "מחיקת מלאי מהמחסן",
+  "confirmModal": {
+    "reviewTitle": "בדוק את ההזמנה שלך",
+    "reviewDescription": "אנא בדוק בעיון את הפריטים שבחרת לפני השליחה הסופית.",
+    "customRequestLabel": "בקשה מותאמת אישית",
+    "pcs": "יח'",
+    "confirmCheckbox": "בדקתי את ההזמנה שלי ואני מוכן/ה לשלוח אותה",
+    "returnToEditing": "חזרה לעריכה",
+    "submitOrder": "שלח הזמנה"
+  }
+}

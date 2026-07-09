@@ -8,6 +8,7 @@ import {
   Textarea,
 } from '@mantine/core';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import getBrandColor from '../../utils/getBrandColor';
 
 export const EditableTextCell = ({ initialValue, onUpdate, fw, fz, c = 'dark' }) => {
@@ -134,6 +135,7 @@ export const EditableOrderCell = ({ initialValue, max, onUpdate }) => {
 };
 
 export const EditableBrandsCell = ({ initialBrands = [], allBrands = [], onUpdate }) => {
+  const { t } = useTranslation('products');
   const [isEditing, setIsEditing] = useState(false);
   const [value, setValue] = useState([]);
 
@@ -166,7 +168,7 @@ export const EditableBrandsCell = ({ initialBrands = [], allBrands = [], onUpdat
         onDropdownClose={handleSave}
         searchable
         autoFocus
-        placeholder="Select brands..."
+        placeholder={t('editable.selectBrands')}
         w={{ base: 150, sm: 200 }}
         size={{ base: 'xs', sm: 'sm' }}
       />
@@ -196,7 +198,7 @@ export const EditableBrandsCell = ({ initialBrands = [], allBrands = [], onUpdat
           c="dimmed"
           style={{ borderBottom: '1px dashed' }}
         >
-          Add brands...
+          {t('editable.addBrands')}
         </Text>
       )}
     </Group>

@@ -1,22 +1,25 @@
 import { Button, Group, Modal, Stack, TextInput } from '@mantine/core';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import { useUpdateCategoryMutation } from '../../../store/api/api';
+import { getApiErrorMessage } from '../../../utils/apiError';
 
 const EditCategoryModal = ({ opened, onClose, category }) => {
+  const { t } = useTranslation('categories');
   const [updateCategory, { isLoading }] = useUpdateCategoryMutation();
   const [name, setName] = useState(category?.name || '');
 
   const handleSubmit = async () => {
     if (!name.trim()) {
-      return toast.error('Category name is required');
+      return toast.error(t('edit.nameRequired'));
     }
     try {
       await updateCategory({ id: category.id, name: name.trim() }).unwrap();
-      toast.success('Category updated!');
+      toast.success(t('edit.updated'));
       onClose();
     } catch (error) {
-      toast.error(error.data?.message || 'Failed to update category');
+      toast.error(getApiErrorMessage(t, error, 'edit.updateFailed'));
     }
   };
 
@@ -26,14 +29,14 @@ const EditCategoryModal = ({ opened, onClose, category }) => {
     <Modal
       opened={opened}
       onClose={onClose}
-      title={`Edit category: ${category.name}`}
+      title={t('edit.title', { name: category.name })}
       centered
       size={400}
       padding={{ base: 'md', sm: 'lg' }}
     >
       <Stack gap={{ base: 'sm', sm: 'md' }}>
         <TextInput
-          label="Category Name"
+          label={t('edit.nameLabel')}
           value={name}
           onChange={e => setName(e.currentTarget.value)}
           data-autofocus
@@ -45,13 +48,13 @@ const EditCategoryModal = ({ opened, onClose, category }) => {
             onClick={onClose}
             disabled={isLoading}
           >
-            Cancel
+            {t('common:actions.cancel')}
           </Button>
           <Button
             onClick={handleSubmit}
             loading={isLoading}
           >
-            Save Changes
+            {t('common:actions.saveChanges')}
           </Button>
         </Group>
       </Stack>

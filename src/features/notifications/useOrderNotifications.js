@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 
@@ -11,6 +12,7 @@ const POLL_INTERVAL = 25000;
 const ALL_STATUSES = 'NEW,IN_PROGRESS,SENT,COMPLETED,BACKORDER';
 
 export const useOrderNotifications = () => {
+  const { t } = useTranslation('warehouse');
   const token = useSelector(tokenSelector);
   const role = useSelector(userRoleSelector);
   const location = useLocation();
@@ -54,13 +56,17 @@ export const useOrderNotifications = () => {
     if (arrivedIds.length > 0) {
       arrivedIds.forEach(id => {
         const order = newOrders.data.find(o => o.id === id);
-        toast.success(`New order from ${order?.store?.name || 'a store'}`);
+        toast.success(
+          t('notifications.newOrder', {
+            store: order?.store?.name || t('notifications.aStore'),
+          }),
+        );
       });
-      startTitleBlink(`NEW ORDER: ${currentIds.size}`);
+      startTitleBlink(t('notifications.newOrderTitle', { count: currentIds.size }));
     }
 
     knownNewOrderIds.current = currentIds;
-  }, [newOrders, isWarehouse]);
+  }, [newOrders, isWarehouse, t]);
 
   useEffect(() => {
     if (!isStore || !myOrders?.data) return;
@@ -76,12 +82,12 @@ export const useOrderNotifications = () => {
       const prevStatus = knownStatuses.current.get(id);
       if (prevStatus && prevStatus !== status) {
         const order = myOrders.data.find(o => o.id === id);
-        toast.success(`Order "${order?.name}" status changed to ${status}`);
+        toast.success(t('notifications.statusChanged', { name: order?.name, status }));
       }
     });
 
     knownStatuses.current = currentStatuses;
-  }, [myOrders, isStore]);
+  }, [myOrders, isStore, t]);
 
   useEffect(() => {
     if (location.pathname === '/all-orders') {

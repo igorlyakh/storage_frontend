@@ -1,0 +1,34 @@
+{
+  "sendRequestBar": {
+    "selectedProducts": "Selected products: {{count}}",
+    "sendRequest": "Send Request",
+    "quantityRequired": "Please specify quantity for at least one product",
+    "requestSent": "Request sent successfully!",
+    "sendFailed": "Failed to send request"
+  },
+  "stockModal": {
+    "increaseTitle": "Increase Stock: {{name}}",
+    "decreaseTitle": "Decrease Stock: {{name}}",
+    "quantity": "Quantity",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "increaseSuccess": "Stock increased successfully!",
+    "decreaseSuccess": "Stock decreased successfully!",
+    "increaseFailed": "Failed to increase stock",
+    "decreaseFailed": "Failed to decrease stock"
+  },
+  "lowStock": {
+    "title": "Low Stock Warning",
+    "description": "The following products in your scope have <bold>20 or fewer</bold> items in stock:",
+    "left": "{{count}} left",
+    "close": "Close",
+    "pleaseWait": "Please wait ({{seconds}})",
+    "none": "No low-stock products right now."
+  },
+  "notifications": {
+    "newOrder": "New order from {{store}}",
+    "aStore": "a store",
+    "newOrderTitle": "NEW ORDER: {{count}}",
+    "statusChanged": "Order \"{{name}}\" status changed to {{status}}"
+  }
+}

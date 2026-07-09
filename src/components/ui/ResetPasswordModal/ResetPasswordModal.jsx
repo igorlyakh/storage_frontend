@@ -1,23 +1,25 @@
 import { Button, Modal, PasswordInput, Stack } from '@mantine/core';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import { useResetUserPasswordMutation } from '../../../store/api/api';
 
 const ResetPasswordModal = ({ opened, onClose, user }) => {
+  const { t } = useTranslation('users');
   const [resetPassword, { isLoading }] = useResetUserPasswordMutation();
   const [newPassword, setNewPassword] = useState('');
 
   const handleResetPassword = async () => {
     if (newPassword.length < 6) {
-      return toast.error('Password too short');
+      return toast.error(t('resetPassword.tooShort'));
     }
     try {
       await resetPassword({ id: user.id, password: newPassword }).unwrap();
-      toast.success('Password updated!');
+      toast.success(t('resetPassword.updated'));
       setNewPassword('');
       onClose();
     } catch {
-      toast.error('Failed to update password');
+      toast.error(t('resetPassword.updateFailed'));
     }
   };
 
@@ -27,15 +29,15 @@ const ResetPasswordModal = ({ opened, onClose, user }) => {
     <Modal
       opened={opened}
       onClose={onClose}
-      title={`Reset password for ${user.username}`}
+      title={t('resetPassword.title', { username: user.username })}
       centered
       size={400}
       padding={{ base: 'md', sm: 'lg' }}
     >
       <Stack gap={{ base: 'sm', sm: 'md' }}>
         <PasswordInput
-          label="New Password"
-          placeholder="Enter new password"
+          label={t('resetPassword.newPasswordLabel')}
+          placeholder={t('resetPassword.newPasswordPlaceholder')}
           value={newPassword}
           onChange={e => setNewPassword(e.currentTarget.value)}
           size={{ base: 'md', sm: 'sm' }}
@@ -46,7 +48,7 @@ const ResetPasswordModal = ({ opened, onClose, user }) => {
           fullWidth
           size="md"
         >
-          Confirm New Password
+          {t('resetPassword.confirmButton')}
         </Button>
       </Stack>
     </Modal>

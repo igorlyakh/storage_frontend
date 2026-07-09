@@ -1,0 +1,78 @@
+{
+  "management": "ניהול מוצרים",
+  "columns": {
+    "pcsUnit": "יח'",
+    "productDetails": "פרטי מוצר",
+    "brands": "מותגים",
+    "category": "קטגוריה",
+    "withoutCategory": "ללא קטגוריה",
+    "pkgType": "סוג אריזה",
+    "qtyPerPkg": "כמות/אריזה",
+    "packages": "אריזות",
+    "stockQty": "מלאי (כמות)",
+    "toOrder": "להזמנה",
+    "available": "זמין",
+    "updated": "עודכן",
+    "limit": "מגבלה",
+    "delete": "מחק",
+    "deleteTooltip": "מחק מוצר"
+  },
+  "editable": {
+    "addBrands": "הוסף מותגים...",
+    "selectBrands": "בחר מותגים..."
+  },
+  "create": {
+    "title": "הוספת מוצר חדש",
+    "submit": "צור מוצר",
+    "nameLabel": "שם המוצר",
+    "namePlaceholder": "הזן שם מוצר",
+    "nameRequired": "שם נדרש!",
+    "articleLabel": "מק\"ט",
+    "articleRequired": "מק\"ט נדרש!",
+    "categoryLabel": "קטגוריה",
+    "loadingOptions": "טוען...",
+    "selectCategory": "בחר קטגוריה",
+    "categoryRequired": "קטגוריה נדרשת!",
+    "tagLabel": "תגית ניהול",
+    "tagRequired": "תגית נדרשת!",
+    "brandsLabel": "מותגים",
+    "selectBrands": "בחר מותגים",
+    "brandsRequired": "מותגים נדרשים!",
+    "limitLabel": "מגבלה (אופציונלי)",
+    "limitPlaceholder": "הזן מגבלה",
+    "packageTypeLabel": "סוג אריזה",
+    "selectType": "בחר סוג",
+    "packageTypeRequired": "סוג אריזה נדרש!",
+    "itemsPerPackageLabel": "יחידות באריזה",
+    "itemsPerPackagePlaceholder": "לדוגמה, 24",
+    "itemsPerPackageRequired": "כמות באריזה נדרשת!",
+    "initialPackagesLabel": "כמות אריזות התחלתית",
+    "initialPackagesPlaceholder": "לדוגמה, 5",
+    "initialPackagesRequired": "כמות אריזות נדרשת!",
+    "added": "!המוצר נוסף",
+    "addFailed": "הוספת המוצר נכשלה",
+    "packageTypes": {
+      "PALLET": "משטח",
+      "BOX": "קופסה",
+      "PACKAGE": "אריזה"
+    }
+  },
+  "reorder": {
+    "title": "סידור מוצרים וקטגוריות",
+    "description": "גרור פריטים כדי לשנות את הסדר המוצג לכולם באפליקציה.",
+    "categories": "קטגוריות",
+    "productsInCategory": "מוצרים בקטגוריה",
+    "selectCategory": "בחר קטגוריה",
+    "categoryOrderFailed": "שמירת סדר הקטגוריות נכשלה",
+    "productOrderFailed": "שמירת סדר המוצרים נכשלה",
+    "noProducts": "אין מוצרים בקטגוריה זו"
+  },
+  "deleteModal": {
+    "title": "אישור מחיקה",
+    "confirmText": "?<bold>{{name}}</bold> האם אתה בטוח שברצונך למחוק את",
+    "deleted": "המוצר נמחק",
+    "deleteFailed": "מחיקת המוצר נכשלה"
+  },
+  "updated": "!המוצר עודכן",
+  "updateFailed": "עדכון המוצר נכשל"
+}

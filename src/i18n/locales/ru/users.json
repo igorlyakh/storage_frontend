@@ -1,0 +1,55 @@
+{
+  "columns": {
+    "username": "Логин",
+    "role": "Роль",
+    "store": "Магазин",
+    "logistics": "ЛОГИСТИКА",
+    "actions": "Действия"
+  },
+  "tooltips": {
+    "editUser": "Редактировать пользователя",
+    "resetPassword": "Сбросить пароль",
+    "deleteUser": "Удалить пользователя"
+  },
+  "create": {
+    "title": "Создать пользователя",
+    "submit": "Создать пользователя",
+    "usernameLabel": "Логин",
+    "usernamePlaceholder": "Введите логин",
+    "usernameRequired": "Логин обязателен",
+    "passwordLabel": "Пароль",
+    "passwordRequired": "Пароль обязателен",
+    "passwordMinLength": "Минимум 6 символов",
+    "roleLabel": "Роль доступа",
+    "adminScopesLabel": "Разделы администратора",
+    "chooseScopesPlaceholder": "-- Выберите разделы --",
+    "scopesRequired": "Разделы обязательны для роли ADMIN",
+    "assignedStoreLabel": "Назначенный магазин",
+    "choosePlaceholder": "-- Выберите --",
+    "storeRequired": "Магазин обязателен для роли STORE",
+    "created": "Пользователь создан!",
+    "createFailed": "Не удалось создать пользователя"
+  },
+  "edit": {
+    "title": "Редактирование пользователя: {{username}}",
+    "submit": "Сохранить изменения",
+    "updated": "Пользователь обновлён!",
+    "updateFailed": "Не удалось обновить пользователя"
+  },
+  "deleteModal": {
+    "confirmText": "Вы уверены, что хотите удалить пользователя <bold>{{username}}</bold>? Это действие необратимо.",
+    "deleteUser": "Удалить пользователя",
+    "deleted": "Пользователь успешно удалён",
+    "deleteFailed": "Не удалось удалить пользователя"
+  },
+  "resetPassword": {
+    "title": "Сброс пароля для {{username}}",
+    "newPasswordLabel": "Новый пароль",
+    "newPasswordPlaceholder": "Введите новый пароль",
+    "confirmButton": "Подтвердить новый пароль",
+    "tooShort": "Пароль слишком короткий",
+    "updated": "Пароль обновлён!",
+    "updateFailed": "Не удалось обновить пароль"
+  },
+  "storeFallback": "Магазин №{{id}}"
+}

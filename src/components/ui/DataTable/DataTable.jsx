@@ -6,8 +6,10 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import { Inbox } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 const DataTable = ({ data, columns, initialState = {} }) => {
+  const { t } = useTranslation('common');
   const table = useReactTable({
     data: data || [],
     columns,
@@ -80,7 +82,7 @@ const DataTable = ({ data, columns, initialState = {} }) => {
                       c="dimmed"
                       size="sm"
                     >
-                      No records found
+                      {t('table.noRecords')}
                     </Text>
                   </Stack>
                 </Table.Td>

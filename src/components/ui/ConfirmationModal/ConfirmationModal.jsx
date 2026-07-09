@@ -11,6 +11,7 @@ import {
 } from '@mantine/core';
 import { Check, ShoppingCart } from 'lucide-react';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 export const ConfirmOrderModal = ({
   itemsToOrder,
@@ -18,6 +19,7 @@ export const ConfirmOrderModal = ({
   onConfirm,
   onCancel,
 }) => {
+  const { t } = useTranslation('orders');
   const [isChecked, setIsChecked] = useState(false);
 
   return (
@@ -38,7 +40,7 @@ export const ConfirmOrderModal = ({
           fw={600}
           size="lg"
         >
-          Review Your Order
+          {t('confirmModal.reviewTitle')}
         </Text>
       </Group>
 
@@ -47,7 +49,7 @@ export const ConfirmOrderModal = ({
         c="dimmed"
         mb="md"
       >
-        Please carefully review the items you have selected before final submission.
+        {t('confirmModal.reviewDescription')}
       </Text>
 
       <Paper
@@ -80,7 +82,7 @@ export const ConfirmOrderModal = ({
                   fw={700}
                   c="blue.7"
                 >
-                  {item.orderQuantity} pcs
+                  {item.orderQuantity} {t('confirmModal.pcs')}
                 </Text>
               </Group>
               {index < itemsToOrder.length - 1 && <Divider />}
@@ -102,7 +104,7 @@ export const ConfirmOrderModal = ({
                   c="yellow.8"
                   mb={4}
                 >
-                  Custom Request
+                  {t('confirmModal.customRequestLabel')}
                 </Text>
                 <Text
                   size="sm"
@@ -123,7 +125,7 @@ export const ConfirmOrderModal = ({
             size="sm"
             fw={500}
           >
-            I have verified my order and I am ready to submit
+            {t('confirmModal.confirmCheckbox')}
           </Text>
         }
         checked={isChecked}
@@ -142,7 +144,7 @@ export const ConfirmOrderModal = ({
           color="gray"
           onClick={onCancel}
         >
-          Return to editing
+          {t('confirmModal.returnToEditing')}
         </Button>
         <Button
           color="blue"
@@ -150,7 +152,7 @@ export const ConfirmOrderModal = ({
           onClick={onConfirm}
           leftSection={<Check size={16} />}
         >
-          Submit Order
+          {t('confirmModal.submitOrder')}
         </Button>
       </Group>
     </Box>

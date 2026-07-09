@@ -1,5 +1,6 @@
 import { Container } from '@mantine/core';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import DynamicForm from '../../components/ui/DynamicForm';
 import { productTags } from '../../constants/productTags';
@@ -9,8 +10,10 @@ import {
   useGetAllCategoriesQuery,
 } from '../../store/api/api';
 import { adminScopesSelector } from '../../store/selectors/selectors';
+import { getApiErrorMessage } from '../../utils/apiError';
 
 const CreateProductPage = () => {
+  const { t } = useTranslation('products');
   const { data: brands = [], isLoading: isBrandsLoading } = useGetAllBrandsQuery();
   const { data: productCategories = [], isLoading: isCategoriesLoading } =
     useGetAllCategoriesQuery();
@@ -32,81 +35,81 @@ const CreateProductPage = () => {
   const isSingleScope = availableTags.length === 1;
 
   const packageTypeOptions = [
-    { value: 'PALLET', label: 'Pallet' },
-    { value: 'BOX', label: 'Box' },
-    { value: 'PACKAGE', label: 'Package' },
+    { value: 'PALLET', label: t('create.packageTypes.PALLET') },
+    { value: 'BOX', label: t('create.packageTypes.BOX') },
+    { value: 'PACKAGE', label: t('create.packageTypes.PACKAGE') },
   ];
 
   const fields = [
     {
       name: 'name',
       type: 'text',
-      label: 'Product name',
-      placeholder: 'Enter product name',
-      rules: { required: 'Name is required!' },
+      label: t('create.nameLabel'),
+      placeholder: t('create.namePlaceholder'),
+      rules: { required: t('create.nameRequired') },
     },
     {
       name: 'article',
       type: 'mask',
       mask: '000000-00',
-      label: 'Article',
+      label: t('create.articleLabel'),
       placeholder: '000000-00',
-      rules: { required: 'Article is required!' },
+      rules: { required: t('create.articleRequired') },
     },
     {
       name: 'category',
       type: 'select',
-      label: 'Category',
-      placeholder: isCategoriesLoading ? 'Loading...' : 'Select category',
+      label: t('create.categoryLabel'),
+      placeholder: isCategoriesLoading ? t('create.loadingOptions') : t('create.selectCategory'),
       options: categoriesOptions,
       loading: isCategoriesLoading,
       searchable: true,
-      rules: { required: 'Category is required!' },
+      rules: { required: t('create.categoryRequired') },
     },
     {
       name: 'tag',
       type: 'select',
-      label: 'Admin Tag',
+      label: t('create.tagLabel'),
       options: tagOptions,
       disabled: isSingleScope,
-      rules: { required: 'Tag is required!' },
+      rules: { required: t('create.tagRequired') },
     },
     {
       name: 'brandsIds',
       type: 'multiselect',
-      label: 'Brands',
-      placeholder: isBrandsLoading ? 'Loading...' : 'Select brands',
+      label: t('create.brandsLabel'),
+      placeholder: isBrandsLoading ? t('create.loadingOptions') : t('create.selectBrands'),
       options: brandOptions,
       loading: isBrandsLoading,
-      rules: { required: 'Brands are required!' },
+      rules: { required: t('create.brandsRequired') },
     },
     {
       name: 'limitPerOrder',
       type: 'number',
-      label: 'Limit (optional)',
-      placeholder: 'Enter limit',
+      label: t('create.limitLabel'),
+      placeholder: t('create.limitPlaceholder'),
     },
     {
       name: 'packageType',
       type: 'select',
-      label: 'Package Type',
-      placeholder: 'Select type',
+      label: t('create.packageTypeLabel'),
+      placeholder: t('create.selectType'),
       options: packageTypeOptions,
-      rules: { required: 'Package type is required!' },
+      rules: { required: t('create.packageTypeRequired') },
     },
     {
       name: 'itemsPerPackage',
       type: 'number',
-      label: 'Items per Package',
-      placeholder: 'E.g., 24',
-      rules: { required: 'Items per package is required!' },
+      label: t('create.itemsPerPackageLabel'),
+      placeholder: t('create.itemsPerPackagePlaceholder'),
+      rules: { required: t('create.itemsPerPackageRequired') },
     },
     {
       name: 'initialPackagesCount',
       type: 'number',
-      label: 'Initial Packages Count',
-      placeholder: 'E.g., 5',
-      rules: { required: 'Packages count is required!' },
+      label: t('create.initialPackagesLabel'),
+      placeholder: t('create.initialPackagesPlaceholder'),
+      rules: { required: t('create.initialPackagesRequired') },
     },
   ];
 
@@ -125,10 +128,10 @@ const CreateProductPage = () => {
 
     try {
       await addProduct(payload).unwrap();
-      toast.success('Product added!');
+      toast.success(t('create.added'));
       reset();
     } catch (error) {
-      toast.error(error.data?.message?.[0] || error.message || 'Failed to add product');
+      toast.error(getApiErrorMessage(t, error, 'create.addFailed'));
     }
   };
 
@@ -138,8 +141,8 @@ const CreateProductPage = () => {
       py="xl"
     >
       <DynamicForm
-        title="Add New Product"
-        submitLabel="Create Product"
+        title={t('create.title')}
+        submitLabel={t('create.submit')}
         fields={fields}
         gridCols={2}
         paperWidth={{ base: '100%', sm: 500, md: 700 }}

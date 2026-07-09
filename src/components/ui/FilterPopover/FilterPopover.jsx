@@ -7,8 +7,11 @@ import {
   ScrollArea,
   Stack,
 } from '@mantine/core';
+import { useTranslation } from 'react-i18next';
 
 const FilterPopover = ({ label, options, values, onChange }) => {
+  const { t } = useTranslation('orders');
+
   const handleToggle = val => {
     const newValues = values.includes(val)
       ? values.filter(v => v !== val)
@@ -38,7 +41,9 @@ const FilterPopover = ({ label, options, values, onChange }) => {
           w={{ base: '100%', sm: 200 }}
           style={{ fontWeight: 500 }}
         >
-          {values.length > 0 ? `${label} (${values.length})` : `All ${label}`}
+          {values.length > 0
+            ? t('filters.withCount', { label, count: values.length })
+            : t('filters.allPrefix', { label })}
         </Button>
       </Popover.Target>
 
@@ -54,7 +59,7 @@ const FilterPopover = ({ label, options, values, onChange }) => {
               color="blue"
               onClick={handleSelectAll}
             >
-              Select All
+              {t('filters.selectAll')}
             </Button>
             <Button
               size="xs"
@@ -63,7 +68,7 @@ const FilterPopover = ({ label, options, values, onChange }) => {
               onClick={handleClearAll}
               disabled={values.length === 0}
             >
-              Clear
+              {t('filters.clear')}
             </Button>
           </Group>
 

@@ -1,0 +1,43 @@
+{
+  "home": "Home",
+  "allOrders": "All orders",
+  "order": {
+    "title": "Order",
+    "myOrders": "My Orders",
+    "createOrder": "Create Order"
+  },
+  "productsMenu": {
+    "title": "Products",
+    "allProducts": "All Products",
+    "createProduct": "Create Product"
+  },
+  "requests": "Requests",
+  "writeOff": "Write-off",
+  "management": {
+    "title": "Management",
+    "users": "Users",
+    "allUsers": "All Users",
+    "createUser": "Create User",
+    "brands": "Brands",
+    "allBrands": "All Brands",
+    "createBrand": "Create Brand",
+    "categories": "Categories",
+    "allCategories": "All Categories",
+    "createCategory": "Create Category",
+    "stores": "Stores",
+    "allStores": "All Stores",
+    "createStore": "Create Store",
+    "products": "Products",
+    "reorderProducts": "Reorder Products"
+  },
+  "statistics": {
+    "title": "Statistics",
+    "orders": "Orders Statistics",
+    "requests": "Requests Statistics"
+  },
+  "checkLowStock": "Check Low Stock",
+  "checkLowStockTooltip": "Check low stock now",
+  "logout": "Logout",
+  "logoutSuccess": "You have successfully logged out!",
+  "login": "Login"
+}

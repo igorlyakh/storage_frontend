@@ -1,0 +1,43 @@
+{
+  "home": "Главная",
+  "allOrders": "Все заказы",
+  "order": {
+    "title": "Заказ",
+    "myOrders": "Мои заказы",
+    "createOrder": "Создать заказ"
+  },
+  "productsMenu": {
+    "title": "Товары",
+    "allProducts": "Все товары",
+    "createProduct": "Создать товар"
+  },
+  "requests": "Заявки",
+  "writeOff": "Списание",
+  "management": {
+    "title": "Управление",
+    "users": "Пользователи",
+    "allUsers": "Все пользователи",
+    "createUser": "Создать пользователя",
+    "brands": "Бренды",
+    "allBrands": "Все бренды",
+    "createBrand": "Создать бренд",
+    "categories": "Категории",
+    "allCategories": "Все категории",
+    "createCategory": "Создать категорию",
+    "stores": "Магазины",
+    "allStores": "Все магазины",
+    "createStore": "Создать магазин",
+    "products": "Товары",
+    "reorderProducts": "Порядок товаров"
+  },
+  "statistics": {
+    "title": "Статистика",
+    "orders": "Статистика заказов",
+    "requests": "Статистика заявок"
+  },
+  "checkLowStock": "Проверить остатки",
+  "checkLowStockTooltip": "Проверить низкие остатки сейчас",
+  "logout": "Выйти",
+  "logoutSuccess": "Вы успешно вышли из системы!",
+  "login": "Войти"
+}

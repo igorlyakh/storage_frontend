@@ -1,0 +1,35 @@
+{
+  "management": "Brands Management",
+  "columns": {
+    "name": "Brand Name",
+    "createdAt": "Created At",
+    "actions": "Actions"
+  },
+  "tooltips": {
+    "edit": "Edit Brand",
+    "delete": "Delete Brand"
+  },
+  "create": {
+    "title": "Create New Brand",
+    "submit": "Create Brand",
+    "nameLabel": "Brand Name",
+    "namePlaceholder": "Enter brand name",
+    "nameRequired": "Brand name is required",
+    "minLength": "Minimum 2 characters",
+    "created": "Brand \"{{name}}\" created!",
+    "createFailed": "Failed to create brand"
+  },
+  "edit": {
+    "title": "Edit brand: {{name}}",
+    "nameLabel": "Brand Name",
+    "nameRequired": "Brand name is required",
+    "updated": "Brand updated!",
+    "updateFailed": "Failed to update brand"
+  },
+  "deleteModal": {
+    "confirmText": "Are you sure you want to delete brand <bold>{{name}}</bold>? This action cannot be undone.",
+    "delete": "Delete Brand",
+    "deleted": "Brand \"{{name}}\" deleted",
+    "deleteFailed": "Failed to delete brand"
+  }
+}

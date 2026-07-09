@@ -1,6 +1,7 @@
 import { Box, Group, LoadingOverlay, Pagination, Stack, Title } from '@mantine/core';
 import { DatePickerInput } from '@mantine/dates';
 import dayjs from 'dayjs';
+import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router-dom';
 import OrdersList from '../../components/OrdersList/OrdersList';
 import FilterPopover from '../../components/ui/FilterPopover';
@@ -9,6 +10,7 @@ import { useGetAllOrdersQuery, useGetAllStoresQuery } from '../../store/api/api'
 const DEFAULT_STATUSES = ['NEW', 'IN_PROGRESS', 'BACKORDER'];
 
 const AllOrdersPage = () => {
+  const { t } = useTranslation('orders');
   const [searchParams, setSearchParams] = useSearchParams();
 
   const page = Number(searchParams.get('page')) || 1;
@@ -47,15 +49,15 @@ const AllOrdersPage = () => {
 
   const storeOptions = stores.map(store => ({
     value: store.id,
-    label: store.name || `Store #${store.id}`,
+    label: store.name || t('storeFallback', { id: store.id }),
   }));
 
   const statusOptions = [
-    { value: 'NEW', label: 'NEW' },
-    { value: 'IN_PROGRESS', label: 'IN PROGRESS' },
-    { value: 'SENT', label: 'SENT' },
-    { value: 'COMPLETED', label: 'COMPLETED' },
-    { value: 'BACKORDER', label: 'BACKORDER' },
+    { value: 'NEW', label: t('status.NEW') },
+    { value: 'IN_PROGRESS', label: t('status.IN_PROGRESS') },
+    { value: 'SENT', label: t('status.SENT') },
+    { value: 'COMPLETED', label: t('status.COMPLETED') },
+    { value: 'BACKORDER', label: t('status.BACKORDER') },
   ];
 
   const { data, isFetching } = useGetAllOrdersQuery(
@@ -97,21 +99,21 @@ const AllOrdersPage = () => {
       gap="lg"
       p="md"
     >
-      <Title order={2}>All Orders</Title>
+      <Title order={2}>{t('allOrders')}</Title>
 
       <Group
         align="center"
         gap="md"
       >
         <FilterPopover
-          label="Statuses"
+          label={t('filters.statuses')}
           options={statusOptions}
           values={statuses}
           onChange={handleStatusesChange}
         />
 
         <FilterPopover
-          label="Stores"
+          label={t('filters.stores')}
           options={storeOptions}
           values={storeIds}
           onChange={handleStoresChange}
@@ -119,7 +121,7 @@ const AllOrdersPage = () => {
 
         <DatePickerInput
           type="range"
-          placeholder="Filter by date"
+          placeholder={t('filters.filterByDate')}
           value={[startDate ? new Date(startDate) : null, endDate ? new Date(endDate) : null]}
           onChange={handleDateRangeChange}
           clearable

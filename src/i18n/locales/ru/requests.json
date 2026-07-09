@@ -1,0 +1,51 @@
+{
+  "pageTitle": "Все заявки",
+  "filters": {
+    "statuses": "Статусы",
+    "filterByDate": "Фильтр по дате"
+  },
+  "status": {
+    "NEW": "Новая",
+    "APPROVED": "Одобрена",
+    "SENT": "Отправлена",
+    "COMPLETED": "Завершена"
+  },
+  "loadFailed": "Не удалось загрузить заявки!",
+  "listEmpty": "Список пуст!",
+  "card": {
+    "createdAt": "Создана:",
+    "productsInOrder": "Товаров в заявке:",
+    "details": "Подробнее",
+    "approve": "Одобрить",
+    "approved": "Одобрено!",
+    "approveError": "Ошибка!"
+  },
+  "detail": {
+    "details": "Подробности",
+    "id": "ID: {{id}}",
+    "createdAt": "Создана: {{date}}",
+    "category": "Категория: {{category}}",
+    "items": "Товары",
+    "editItems": "Редактировать товары",
+    "addItem": "Добавить товар",
+    "cancel": "Отмена",
+    "saveChanges": "Сохранить изменения",
+    "send": "Отправить",
+    "accept": "Принять",
+    "statusUpdated": "Статус изменён на: {{status}}",
+    "statusUpdateError": "Ошибка при обновлении статуса!",
+    "itemsUpdated": "Товары успешно обновлены!",
+    "itemsUpdateError": "Ошибка при сохранении товаров!",
+    "noData": "Нет данных!",
+    "columns": {
+      "article": "Артикул",
+      "product": "Товар",
+      "selectProduct": "Выберите товар",
+      "category": "Категория",
+      "categoryNA": "Н/Д",
+      "pkgType": "Тип упаковки",
+      "quantity": "Количество",
+      "pcs": "шт."
+    }
+  }
+}

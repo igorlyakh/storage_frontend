@@ -1,20 +1,23 @@
 import { Container } from '@mantine/core';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import DynamicForm from '../../components/ui/DynamicForm';
 import { useCreateBrandMutation } from '../../store/api/api';
+import { getApiErrorMessage } from '../../utils/apiError';
 
 const CreateBrandPage = () => {
+  const { t } = useTranslation('brands');
   const [createBrand, { isLoading }] = useCreateBrandMutation();
 
   const fields = [
     {
       name: 'name',
       type: 'text',
-      label: 'Brand Name',
-      placeholder: 'Enter brand name',
+      label: t('create.nameLabel'),
+      placeholder: t('create.namePlaceholder'),
       rules: {
-        required: 'Brand name is required',
-        minLength: { value: 2, message: 'Minimum 2 characters' },
+        required: t('create.nameRequired'),
+        minLength: { value: 2, message: t('create.minLength') },
       },
     },
   ];
@@ -22,10 +25,10 @@ const CreateBrandPage = () => {
   const onSubmit = async (data, reset) => {
     try {
       await createBrand(data.name).unwrap();
-      toast.success(`Brand "${data.name}" created!`);
+      toast.success(t('create.created', { name: data.name }));
       reset();
     } catch (error) {
-      toast.error(error.data?.message || 'Failed to create brand');
+      toast.error(getApiErrorMessage(t, error, 'create.createFailed'));
     }
   };
 
@@ -35,8 +38,8 @@ const CreateBrandPage = () => {
       py="xl"
     >
       <DynamicForm
-        title="Create New Brand"
-        submitLabel="Create Brand"
+        title={t('create.title')}
+        submitLabel={t('create.submit')}
         fields={fields}
         defaultValues={{ name: '' }}
         onSubmit={onSubmit}

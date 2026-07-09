@@ -1,5 +1,5 @@
 import '@mantine/charts/styles.css';
-import { createTheme, MantineProvider } from '@mantine/core';
+import { createTheme, DirectionProvider, MantineProvider } from '@mantine/core';
 import '@mantine/core/styles.css';
 import '@mantine/dates/styles.css';
 import { ModalsProvider } from '@mantine/modals';
@@ -13,6 +13,7 @@ import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import { PersistGate } from 'redux-persist/integration/react';
 import App from './App.jsx';
+import './i18n/config.js';
 import { persister, store } from './store/store.js';
 
 const theme = createTheme({
@@ -47,29 +48,31 @@ createRoot(document.getElementById('root')).render(
   <StrictMode>
     <SpeedInsights />
     <Analytics />
-    <MantineProvider theme={theme}>
-      <ModalsProvider>
-        <Provider store={store}>
-          <PersistGate
-            loading={null}
-            persistor={persister}
-          >
-            <BrowserRouter>
-              <App />
-              <Toaster
-                position="top-right"
-                toastOptions={{
-                  style: {
-                    background: '#242020',
-                    color: '#ffffff',
-                    borderRadius: 10,
-                  },
-                }}
-              />
-            </BrowserRouter>
-          </PersistGate>
-        </Provider>
-      </ModalsProvider>
-    </MantineProvider>
+    <DirectionProvider>
+      <MantineProvider theme={theme}>
+        <ModalsProvider>
+          <Provider store={store}>
+            <PersistGate
+              loading={null}
+              persistor={persister}
+            >
+              <BrowserRouter>
+                <App />
+                <Toaster
+                  position="top-right"
+                  toastOptions={{
+                    style: {
+                      background: '#242020',
+                      color: '#ffffff',
+                      borderRadius: 10,
+                    },
+                  }}
+                />
+              </BrowserRouter>
+            </PersistGate>
+          </Provider>
+        </ModalsProvider>
+      </MantineProvider>
+    </DirectionProvider>
   </StrictMode>,
 );

@@ -1,9 +1,12 @@
 import { Button, Group, Modal, Select, Stack, TextInput } from '@mantine/core';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import { useGetAllBrandsQuery, useUpdateStoreMutation } from '../../../store/api/api';
+import { getApiErrorMessage } from '../../../utils/apiError';
 
 const EditStoreModal = ({ opened, onClose, store }) => {
+  const { t } = useTranslation('stores');
   const { data: brands = [], isLoading: isBrandsLoading } = useGetAllBrandsQuery();
   const [updateStore, { isLoading }] = useUpdateStoreMutation();
 
@@ -17,18 +20,18 @@ const EditStoreModal = ({ opened, onClose, store }) => {
 
   const handleSubmit = async () => {
     if (!name.trim()) {
-      return toast.error('Store name is required');
+      return toast.error(t('edit.nameRequired'));
     }
     if (!brandId) {
-      return toast.error('Brand is required');
+      return toast.error(t('edit.brandRequired'));
     }
 
     try {
       await updateStore({ id: store.id, name: name.trim(), brandId }).unwrap();
-      toast.success('Store updated!');
+      toast.success(t('edit.updated'));
       onClose();
     } catch (error) {
-      toast.error(error.data?.message || 'Failed to update store');
+      toast.error(getApiErrorMessage(t, error, 'edit.updateFailed'));
     }
   };
 
@@ -38,19 +41,19 @@ const EditStoreModal = ({ opened, onClose, store }) => {
     <Modal
       opened={opened}
       onClose={onClose}
-      title={`Edit store: ${store.name}`}
+      title={t('edit.title', { name: store.name })}
       centered
       size={400}
       padding={{ base: 'md', sm: 'lg' }}
     >
       <Stack gap={{ base: 'sm', sm: 'md' }}>
         <TextInput
-          label="Store Name"
+          label={t('edit.nameLabel')}
           value={name}
           onChange={e => setName(e.currentTarget.value)}
         />
         <Select
-          label="Brand"
+          label={t('edit.brandLabel')}
           data={brandOptions}
           value={brandId}
           onChange={setBrandId}
@@ -65,13 +68,13 @@ const EditStoreModal = ({ opened, onClose, store }) => {
             onClick={onClose}
             disabled={isLoading}
           >
-            Cancel
+            {t('common:actions.cancel')}
           </Button>
           <Button
             onClick={handleSubmit}
             loading={isLoading}
           >
-            Save Changes
+            {t('common:actions.saveChanges')}
           </Button>
         </Group>
       </Stack>

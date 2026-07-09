@@ -1,10 +1,12 @@
 import { Badge, Button, Group, List, Modal, Stack, Text, ThemeIcon } from '@mantine/core';
 import { TriangleAlert } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 
 const CLOSE_DELAY_SECONDS = 5;
 
 const LowStockModal = ({ opened, onClose, products = [] }) => {
+  const { t } = useTranslation('warehouse');
   const [secondsLeft, setSecondsLeft] = useState(CLOSE_DELAY_SECONDS);
 
   useEffect(() => {
@@ -32,7 +34,7 @@ const LowStockModal = ({ opened, onClose, products = [] }) => {
           >
             <TriangleAlert size={16} />
           </ThemeIcon>
-          <Text fw={700}>Low Stock Warning</Text>
+          <Text fw={700}>{t('lowStock.title')}</Text>
         </Group>
       }
       centered
@@ -43,7 +45,11 @@ const LowStockModal = ({ opened, onClose, products = [] }) => {
     >
       <Stack gap="md">
         <Text size="sm">
-          The following products in your scope have <b>20 or fewer</b> items in stock:
+          <Trans
+            t={t}
+            i18nKey="lowStock.description"
+            components={{ bold: <b /> }}
+          />
         </Text>
 
         <List
@@ -67,7 +73,7 @@ const LowStockModal = ({ opened, onClose, products = [] }) => {
                   color="red"
                   variant="light"
                 >
-                  {product.stock?.quantity ?? 0} left
+                  {t('lowStock.left', { count: product.stock?.quantity ?? 0 })}
                 </Badge>
               </Group>
             </List.Item>
@@ -80,7 +86,7 @@ const LowStockModal = ({ opened, onClose, products = [] }) => {
           disabled={!canClose}
           color={canClose ? 'blue' : 'gray'}
         >
-          {canClose ? 'Close' : `Please wait (${secondsLeft})`}
+          {canClose ? t('lowStock.close') : t('lowStock.pleaseWait', { seconds: secondsLeft })}
         </Button>
       </Stack>
     </Modal>

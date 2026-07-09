@@ -13,6 +13,7 @@ import {
 } from '@mantine/core';
 import { DatePickerInput } from '@mantine/dates';
 import dayjs from 'dayjs';
+import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router-dom';
 import OrdersList from '../../components/OrdersList/OrdersList';
 import { useGetMyOrdersQuery } from '../../store/api/api';
@@ -20,6 +21,8 @@ import { useGetMyOrdersQuery } from '../../store/api/api';
 const DEFAULT_STATUSES = ['NEW', 'IN_PROGRESS', 'SENT', 'BACKORDER'];
 
 const FilterPopover = ({ label, options, values, onChange }) => {
+  const { t } = useTranslation('orders');
+
   const handleToggle = val => {
     const newValues = values.includes(val)
       ? values.filter(v => v !== val)
@@ -49,7 +52,9 @@ const FilterPopover = ({ label, options, values, onChange }) => {
           w={{ base: '100%', sm: 200 }}
           style={{ fontWeight: 500 }}
         >
-          {values.length > 0 ? `${label} (${values.length})` : `All ${label}`}
+          {values.length > 0
+            ? t('filters.withCount', { label, count: values.length })
+            : t('filters.allPrefix', { label })}
         </Button>
       </Popover.Target>
 
@@ -65,7 +70,7 @@ const FilterPopover = ({ label, options, values, onChange }) => {
               color="blue"
               onClick={handleSelectAll}
             >
-              Select All
+              {t('filters.selectAll')}
             </Button>
             <Button
               size="xs"
@@ -74,7 +79,7 @@ const FilterPopover = ({ label, options, values, onChange }) => {
               onClick={handleClearAll}
               disabled={values.length === 0}
             >
-              Clear
+              {t('filters.clear')}
             </Button>
           </Group>
 
@@ -102,6 +107,7 @@ const FilterPopover = ({ label, options, values, onChange }) => {
 };
 
 const MyOrdersPage = () => {
+  const { t } = useTranslation('orders');
   const [searchParams, setSearchParams] = useSearchParams();
 
   const page = Number(searchParams.get('page')) || 1;
@@ -128,11 +134,11 @@ const MyOrdersPage = () => {
   };
 
   const statusOptions = [
-    { value: 'NEW', label: 'NEW' },
-    { value: 'IN_PROGRESS', label: 'IN PROGRESS' },
-    { value: 'SENT', label: 'SENT' },
-    { value: 'COMPLETED', label: 'COMPLETED' },
-    { value: 'BACKORDER', label: 'BACKORDER' },
+    { value: 'NEW', label: t('status.NEW') },
+    { value: 'IN_PROGRESS', label: t('status.IN_PROGRESS') },
+    { value: 'SENT', label: t('status.SENT') },
+    { value: 'COMPLETED', label: t('status.COMPLETED') },
+    { value: 'BACKORDER', label: t('status.BACKORDER') },
   ];
 
   const { data, isFetching } = useGetMyOrdersQuery(
@@ -160,21 +166,21 @@ const MyOrdersPage = () => {
       gap="lg"
       p="md"
     >
-      <Title order={2}>My Orders</Title>
+      <Title order={2}>{t('myOrders')}</Title>
 
       <Group
         align="center"
         gap="md"
       >
         <FilterPopover
-          label="Statuses"
+          label={t('filters.statuses')}
           options={statusOptions}
           values={statuses}
           onChange={handleStatusesChange}
         />
 
         <DatePickerInput
-          placeholder="Filter by date"
+          placeholder={t('filters.filterByDate')}
           value={date ? new Date(date) : null}
           onChange={val =>
             updateParams({

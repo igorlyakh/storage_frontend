@@ -1,0 +1,45 @@
+{
+  "globalTitle": "Global Statistics",
+  "requestsTitle": "Requests Statistics",
+  "exportExcel": "Export to Excel",
+  "selectDateRangePrompt": "Please select a date range to view statistics.",
+  "filters": {
+    "dateRangeLabel": "Date Range (Required)",
+    "dateRangePlaceholder": "Pick dates range",
+    "dateRangeRequired": "Please select a date range",
+    "quickSelect": "Quick select:",
+    "today": "Today",
+    "thisMonth": "This Month",
+    "thisYear": "This Year",
+    "storeFilter": "Store Filter",
+    "allStores": "All Stores",
+    "productFilter": "Product Filter",
+    "allProducts": "All Products",
+    "scopeFilter": "Scope Filter",
+    "allScopes": "All Scopes"
+  },
+  "metrics": {
+    "orders": "Orders",
+    "requested": "Requested",
+    "shipped": "Shipped",
+    "fulfillmentRate": "Fulfillment Rate",
+    "requests": "Requests",
+    "quantity": "Quantity",
+    "completionRate": "Completion Rate"
+  },
+  "chart": {
+    "totalOrdersCount": "Total Orders Count",
+    "itemsRequested": "Items Requested",
+    "itemsShipped": "Items Shipped",
+    "quantityRequested": "Quantity Requested",
+    "totalRequestsCount": "Total Requests Count",
+    "totalByStore": "Total by Store",
+    "totalByScope": "Total by Scope",
+    "dynamicsOverTime": "Dynamics over Time",
+    "noData": "No data",
+    "ordersLabel": "Orders",
+    "requestedQtyLabel": "Requested Qty",
+    "shippedQtyLabel": "Shipped Qty"
+  },
+  "exportFallbackAll": "All"
+}

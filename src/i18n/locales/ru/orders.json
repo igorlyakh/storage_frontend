@@ -1,0 +1,90 @@
+{
+  "myOrders": "Мои заказы",
+  "allOrders": "Все заказы",
+  "filters": {
+    "statuses": "Статусы",
+    "stores": "Магазины",
+    "filterByDate": "Фильтр по дате",
+    "selectAll": "Выбрать все",
+    "clear": "Очистить",
+    "allPrefix": "Все: {{label}}",
+    "withCount": "{{label}} ({{count}})"
+  },
+  "status": {
+    "NEW": "Новый",
+    "IN_PROGRESS": "В работе",
+    "SENT": "Отправлен",
+    "COMPLETED": "Завершён",
+    "BACKORDER": "Ожидание товара"
+  },
+  "noOrdersFound": "Заказы не найдены",
+  "storeFallback": "Магазин №{{id}}",
+  "card": {
+    "from": "От:",
+    "sended": "Создан:",
+    "updated": "Обновлён:",
+    "processOrder": "Взять в работу",
+    "accept": "Принять",
+    "toOrder": "К заказу",
+    "processed": "Заказ взят в работу!",
+    "processError": "Ошибка при обработке заказа",
+    "completed": "Заказ успешно завершён!",
+    "completeError": "Ошибка при завершении заказа"
+  },
+  "detail": {
+    "backToOrders": "Назад к заказам",
+    "orderDetails": "Детали заказа",
+    "orderedBy": "Заказал(а)"
+  },
+  "table": {
+    "productName": "Название товара",
+    "category": "Категория",
+    "withoutCategory": "БЕЗ КАТЕГОРИИ",
+    "requestedQuantity": "Запрошено",
+    "shippedQuantity": "Отправлено",
+    "picked": "Собрано",
+    "other": "Другое",
+    "sendOrder": "Отправить заказ",
+    "orderSent": "Заказ успешно отправлен!",
+    "sendFailed": "Не удалось отправить заказ"
+  },
+  "create": {
+    "yourName": "Ваше имя / Ответственный",
+    "enterYourName": "Введите ваше имя",
+    "store": "Магазин",
+    "loadingOptions": "Загрузка...",
+    "selectStore": "Выберите магазин",
+    "productName": "Название товара",
+    "category": "Категория",
+    "quantityToOrder": "Количество к заказу",
+    "limit": "Лимит",
+    "noLimit": "Без лимита",
+    "maxLimit": "Макс. {{limit}}",
+    "reason": "Причина",
+    "other": "Другое",
+    "writeOffPlaceholder": "Опишите причину списания (обязательно)...",
+    "customRequestPlaceholder": "Не нашли нужный товар? Опишите его здесь...",
+    "sendOrder": "Отправить заказ",
+    "createWriteOff": "Создать списание",
+    "writeOffSuccess": "Заказ на списание успешно создан.",
+    "orderSuccess": "Ваш заказ успешно отправлен! Склад уведомлён.",
+    "understood": "Понятно",
+    "orderStatusTitle": "Статус заказа",
+    "createFailed": "Не удалось создать заказ",
+    "nameRequired": "Пожалуйста, укажите ваше имя",
+    "storeRequired": "Пожалуйста, выберите магазин",
+    "writeOffReasonRequired": "Пожалуйста, укажите причину списания",
+    "specifyQuantity": "Укажите количество или опишите произвольный запрос",
+    "limitExceeded": "Превышен лимит для «{{name}}». Максимум: {{limit}}."
+  },
+  "writeOffTitle": "Списание со склада",
+  "confirmModal": {
+    "reviewTitle": "Проверьте ваш заказ",
+    "reviewDescription": "Пожалуйста, внимательно проверьте выбранные товары перед окончательной отправкой.",
+    "customRequestLabel": "Произвольный запрос",
+    "pcs": "шт",
+    "confirmCheckbox": "Я проверил(а) заказ и готов(а) его отправить",
+    "returnToEditing": "Вернуться к редактированию",
+    "submitOrder": "Отправить заказ"
+  }
+}

@@ -9,11 +9,15 @@ import {
 } from '@mantine/core';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
+import { syncLanguageFromAccount } from '../../language/useSyncLanguage';
 import { useLoginMutation } from '../../../store/api/api';
 import { setData } from '../../../store/userSlice/userSlice';
+import { getApiErrorMessage } from '../../../utils/apiError';
 
 const LoginForm = () => {
+  const { t, i18n } = useTranslation('auth');
   const [login, { isLoading }] = useLoginMutation();
 
   const {
@@ -29,10 +33,11 @@ const LoginForm = () => {
     try {
       const data = await login(formData).unwrap();
       dispatch(setData(data));
-      toast.success(`Welcome, ${data.username}!`);
+      syncLanguageFromAccount(i18n, data.language);
+      toast.success(t('welcomeToast', { username: data.username }));
       reset();
     } catch (error) {
-      toast.error(error.data?.message || error.message || 'Login failed');
+      toast.error(getApiErrorMessage(t, error, 'loginFailed'));
     }
   };
 
@@ -55,31 +60,31 @@ const LoginForm = () => {
           mb="lg"
           fz={{ base: 22, sm: 26 }}
         >
-          Welcome to Stock Assistant
+          {t('welcomeTitle')}
         </Title>
 
         <form onSubmit={handleSubmit(handler)}>
           <Stack gap={{ base: 'sm', sm: 'md' }}>
             <TextInput
-              label="Username"
-              placeholder="Enter your username"
+              label={t('username')}
+              placeholder={t('usernamePlaceholder')}
               withAsterisk
               {...register('username', {
-                required: 'Username is required!',
+                required: t('usernameRequired'),
               })}
               error={errors.username?.message}
               size={{ base: 'md', sm: 'sm' }}
             />
 
             <PasswordInput
-              label="Password"
-              placeholder="Enter your password"
+              label={t('password')}
+              placeholder={t('passwordPlaceholder')}
               withAsterisk
               {...register('password', {
-                required: 'Password is required!',
+                required: t('passwordRequired'),
                 minLength: {
                   value: 6,
-                  message: 'Password must be longer than 6 characters!',
+                  message: t('passwordMinLength'),
                 },
               })}
               error={errors.password?.message}
@@ -93,7 +98,7 @@ const LoginForm = () => {
               loading={isLoading}
               size="md"
             >
-              Login
+              {t('login')}
             </Button>
           </Stack>
         </form>

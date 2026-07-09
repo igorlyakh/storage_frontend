@@ -12,12 +12,14 @@ import { useDisclosure } from '@mantine/hooks';
 import dayjs from 'dayjs';
 import { Pencil, Trash } from 'lucide-react';
 import { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import DataTable from '../../components/ui/DataTable';
 import DeleteBrandModal from '../../components/ui/DeleteBrandModal';
 import EditBrandModal from '../../components/ui/EditBrandModal';
 import { useGetAllBrandsQuery } from '../../store/api/api';
 
 const BrandsPage = () => {
+  const { t } = useTranslation('brands');
   const { data: brands = [], isLoading } = useGetAllBrandsQuery();
   const [openedEdit, { open: openEdit, close: closeEdit }] = useDisclosure(false);
   const [openedDelete, { open: openDelete, close: closeDelete }] = useDisclosure(false);
@@ -27,22 +29,22 @@ const BrandsPage = () => {
     () => [
       {
         accessorKey: 'name',
-        header: 'Brand Name',
+        header: t('columns.name'),
         cell: info => <Text fw={500}>{info.getValue()}</Text>,
       },
       {
         accessorKey: 'createdAt',
-        header: 'Created At',
+        header: t('columns.createdAt'),
         cell: info => (
           <Text size="sm">{dayjs(info.getValue()).format('DD.MM.YY HH:mm')}</Text>
         ),
       },
       {
         id: 'actions',
-        header: 'Actions',
+        header: t('columns.actions'),
         cell: info => (
           <Group gap="xs">
-            <Tooltip label="Edit Brand">
+            <Tooltip label={t('tooltips.edit')}>
               <ActionIcon
                 color="blue"
                 variant="light"
@@ -54,7 +56,7 @@ const BrandsPage = () => {
                 <Pencil size={16} />
               </ActionIcon>
             </Tooltip>
-            <Tooltip label="Delete Brand">
+            <Tooltip label={t('tooltips.delete')}>
               <ActionIcon
                 color="red"
                 variant="light"
@@ -70,7 +72,7 @@ const BrandsPage = () => {
         ),
       },
     ],
-    [openEdit, openDelete],
+    [openEdit, openDelete, t],
   );
 
   return (
@@ -91,7 +93,7 @@ const BrandsPage = () => {
           order={2}
           mb={10}
         >
-          Brands Management
+          {t('management')}
         </Title>
 
         <DataTable

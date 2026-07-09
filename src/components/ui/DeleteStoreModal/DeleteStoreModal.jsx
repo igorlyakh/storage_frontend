@@ -1,17 +1,20 @@
 import { Button, Group, Modal, Text } from '@mantine/core';
 import toast from 'react-hot-toast';
+import { Trans, useTranslation } from 'react-i18next';
 import { useDeleteStoreMutation } from '../../../store/api/api';
+import { getApiErrorMessage } from '../../../utils/apiError';
 
 const DeleteStoreModal = ({ opened, onClose, store }) => {
+  const { t } = useTranslation('stores');
   const [deleteStore, { isLoading }] = useDeleteStoreMutation();
 
   const handleDelete = async () => {
     try {
       await deleteStore(store.id).unwrap();
-      toast.success(`Store "${store.name}" deleted`);
+      toast.success(t('deleteModal.deleted', { name: store.name }));
       onClose();
     } catch (error) {
-      toast.error(error.data?.message || 'Failed to delete store');
+      toast.error(getApiErrorMessage(t, error, 'deleteModal.deleteFailed'));
     }
   };
 
@@ -21,7 +24,7 @@ const DeleteStoreModal = ({ opened, onClose, store }) => {
     <Modal
       opened={opened}
       onClose={onClose}
-      title="Confirm Deletion"
+      title={t('common:actions.confirmDeletion')}
       centered
       size={{ base: '95%', sm: 420 }}
       padding={{ base: 'md', sm: 'lg' }}
@@ -30,9 +33,12 @@ const DeleteStoreModal = ({ opened, onClose, store }) => {
         size="sm"
         mb="lg"
       >
-        Are you sure you want to delete store <b>{store.name}</b>? This will{' '}
-        <b>permanently delete the entire order history</b> of this store. This action
-        cannot be undone.
+        <Trans
+          t={t}
+          i18nKey="deleteModal.confirmText"
+          values={{ name: store.name }}
+          components={{ bold: <b />, bold2: <b /> }}
+        />
       </Text>
       <Group
         justify="flex-end"
@@ -45,7 +51,7 @@ const DeleteStoreModal = ({ opened, onClose, store }) => {
           disabled={isLoading}
           w={{ base: '100%', sm: 'auto' }}
         >
-          Cancel
+          {t('common:actions.cancel')}
         </Button>
         <Button
           color="red"
@@ -53,7 +59,7 @@ const DeleteStoreModal = ({ opened, onClose, store }) => {
           loading={isLoading}
           w={{ base: '100%', sm: 'auto' }}
         >
-          Delete Store
+          {t('deleteModal.delete')}
         </Button>
       </Group>
     </Modal>

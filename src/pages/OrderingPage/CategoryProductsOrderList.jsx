@@ -9,10 +9,12 @@ import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-ki
 import { Stack, Text } from '@mantine/core';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import SortableRow from '../../components/ui/SortableRow';
 import { useReorderProductsMutation } from '../../store/api/api';
 
 const CategoryProductsOrderList = ({ initialProducts }) => {
+  const { t } = useTranslation('products');
   const [items, setItems] = useState(initialProducts);
   const [reorderProducts] = useReorderProductsMutation();
 
@@ -31,7 +33,7 @@ const CategoryProductsOrderList = ({ initialProducts }) => {
 
     reorderProducts(newItems.map(p => p.id))
       .unwrap()
-      .catch(() => toast.error('Failed to save product order'));
+      .catch(() => toast.error(t('reorder.productOrderFailed')));
   };
 
   if (items.length === 0) {
@@ -42,7 +44,7 @@ const CategoryProductsOrderList = ({ initialProducts }) => {
         ta="center"
         py="lg"
       >
-        No products in this category
+        {t('reorder.noProducts')}
       </Text>
     );
   }

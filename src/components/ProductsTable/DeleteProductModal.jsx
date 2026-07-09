@@ -1,17 +1,19 @@
 import { Button, Group, Modal, Text } from '@mantine/core';
 import toast from 'react-hot-toast';
+import { Trans, useTranslation } from 'react-i18next';
 import { useDeleteProductMutation } from '../../store/api/api';
 
 const DeleteProductModal = ({ opened, onClose, product }) => {
+  const { t } = useTranslation('products');
   const [deleteProduct, { isLoading }] = useDeleteProductMutation();
 
   const handleDelete = async () => {
     try {
       await deleteProduct({ id: product.id }).unwrap();
-      toast.success('Product deleted');
+      toast.success(t('deleteModal.deleted'));
       onClose();
     } catch {
-      toast.error('Failed to delete product');
+      toast.error(t('deleteModal.deleteFailed'));
     }
   };
 
@@ -21,7 +23,7 @@ const DeleteProductModal = ({ opened, onClose, product }) => {
     <Modal
       opened={opened}
       onClose={onClose}
-      title="Confirm Deletion"
+      title={t('deleteModal.title')}
       centered
       padding={{ base: 'md', sm: 'lg' }}
       size={{ base: '95%', sm: 400 }}
@@ -30,7 +32,12 @@ const DeleteProductModal = ({ opened, onClose, product }) => {
         size="sm"
         mb="lg"
       >
-        Are you sure you want to delete <b>{product.name}</b>?
+        <Trans
+          t={t}
+          i18nKey="deleteModal.confirmText"
+          values={{ name: product.name }}
+          components={{ bold: <b /> }}
+        />
       </Text>
       <Group
         justify="flex-end"
@@ -43,7 +50,7 @@ const DeleteProductModal = ({ opened, onClose, product }) => {
           disabled={isLoading}
           w={{ base: '100%', sm: 'auto' }}
         >
-          Cancel
+          {t('common:actions.cancel')}
         </Button>
         <Button
           color="red"
@@ -51,7 +58,7 @@ const DeleteProductModal = ({ opened, onClose, product }) => {
           loading={isLoading}
           w={{ base: '100%', sm: 'auto' }}
         >
-          Delete
+          {t('common:actions.delete')}
         </Button>
       </Group>
     </Modal>

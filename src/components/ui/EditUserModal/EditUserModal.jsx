@@ -1,10 +1,13 @@
 import { Modal } from '@mantine/core';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import DynamicForm from '../DynamicForm';
 import { productTags } from '../../../constants/productTags';
 import { useGetAllStoresQuery, useUpdateUserMutation } from '../../../store/api/api';
+import { getApiErrorMessage } from '../../../utils/apiError';
 
 const EditUserModal = ({ opened, onClose, user }) => {
+  const { t } = useTranslation('users');
   const { data: stores = [], isLoading: isStoresLoading } = useGetAllStoresQuery();
   const [updateUser, { isLoading: isSubmitting }] = useUpdateUserMutation();
 
@@ -12,21 +15,21 @@ const EditUserModal = ({ opened, onClose, user }) => {
 
   const storeOptions = stores.map(store => ({
     value: String(store.id),
-    label: store.name || `Store #${store.id}`,
+    label: store.name || t('storeFallback', { id: store.id }),
   }));
 
   const fields = [
     {
       name: 'username',
       type: 'text',
-      label: 'Username',
-      placeholder: 'Enter username',
-      rules: { required: 'Username is required' },
+      label: t('create.usernameLabel'),
+      placeholder: t('create.usernamePlaceholder'),
+      rules: { required: t('create.usernameRequired') },
     },
     {
       name: 'role',
       type: 'select',
-      label: 'Access Role',
+      label: t('create.roleLabel'),
       options: [
         { value: 'ADMIN', label: 'ADMIN' },
         { value: 'WAREHOUSE', label: 'WAREHOUSE' },
@@ -36,20 +39,20 @@ const EditUserModal = ({ opened, onClose, user }) => {
     {
       name: 'adminScopes',
       type: 'multiselect',
-      label: 'Admin Scopes',
-      placeholder: '-- Choose scopes --',
-      rules: { required: 'Scopes are required for ADMIN role' },
+      label: t('create.adminScopesLabel'),
+      placeholder: t('create.chooseScopesPlaceholder'),
+      rules: { required: t('create.scopesRequired') },
       options: productTags.map(tag => ({ value: tag, label: tag })),
       condition: values => values.role === 'ADMIN',
     },
     {
       name: 'storeId',
       type: 'select',
-      label: 'Assigned Store',
-      placeholder: '-- Choose --',
+      label: t('create.assignedStoreLabel'),
+      placeholder: t('create.choosePlaceholder'),
       options: storeOptions,
       loading: isStoresLoading,
-      rules: { required: 'Store is required for STORE role' },
+      rules: { required: t('create.storeRequired') },
       condition: values => values.role === 'STORE',
     },
   ];
@@ -65,11 +68,11 @@ const EditUserModal = ({ opened, onClose, user }) => {
 
     try {
       await updateUser(payload).unwrap();
-      toast.success('User updated!');
+      toast.success(t('edit.updated'));
       reset();
       onClose();
     } catch (error) {
-      toast.error(error.data?.message || error.message || 'Failed to update user');
+      toast.error(getApiErrorMessage(t, error, 'edit.updateFailed'));
     }
   };
 
@@ -77,7 +80,7 @@ const EditUserModal = ({ opened, onClose, user }) => {
     <Modal
       opened={opened}
       onClose={onClose}
-      title={`Edit user: ${user.username}`}
+      title={t('edit.title', { username: user.username })}
       centered
       size={{ base: '95%', sm: 500 }}
       padding={0}
@@ -85,7 +88,7 @@ const EditUserModal = ({ opened, onClose, user }) => {
       <DynamicForm
         key={user.id}
         title=""
-        submitLabel="Save Changes"
+        submitLabel={t('edit.submit')}
         fields={fields}
         gridCols={1}
         paperWidth="100%"

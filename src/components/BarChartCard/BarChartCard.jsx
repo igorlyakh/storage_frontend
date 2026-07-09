@@ -1,23 +1,32 @@
 import { BarChart } from '@mantine/charts';
 import { Box, Card, LoadingOverlay, Text, Title } from '@mantine/core';
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 
-const BarChartCard = ({ data, isFetching, chartLabel }) => {
+const BarChartCard = ({
+  data,
+  isFetching,
+  chartLabel,
+  groupKey = 'storeName',
+  title,
+}) => {
+  const { t } = useTranslation('statistics');
+
   const chartData = useMemo(() => {
     if (!data || data.length === 0) return [];
 
     const grouped = data.reduce((acc, item) => {
-      acc[item.storeName] = (acc[item.storeName] || 0) + item.value;
+      acc[item[groupKey]] = (acc[item[groupKey]] || 0) + item.value;
       return acc;
     }, {});
 
     return Object.entries(grouped)
-      .map(([storeName, value]) => ({
-        storeName,
+      .map(([name, value]) => ({
+        [groupKey]: name,
         value,
       }))
       .sort((a, b) => b.value - a.value);
-  }, [data]);
+  }, [data, groupKey]);
 
   return (
     <Card
@@ -30,7 +39,7 @@ const BarChartCard = ({ data, isFetching, chartLabel }) => {
         order={4}
         mb="xs"
       >
-        Total by Store
+        {title || t('chart.totalByStore')}
       </Title>
       <Text
         c="dimmed"
@@ -56,7 +65,7 @@ const BarChartCard = ({ data, isFetching, chartLabel }) => {
           <BarChart
             h={300}
             data={chartData}
-            dataKey="storeName"
+            dataKey={groupKey}
             series={[{ name: 'value', label: chartLabel, color: 'blue.6' }]}
             tickLine="y"
             tooltipAnimationDuration={200}
@@ -67,7 +76,7 @@ const BarChartCard = ({ data, isFetching, chartLabel }) => {
             ta="center"
             mt={100}
           >
-            No data
+            {t('chart.noData')}
           </Text>
         )}
       </Box>

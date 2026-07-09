@@ -11,11 +11,13 @@ import {
   Title,
 } from '@mantine/core';
 import { ArrowLeft, User } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import OrderItemsTable from '../../components/OrderItemsTable/OrderItemsTable';
 import { useGetOrderByIdQuery } from '../../store/api/api';
 
 const OrderPage = () => {
+  const { t } = useTranslation('orders');
   const { id } = useParams();
   const { data: order, isLoading } = useGetOrderByIdQuery(id);
   const navigate = useNavigate();
@@ -47,11 +49,11 @@ const OrderPage = () => {
           onClick={() => navigate(backLinkPath)}
           style={{ alignSelf: 'flex-start', paddingLeft: 0 }}
         >
-          Back to Orders
+          {t('detail.backToOrders')}
         </Button>
 
         <Stack gap="sm">
-          <Title order={2}>Order Details</Title>
+          <Title order={2}>{t('detail.orderDetails')}</Title>
 
           <Group gap="sm">
             <Badge
@@ -82,7 +84,7 @@ const OrderPage = () => {
                   c="dimmed"
                   lh={1.2}
                 >
-                  Ordered by
+                  {t('detail.orderedBy')}
                 </Text>
                 <Text
                   fw={500}

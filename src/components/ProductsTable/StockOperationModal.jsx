@@ -1,4 +1,5 @@
 import { Button, Group, Modal, NumberInput, Stack } from '@mantine/core';
+import { useTranslation } from 'react-i18next';
 
 const StockOperationModal = ({
   stockOpData,
@@ -8,20 +9,27 @@ const StockOperationModal = ({
   onConfirm,
   isLoading,
 }) => {
+  const { t } = useTranslation('warehouse');
+
   return (
     <Modal
       opened={!!stockOpData}
       onClose={onClose}
       title={
         stockOpData
-          ? `${stockOpData.type === 'increase' ? 'Increase' : 'Decrease'} Stock: ${stockOpData.product?.name}`
+          ? t(
+              stockOpData.type === 'increase'
+                ? 'stockModal.increaseTitle'
+                : 'stockModal.decreaseTitle',
+              { name: stockOpData.product?.name },
+            )
           : ''
       }
       centered
     >
       <Stack>
         <NumberInput
-          label="Quantity"
+          label={t('stockModal.quantity')}
           value={stockQuantity}
           onChange={val => onQuantityChange(val || 0)}
           min={1}
@@ -32,14 +40,14 @@ const StockOperationModal = ({
             variant="default"
             onClick={onClose}
           >
-            Cancel
+            {t('stockModal.cancel')}
           </Button>
           <Button
             color={stockOpData?.type === 'increase' ? 'green' : 'red'}
             onClick={onConfirm}
             loading={isLoading}
           >
-            Confirm
+            {t('stockModal.confirm')}
           </Button>
         </Group>
       </Stack>

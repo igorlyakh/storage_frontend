@@ -1,7 +1,10 @@
 import { Center, SimpleGrid, Text } from '@mantine/core';
+import { useTranslation } from 'react-i18next';
 import RequestItem from '../RequestItem';
 
 const RequestsList = ({ requests }) => {
+  const { t } = useTranslation('requests');
+
   if (!requests || requests.length === 0) {
     return (
       <Center h={{ base: 100, sm: 200 }}>
@@ -10,7 +13,7 @@ const RequestsList = ({ requests }) => {
           fz={{ base: 'md', sm: 'lg' }}
           fw={500}
         >
-          List is empty!
+          {t('listEmpty')}
         </Text>
       </Center>
     );

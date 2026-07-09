@@ -1,0 +1,90 @@
+{
+  "myOrders": "My Orders",
+  "allOrders": "All Orders",
+  "filters": {
+    "statuses": "Statuses",
+    "stores": "Stores",
+    "filterByDate": "Filter by date",
+    "selectAll": "Select All",
+    "clear": "Clear",
+    "allPrefix": "All {{label}}",
+    "withCount": "{{label}} ({{count}})"
+  },
+  "status": {
+    "NEW": "New",
+    "IN_PROGRESS": "In progress",
+    "SENT": "Sent",
+    "COMPLETED": "Completed",
+    "BACKORDER": "Backorder"
+  },
+  "noOrdersFound": "No orders found",
+  "storeFallback": "Store #{{id}}",
+  "card": {
+    "from": "From:",
+    "sended": "Sended:",
+    "updated": "Updated:",
+    "processOrder": "Process order",
+    "accept": "Accept",
+    "toOrder": "To order",
+    "processed": "Order processed!",
+    "processError": "Error processing order",
+    "completed": "Order successfully completed!",
+    "completeError": "Error completing order"
+  },
+  "detail": {
+    "backToOrders": "Back to Orders",
+    "orderDetails": "Order Details",
+    "orderedBy": "Ordered by"
+  },
+  "table": {
+    "productName": "Product Name",
+    "category": "Category",
+    "withoutCategory": "WITHOUT CATEGORY",
+    "requestedQuantity": "Requested Quantity",
+    "shippedQuantity": "Shipped Quantity",
+    "picked": "Picked",
+    "other": "Other",
+    "sendOrder": "Send order",
+    "orderSent": "Order sent successfully!",
+    "sendFailed": "Failed to send order"
+  },
+  "create": {
+    "yourName": "Your Name / Responsible Person",
+    "enterYourName": "Enter your name",
+    "store": "Store",
+    "loadingOptions": "Loading...",
+    "selectStore": "Select store",
+    "productName": "Product Name",
+    "category": "Category",
+    "quantityToOrder": "Quantity to Order",
+    "limit": "Limit",
+    "noLimit": "No limit",
+    "maxLimit": "Max {{limit}}",
+    "reason": "Reason",
+    "other": "Other",
+    "writeOffPlaceholder": "Describe the reason for this write-off (required)...",
+    "customRequestPlaceholder": "Didn't find what you need? Describe it here...",
+    "sendOrder": "Send Order",
+    "createWriteOff": "Create Write-off",
+    "writeOffSuccess": "Write-off order has been created successfully.",
+    "orderSuccess": "Your order has been sent successfully! The warehouse has been notified.",
+    "understood": "Understood",
+    "orderStatusTitle": "Order Status",
+    "createFailed": "Failed to create order",
+    "nameRequired": "Please enter your name",
+    "storeRequired": "Please select a store",
+    "writeOffReasonRequired": "Please specify a reason for the write-off",
+    "specifyQuantity": "Please specify quantity or write a custom request",
+    "limitExceeded": "Limit exceeded for \"{{name}}\". Maximum allowed is {{limit}}."
+  },
+  "writeOffTitle": "Warehouse Write-off",
+  "confirmModal": {
+    "reviewTitle": "Review Your Order",
+    "reviewDescription": "Please carefully review the items you have selected before final submission.",
+    "customRequestLabel": "Custom Request",
+    "pcs": "pcs",
+    "confirmCheckbox": "I have verified my order and I am ready to submit",
+    "returnToEditing": "Return to editing",
+    "submitOrder": "Submit Order"
+  }
+}

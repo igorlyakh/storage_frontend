@@ -1,6 +1,9 @@
 import { Badge, Box, Button, Group } from '@mantine/core';
+import { useTranslation } from 'react-i18next';
 
 const SendRequestBar = ({ totalItemsToOrder, isSending, onSend }) => {
+  const { t } = useTranslation('warehouse');
+
   return (
     <Group
       justify="space-between"
@@ -16,7 +19,7 @@ const SendRequestBar = ({ totalItemsToOrder, isSending, onSend }) => {
             variant="light"
             w={{ base: '100%', sm: 'auto' }}
           >
-            Selected products: {totalItemsToOrder}
+            {t('sendRequestBar.selectedProducts', { count: totalItemsToOrder })}
           </Badge>
         )}
       </Box>
@@ -27,7 +30,7 @@ const SendRequestBar = ({ totalItemsToOrder, isSending, onSend }) => {
         loading={isSending}
         w={{ base: '100%', sm: 'auto' }}
       >
-        Send Request
+        {t('sendRequestBar.sendRequest')}
       </Button>
     </Group>
   );

@@ -1,0 +1,78 @@
+{
+  "management": "Products Management",
+  "columns": {
+    "pcsUnit": "pcs",
+    "productDetails": "Product Details",
+    "brands": "Brands",
+    "category": "Category",
+    "withoutCategory": "WITHOUT CATEGORY",
+    "pkgType": "Pkg Type",
+    "qtyPerPkg": "Qty/Pkg",
+    "packages": "Packages",
+    "stockQty": "Stock (Qty)",
+    "toOrder": "To Order",
+    "available": "Available",
+    "updated": "Updated",
+    "limit": "Limit",
+    "delete": "Delete",
+    "deleteTooltip": "Delete Product"
+  },
+  "editable": {
+    "addBrands": "Add brands...",
+    "selectBrands": "Select brands..."
+  },
+  "create": {
+    "title": "Add New Product",
+    "submit": "Create Product",
+    "nameLabel": "Product name",
+    "namePlaceholder": "Enter product name",
+    "nameRequired": "Name is required!",
+    "articleLabel": "Article",
+    "articleRequired": "Article is required!",
+    "categoryLabel": "Category",
+    "loadingOptions": "Loading...",
+    "selectCategory": "Select category",
+    "categoryRequired": "Category is required!",
+    "tagLabel": "Admin Tag",
+    "tagRequired": "Tag is required!",
+    "brandsLabel": "Brands",
+    "selectBrands": "Select brands",
+    "brandsRequired": "Brands are required!",
+    "limitLabel": "Limit (optional)",
+    "limitPlaceholder": "Enter limit",
+    "packageTypeLabel": "Package Type",
+    "selectType": "Select type",
+    "packageTypeRequired": "Package type is required!",
+    "itemsPerPackageLabel": "Items per Package",
+    "itemsPerPackagePlaceholder": "E.g., 24",
+    "itemsPerPackageRequired": "Items per package is required!",
+    "initialPackagesLabel": "Initial Packages Count",
+    "initialPackagesPlaceholder": "E.g., 5",
+    "initialPackagesRequired": "Packages count is required!",
+    "added": "Product added!",
+    "addFailed": "Failed to add product",
+    "packageTypes": {
+      "PALLET": "Pallet",
+      "BOX": "Box",
+      "PACKAGE": "Package"
+    }
+  },
+  "reorder": {
+    "title": "Reorder Products & Categories",
+    "description": "Drag items to change the order shown to everyone across the app.",
+    "categories": "Categories",
+    "productsInCategory": "Products in category",
+    "selectCategory": "Select category",
+    "categoryOrderFailed": "Failed to save category order",
+    "productOrderFailed": "Failed to save product order",
+    "noProducts": "No products in this category"
+  },
+  "deleteModal": {
+    "title": "Confirm Deletion",
+    "confirmText": "Are you sure you want to delete <bold>{{name}}</bold>?",
+    "deleted": "Product deleted",
+    "deleteFailed": "Failed to delete product"
+  },
+  "updated": "Product updated!",
+  "updateFailed": "Failed to update product"
+}

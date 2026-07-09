@@ -1,0 +1,51 @@
+{
+  "pageTitle": "כל ההזמנות",
+  "filters": {
+    "statuses": "סטטוסים",
+    "filterByDate": "סינון לפי תאריך"
+  },
+  "status": {
+    "NEW": "חדשה",
+    "APPROVED": "אושרה",
+    "SENT": "נשלחה",
+    "COMPLETED": "הושלמה"
+  },
+  "loadFailed": "!טעינת ההזמנות נכשלה",
+  "listEmpty": "!הרשימה ריקה",
+  "card": {
+    "createdAt": ":נוצרה בתאריך",
+    "productsInOrder": ":מוצרים בבקשה",
+    "details": "פרטים",
+    "approve": "אישור",
+    "approved": "!אושר",
+    "approveError": "!שגיאה"
+  },
+  "detail": {
+    "details": "פרטים",
+    "id": "{{id}} :מזהה",
+    "createdAt": "{{date}} :נוצרה בתאריך",
+    "category": "{{category}} :קטגוריה",
+    "items": "פריטים",
+    "editItems": "ערוך פריטים",
+    "addItem": "הוסף פריט",
+    "cancel": "ביטול",
+    "saveChanges": "שמור שינויים",
+    "send": "שלח",
+    "accept": "אישור",
+    "statusUpdated": "{{status}} הסטטוס עודכן ל-",
+    "statusUpdateError": "!שגיאה בעדכון הסטטוס",
+    "itemsUpdated": "!הפריטים עודכנו בהצלחה",
+    "itemsUpdateError": "!שגיאה בשמירת הפריטים",
+    "noData": "!אין נתונים",
+    "columns": {
+      "article": "מק\"ט",
+      "product": "מוצר",
+      "selectProduct": "בחר מוצר",
+      "category": "קטגוריה",
+      "categoryNA": "לא זמין",
+      "pkgType": "סוג אריזה",
+      "quantity": "כמות",
+      "pcs": "יח'"
+    }
+  }
+}

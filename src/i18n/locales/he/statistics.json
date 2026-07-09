@@ -1,0 +1,45 @@
+{
+  "globalTitle": "סטטיסטיקה כללית",
+  "requestsTitle": "סטטיסטיקת בקשות",
+  "exportExcel": "ייצוא ל-Excel",
+  "selectDateRangePrompt": ".בחר טווח תאריכים כדי להציג סטטיסטיקה",
+  "filters": {
+    "dateRangeLabel": "(טווח תאריכים (חובה",
+    "dateRangePlaceholder": "בחר טווח תאריכים",
+    "dateRangeRequired": "נא לבחור טווח תאריכים",
+    "quickSelect": ":בחירה מהירה",
+    "today": "היום",
+    "thisMonth": "החודש",
+    "thisYear": "השנה",
+    "storeFilter": "סינון לפי חנות",
+    "allStores": "כל החנויות",
+    "productFilter": "סינון לפי מוצר",
+    "allProducts": "כל המוצרים",
+    "scopeFilter": "סינון לפי הרשאה",
+    "allScopes": "כל ההרשאות"
+  },
+  "metrics": {
+    "orders": "הזמנות",
+    "requested": "התבקש",
+    "shipped": "נשלח",
+    "fulfillmentRate": "אחוז מימוש",
+    "requests": "בקשות",
+    "quantity": "כמות",
+    "completionRate": "אחוז השלמה"
+  },
+  "chart": {
+    "totalOrdersCount": "סך כל ההזמנות",
+    "itemsRequested": "פריטים שהתבקשו",
+    "itemsShipped": "פריטים שנשלחו",
+    "quantityRequested": "כמות שהתבקשה",
+    "totalRequestsCount": "סך כל הבקשות",
+    "totalByStore": "סה\"כ לפי חנות",
+    "totalByScope": "סה\"כ לפי הרשאה",
+    "dynamicsOverTime": "מגמה לאורך זמן",
+    "noData": "אין נתונים",
+    "ordersLabel": "הזמנות",
+    "requestedQtyLabel": "כמות מבוקשת",
+    "shippedQtyLabel": "כמות שנשלחה"
+  },
+  "exportFallbackAll": "הכל"
+}

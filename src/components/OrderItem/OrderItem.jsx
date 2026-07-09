@@ -2,10 +2,12 @@ import { Badge, Button, Card, Group, Stack, Text } from '@mantine/core';
 import dayjs from 'dayjs';
 import { ArrowRight, CheckCheck, CheckCircle } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
 import { useCompleteOrderMutation, useProcessOrderMutation } from '../../store/api/api';
 import { userRoleSelector } from '../../store/selectors/selectors';
+import { getApiErrorMessage } from '../../utils/apiError';
 
 const getStatusColor = status => {
   switch (status) {
@@ -25,6 +27,7 @@ const getStatusColor = status => {
 };
 
 const OrderItem = ({ store, status, sended, updated, id }) => {
+  const { t } = useTranslation('orders');
   const location = useLocation();
   const userRole = useSelector(userRoleSelector);
 
@@ -34,18 +37,18 @@ const OrderItem = ({ store, status, sended, updated, id }) => {
   const handleProcess = async () => {
     try {
       await processOrder({ orderId: id }).unwrap();
-      toast.success('Order processed!');
+      toast.success(t('card.processed'));
     } catch (error) {
-      toast.error(error.data?.message?.[0] || error.message || 'Error processing order');
+      toast.error(getApiErrorMessage(t, error, 'card.processError'));
     }
   };
 
   const handleComplete = async () => {
     try {
       await completeOrder(id).unwrap();
-      toast.success('Order successfully completed!');
+      toast.success(t('card.completed'));
     } catch (error) {
-      toast.error(error.data?.message?.[0] || error.message || 'Error completing order');
+      toast.error(getApiErrorMessage(t, error, 'card.completeError'));
     }
   };
 
@@ -76,7 +79,7 @@ const OrderItem = ({ store, status, sended, updated, id }) => {
             fz={{ base: 'xs', sm: 'sm' }}
             fw={400}
           >
-            From:{' '}
+            {t('card.from')}{' '}
           </Text>
           {store}
         </Text>
@@ -84,7 +87,7 @@ const OrderItem = ({ store, status, sended, updated, id }) => {
           color={getStatusColor(status)}
           size="sm"
         >
-          {status.replace('_', ' ')}
+          {t(`status.${status}`, status.replace('_', ' '))}
         </Badge>
       </Group>
 
@@ -98,7 +101,7 @@ const OrderItem = ({ store, status, sended, updated, id }) => {
             span
             c="dimmed"
           >
-            Sended:{' '}
+            {t('card.sended')}{' '}
           </Text>
           <Text
             span
@@ -113,7 +116,7 @@ const OrderItem = ({ store, status, sended, updated, id }) => {
               span
               c="dimmed"
             >
-              Updated:{' '}
+              {t('card.updated')}{' '}
             </Text>
             <Text
               span
@@ -141,7 +144,7 @@ const OrderItem = ({ store, status, sended, updated, id }) => {
             leftSection={<CheckCircle size={16} />}
             flex={{ base: 1, sm: 'none' }}
           >
-            Process order
+            {t('card.processOrder')}
           </Button>
         )}
 
@@ -156,7 +159,7 @@ const OrderItem = ({ store, status, sended, updated, id }) => {
             leftSection={<CheckCheck size={16} />}
             flex={{ base: 1, sm: 'none' }}
           >
-            Accept
+            {t('card.accept')}
           </Button>
         )}
 
@@ -175,7 +178,7 @@ const OrderItem = ({ store, status, sended, updated, id }) => {
             sm: 'none',
           }}
         >
-          To order
+          {t('card.toOrder')}
         </Button>
       </Group>
     </Card>

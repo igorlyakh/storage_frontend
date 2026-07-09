@@ -1,0 +1,78 @@
+{
+  "management": "Управление товарами",
+  "columns": {
+    "pcsUnit": "шт",
+    "productDetails": "Информация о товаре",
+    "brands": "Бренды",
+    "category": "Категория",
+    "withoutCategory": "БЕЗ КАТЕГОРИИ",
+    "pkgType": "Тип упаковки",
+    "qtyPerPkg": "Шт/уп",
+    "packages": "Упаковок",
+    "stockQty": "Остаток (шт)",
+    "toOrder": "К заказу",
+    "available": "Доступен",
+    "updated": "Обновлён",
+    "limit": "Лимит",
+    "delete": "Удалить",
+    "deleteTooltip": "Удалить товар"
+  },
+  "editable": {
+    "addBrands": "Добавить бренды...",
+    "selectBrands": "Выберите бренды..."
+  },
+  "create": {
+    "title": "Добавить новый товар",
+    "submit": "Создать товар",
+    "nameLabel": "Название товара",
+    "namePlaceholder": "Введите название товара",
+    "nameRequired": "Название обязательно!",
+    "articleLabel": "Артикул",
+    "articleRequired": "Артикул обязателен!",
+    "categoryLabel": "Категория",
+    "loadingOptions": "Загрузка...",
+    "selectCategory": "Выберите категорию",
+    "categoryRequired": "Категория обязательна!",
+    "tagLabel": "Раздел админа",
+    "tagRequired": "Раздел обязателен!",
+    "brandsLabel": "Бренды",
+    "selectBrands": "Выберите бренды",
+    "brandsRequired": "Бренды обязательны!",
+    "limitLabel": "Лимит (необязательно)",
+    "limitPlaceholder": "Введите лимит",
+    "packageTypeLabel": "Тип упаковки",
+    "selectType": "Выберите тип",
+    "packageTypeRequired": "Тип упаковки обязателен!",
+    "itemsPerPackageLabel": "Штук в упаковке",
+    "itemsPerPackagePlaceholder": "Например, 24",
+    "itemsPerPackageRequired": "Количество в упаковке обязательно!",
+    "initialPackagesLabel": "Начальное количество упаковок",
+    "initialPackagesPlaceholder": "Например, 5",
+    "initialPackagesRequired": "Количество упаковок обязательно!",
+    "added": "Товар добавлен!",
+    "addFailed": "Не удалось добавить товар",
+    "packageTypes": {
+      "PALLET": "Паллета",
+      "BOX": "Коробка",
+      "PACKAGE": "Упаковка"
+    }
+  },
+  "reorder": {
+    "title": "Порядок товаров и категорий",
+    "description": "Перетаскивайте элементы, чтобы изменить порядок, отображаемый всем в приложении.",
+    "categories": "Категории",
+    "productsInCategory": "Товары в категории",
+    "selectCategory": "Выберите категорию",
+    "categoryOrderFailed": "Не удалось сохранить порядок категорий",
+    "productOrderFailed": "Не удалось сохранить порядок товаров",
+    "noProducts": "В этой категории нет товаров"
+  },
+  "deleteModal": {
+    "title": "Подтверждение удаления",
+    "confirmText": "Вы уверены, что хотите удалить <bold>{{name}}</bold>?",
+    "deleted": "Товар удалён",
+    "deleteFailed": "Не удалось удалить товар"
+  },
+  "updated": "Товар обновлён!",
+  "updateFailed": "Не удалось обновить товар"
+}

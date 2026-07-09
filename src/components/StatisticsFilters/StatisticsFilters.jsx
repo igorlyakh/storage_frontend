@@ -1,5 +1,6 @@
 import { Button, Card, Group, Select, SimpleGrid, Stack, Text } from '@mantine/core';
 import { DatePickerInput } from '@mantine/dates';
+import { useTranslation } from 'react-i18next';
 
 const StatisticsFilters = ({
   dateRange,
@@ -11,6 +12,8 @@ const StatisticsFilters = ({
   setStoreId,
   storeOptions,
 }) => {
+  const { t } = useTranslation('statistics');
+
   const setToday = () => {
     const today = new Date();
     setDateRange([today, today]);
@@ -44,15 +47,15 @@ const StatisticsFilters = ({
         >
           <DatePickerInput
             type="range"
-            label="Date Range (Required)"
-            placeholder="Pick dates range"
+            label={t('filters.dateRangeLabel')}
+            placeholder={t('filters.dateRangePlaceholder')}
             value={dateRange}
             onChange={setDateRange}
             clearable
             size={{ base: 'md', sm: 'sm' }}
             style={{ flexGrow: 1, maxWidth: '400px' }}
             required
-            error={!dateRange?.[0] ? 'Please select a date range' : null}
+            error={!dateRange?.[0] ? t('filters.dateRangeRequired') : null}
           />
 
           <Group
@@ -65,28 +68,28 @@ const StatisticsFilters = ({
               c="dimmed"
               mr="xs"
             >
-              Quick select:
+              {t('filters.quickSelect')}
             </Text>
             <Button
               variant="light"
               size="xs"
               onClick={setToday}
             >
-              Today
+              {t('filters.today')}
             </Button>
             <Button
               variant="light"
               size="xs"
               onClick={setThisMonth}
             >
-              This Month
+              {t('filters.thisMonth')}
             </Button>
             <Button
               variant="light"
               size="xs"
               onClick={setThisYear}
             >
-              This Year
+              {t('filters.thisYear')}
             </Button>
           </Group>
         </Group>
@@ -97,8 +100,8 @@ const StatisticsFilters = ({
           mt="sm"
         >
           <Select
-            label="Store Filter"
-            placeholder="All Stores"
+            label={t('filters.storeFilter')}
+            placeholder={t('filters.allStores')}
             data={storeOptions}
             value={storeId}
             onChange={setStoreId}
@@ -108,8 +111,8 @@ const StatisticsFilters = ({
           />
 
           <Select
-            label="Product Filter"
-            placeholder="All Products"
+            label={t('filters.productFilter')}
+            placeholder={t('filters.allProducts')}
             data={productOptions}
             value={productId}
             onChange={setProductId}

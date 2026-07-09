@@ -7,7 +7,7 @@ const initialState = {
   store: null,
   adminScopes: null,
   isLogin: false,
-  justLoggedIn: false,
+  lowStockCheckToken: 0,
 };
 
 const userSlice = createSlice({
@@ -20,10 +20,6 @@ const userSlice = createSlice({
       state.adminScopes = action.payload.adminScopes;
       state.accessToken = action.payload.accessToken;
       state.isLogin = true;
-      state.justLoggedIn = true;
-    },
-    clearJustLoggedIn: state => {
-      state.justLoggedIn = false;
     },
     updateToken: (state, action) => {
       state.accessToken = action.payload;
@@ -35,11 +31,13 @@ const userSlice = createSlice({
       state.adminScopes = null;
       state.store = null;
       state.isLogin = false;
-      state.justLoggedIn = false;
+    },
+    triggerLowStockCheck: state => {
+      state.lowStockCheckToken += 1;
     },
   },
 });
 
-export const { setData, updateToken, logOut, clearJustLoggedIn } = userSlice.actions;
+export const { setData, updateToken, logOut, triggerLowStockCheck } = userSlice.actions;
 
 export const userReducer = userSlice.reducer;

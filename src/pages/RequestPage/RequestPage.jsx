@@ -19,6 +19,7 @@ import dayjs from 'dayjs';
 import { Check, Edit, Plus, Trash, X } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import {
   useGetAllProductsQuery,
@@ -28,6 +29,7 @@ import {
 } from '../../store/api/api';
 
 const RequestPage = () => {
+  const { t } = useTranslation('requests');
   const { id } = useParams();
   const { data, isLoading, isError } = useGetWarehouseRequestByIdQuery(id);
   const { data: allProducts } = useGetAllProductsQuery();
@@ -58,9 +60,9 @@ const RequestPage = () => {
   const handleUpdateStatus = async newStatus => {
     try {
       await updateStatus({ id, status: newStatus }).unwrap();
-      toast.success(`Status updated to: ${newStatus}`);
+      toast.success(t('detail.statusUpdated', { status: newStatus }));
     } catch (error) {
-      toast.error('Error updating status!');
+      toast.error(t('detail.statusUpdateError'));
       console.error(error);
     }
   };
@@ -74,10 +76,10 @@ const RequestPage = () => {
       }));
 
       await updateItems({ id, items: payload }).unwrap();
-      toast.success('Items updated successfully!');
+      toast.success(t('detail.itemsUpdated'));
       setIsEditing(false);
     } catch (error) {
-      toast.error('Error saving items!');
+      toast.error(t('detail.itemsUpdateError'));
       console.error(error);
     }
   };
@@ -131,7 +133,7 @@ const RequestPage = () => {
     () => [
       {
         accessorKey: 'product.article',
-        header: 'Article',
+        header: t('detail.columns.article'),
         cell: info => {
           if (isEditing) return null;
           return (
@@ -146,14 +148,14 @@ const RequestPage = () => {
       },
       {
         accessorKey: 'product.name',
-        header: 'Product',
+        header: t('detail.columns.product'),
         cell: ({ row }) => {
           const item = row.original;
 
           if (isEditing) {
             return (
               <Select
-                placeholder="Select product"
+                placeholder={t('detail.columns.selectProduct')}
                 data={productSelectData}
                 value={item.productId}
                 onChange={val => updateDraftItem(row.index, 'productId', val)}
@@ -166,16 +168,20 @@ const RequestPage = () => {
       },
       {
         accessorKey: 'product.category.name',
-        header: 'Category',
+        header: t('detail.columns.category'),
         cell: ({ row }) => {
           const item = row.original;
           if (isEditing) return null;
-          return <Badge variant="outline">{item.product?.category?.name || 'N/A'}</Badge>;
+          return (
+            <Badge variant="outline">
+              {item.product?.category?.name || t('detail.columns.categoryNA')}
+            </Badge>
+          );
         },
       },
       {
         accessorKey: 'packageType',
-        header: 'Pkg Type',
+        header: t('detail.columns.pkgType'),
         cell: ({ row }) => {
           const item = row.original;
 
@@ -209,7 +215,7 @@ const RequestPage = () => {
       },
       {
         accessorKey: 'quantity',
-        header: 'Quantity',
+        header: t('detail.columns.quantity'),
         cell: ({ row }) => {
           const item = row.original;
 
@@ -227,7 +233,7 @@ const RequestPage = () => {
           const unitLabel =
             item.packageType && item.packageType !== 'PIECE'
               ? item.packageType.toLowerCase() + 's'
-              : 'pcs.';
+              : t('detail.columns.pcs');
 
           return (
             <Text>
@@ -253,7 +259,7 @@ const RequestPage = () => {
           ]
         : []),
     ],
-    [isEditing, productSelectData, updateDraftItem, removeDraftItem],
+    [isEditing, productSelectData, updateDraftItem, removeDraftItem, t],
   );
 
   const table = useReactTable({
@@ -273,7 +279,7 @@ const RequestPage = () => {
             loading={isUpdating}
             onClick={() => handleUpdateStatus('SENT')}
           >
-            Send
+            {t('detail.send')}
           </Button>
         );
       case 'SENT':
@@ -284,7 +290,7 @@ const RequestPage = () => {
             loading={isUpdating}
             onClick={() => handleUpdateStatus('COMPLETED')}
           >
-            Accept
+            {t('detail.accept')}
           </Button>
         );
       default:
@@ -319,7 +325,7 @@ const RequestPage = () => {
         c="red"
         textAlign="center"
       >
-        No data!
+        {t('detail.noData')}
       </Text>
     );
 
@@ -343,16 +349,18 @@ const RequestPage = () => {
               order={4}
               mb={5}
             >
-              Details
+              {t('detail.details')}
             </Title>
             <Text
               size="xs"
               c="dimmed"
             >
-              ID: {data.id}
+              {t('detail.id', { id: data.id })}
             </Text>
             <Text size="sm">
-              Created At: {dayjs(data.createdAt).format('DD.MM.YYYY HH:mm')}
+              {t('detail.createdAt', {
+                date: dayjs(data.createdAt).format('DD.MM.YYYY HH:mm'),
+              })}
             </Text>
           </Box>
 
@@ -366,21 +374,21 @@ const RequestPage = () => {
                 size="xl"
                 color={getStatusColor(data.status)}
               >
-                {data.status}
+                {t(`status.${data.status}`, data.status)}
               </Badge>
             </Group>
             <Text
               size="xs"
               c="dimmed"
             >
-              Category: {data.category}
+              {t('detail.category', { category: data.category })}
             </Text>
           </Stack>
         </Group>
       </Paper>
 
       <Group justify="space-between">
-        <Title order={5}>Items</Title>
+        <Title order={5}>{t('detail.items')}</Title>
         <Group>
           {canEdit && (
             <Button
@@ -388,7 +396,7 @@ const RequestPage = () => {
               variant="light"
               onClick={() => setIsEditing(true)}
             >
-              Edit Items
+              {t('detail.editItems')}
             </Button>
           )}
           {isEditing && (
@@ -398,7 +406,7 @@ const RequestPage = () => {
                 variant="outline"
                 onClick={addDraftItem}
               >
-                Add Item
+                {t('detail.addItem')}
               </Button>
               <Button
                 leftSection={<X size={16} />}
@@ -406,7 +414,7 @@ const RequestPage = () => {
                 variant="subtle"
                 onClick={() => setIsEditing(false)}
               >
-                Cancel
+                {t('detail.cancel')}
               </Button>
               <Button
                 leftSection={<Check size={16} />}
@@ -414,7 +422,7 @@ const RequestPage = () => {
                 loading={isSavingItems}
                 onClick={handleSaveDraft}
               >
-                Save Changes
+                {t('detail.saveChanges')}
               </Button>
             </>
           )}

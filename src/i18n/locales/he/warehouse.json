@@ -1,0 +1,34 @@
+{
+  "sendRequestBar": {
+    "selectedProducts": "מוצרים נבחרים: {{count}}",
+    "sendRequest": "שלח בקשה",
+    "quantityRequired": "נא לציין כמות עבור לפחות מוצר אחד",
+    "requestSent": "!הבקשה נשלחה בהצלחה",
+    "sendFailed": "שליחת הבקשה נכשלה"
+  },
+  "stockModal": {
+    "increaseTitle": "הגדלת מלאי: {{name}}",
+    "decreaseTitle": "הקטנת מלאי: {{name}}",
+    "quantity": "כמות",
+    "cancel": "ביטול",
+    "confirm": "אישור",
+    "increaseSuccess": "!המלאי הוגדל בהצלחה",
+    "decreaseSuccess": "!המלאי הוקטן בהצלחה",
+    "increaseFailed": "הגדלת המלאי נכשלה",
+    "decreaseFailed": "הקטנת המלאי נכשלה"
+  },
+  "lowStock": {
+    "title": "התראת מלאי נמוך",
+    "description": ":למוצרים הבאים בתחום שלך יש <bold>20 יחידות או פחות</bold> במלאי",
+    "left": "{{count}} נותרו",
+    "close": "סגור",
+    "pleaseWait": "נא להמתין ({{seconds}})",
+    "none": "אין כרגע מוצרים במלאי נמוך."
+  },
+  "notifications": {
+    "newOrder": "הזמנה חדשה מ-{{store}}",
+    "aStore": "חנות",
+    "newOrderTitle": "הזמנה חדשה: {{count}}",
+    "statusChanged": "סטטוס ההזמנה \"{{name}}\" השתנה ל-{{status}}"
+  }
+}

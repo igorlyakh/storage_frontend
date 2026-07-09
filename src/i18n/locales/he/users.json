@@ -1,0 +1,55 @@
+{
+  "columns": {
+    "username": "שם משתמש",
+    "role": "תפקיד",
+    "store": "חנות",
+    "logistics": "לוגיסטיקה",
+    "actions": "פעולות"
+  },
+  "tooltips": {
+    "editUser": "ערוך משתמש",
+    "resetPassword": "אפס סיסמה",
+    "deleteUser": "מחק משתמש"
+  },
+  "create": {
+    "title": "צור משתמש חדש",
+    "submit": "צור משתמש",
+    "usernameLabel": "שם משתמש",
+    "usernamePlaceholder": "הזן שם משתמש",
+    "usernameRequired": "שם משתמש נדרש",
+    "passwordLabel": "סיסמה",
+    "passwordRequired": "סיסמה נדרשת",
+    "passwordMinLength": "לפחות 6 תווים",
+    "roleLabel": "תפקיד גישה",
+    "adminScopesLabel": "הרשאות ניהול",
+    "chooseScopesPlaceholder": "-- בחר הרשאות --",
+    "scopesRequired": "הרשאות נדרשות עבור תפקיד ADMIN",
+    "assignedStoreLabel": "חנות משויכת",
+    "choosePlaceholder": "-- בחר --",
+    "storeRequired": "חנות נדרשת עבור תפקיד STORE",
+    "created": "!המשתמש נוצר",
+    "createFailed": "יצירת המשתמש נכשלה"
+  },
+  "edit": {
+    "title": "{{username}} :עריכת משתמש",
+    "submit": "שמור שינויים",
+    "updated": "!המשתמש עודכן",
+    "updateFailed": "עדכון המשתמש נכשל"
+  },
+  "deleteModal": {
+    "confirmText": "?<bold>{{username}}</bold> האם אתה בטוח שברצונך למחוק את המשתמש. פעולה זו אינה הפיכה",
+    "deleteUser": "מחק משתמש",
+    "deleted": "המשתמש נמחק בהצלחה",
+    "deleteFailed": "מחיקת המשתמש נכשלה"
+  },
+  "resetPassword": {
+    "title": "{{username}} איפוס סיסמה עבור",
+    "newPasswordLabel": "סיסמה חדשה",
+    "newPasswordPlaceholder": "הזן סיסמה חדשה",
+    "confirmButton": "אשר סיסמה חדשה",
+    "tooShort": "הסיסמה קצרה מדי",
+    "updated": "!הסיסמה עודכנה",
+    "updateFailed": "עדכון הסיסמה נכשל"
+  },
+  "storeFallback": "{{id}} 'חנות מס"
+}

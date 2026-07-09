@@ -1,21 +1,23 @@
 import { Badge, Button, Card, Group, Stack, Text } from '@mantine/core';
 import dayjs from 'dayjs';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { useUpdateWarehouseRequestStatusMutation } from '../../store/api/api';
 import { userRoleSelector } from '../../store/selectors/selectors';
 
 const RequestItem = ({ request }) => {
+  const { t } = useTranslation('requests');
   const [updateStatus, { isLoading }] = useUpdateWarehouseRequestStatusMutation();
   const userRole = useSelector(userRoleSelector);
 
   const handleTakeInProgress = async () => {
     try {
       await updateStatus({ id: request.id, status: 'APPROVED' }).unwrap();
-      toast.success('Approved!');
+      toast.success(t('card.approved'));
     } catch (error) {
-      toast.error('Error!');
+      toast.error(t('card.approveError'));
       console.error(error);
     }
   };
@@ -62,7 +64,7 @@ const RequestItem = ({ request }) => {
           color={getStatusColor(request.status)}
           size="sm"
         >
-          {request.status}
+          {t(`status.${request.status}`, request.status)}
         </Badge>
       </Group>
 
@@ -76,7 +78,7 @@ const RequestItem = ({ request }) => {
             span
             c="dimmed"
           >
-            Created At:{' '}
+            {t('card.createdAt')}{' '}
           </Text>
           <Text
             span
@@ -90,7 +92,7 @@ const RequestItem = ({ request }) => {
             span
             c="dimmed"
           >
-            Products in order:{' '}
+            {t('card.productsInOrder')}{' '}
           </Text>
           <Text
             span
@@ -114,7 +116,7 @@ const RequestItem = ({ request }) => {
           size="sm"
           flex={1}
         >
-          Details
+          {t('card.details')}
         </Button>
 
         {showProcessButton && (
@@ -125,7 +127,7 @@ const RequestItem = ({ request }) => {
             loading={isLoading}
             flex={1}
           >
-            Approve
+            {t('card.approve')}
           </Button>
         )}
       </Group>

@@ -1,0 +1,43 @@
+{
+  "home": "בית",
+  "allOrders": "כל ההזמנות",
+  "order": {
+    "title": "הזמנה",
+    "myOrders": "ההזמנות שלי",
+    "createOrder": "צור הזמנה"
+  },
+  "productsMenu": {
+    "title": "מוצרים",
+    "allProducts": "כל המוצרים",
+    "createProduct": "צור מוצר"
+  },
+  "requests": "בקשות",
+  "writeOff": "מחיקת מלאי",
+  "management": {
+    "title": "ניהול",
+    "users": "משתמשים",
+    "allUsers": "כל המשתמשים",
+    "createUser": "צור משתמש",
+    "brands": "מותגים",
+    "allBrands": "כל המותגים",
+    "createBrand": "צור מותג",
+    "categories": "קטגוריות",
+    "allCategories": "כל הקטגוריות",
+    "createCategory": "צור קטגוריה",
+    "stores": "חנויות",
+    "allStores": "כל החנויות",
+    "createStore": "צור חנות",
+    "products": "מוצרים",
+    "reorderProducts": "סדר מוצרים"
+  },
+  "statistics": {
+    "title": "סטטיסטיקה",
+    "orders": "סטטיסטיקת הזמנות",
+    "requests": "סטטיסטיקת בקשות"
+  },
+  "checkLowStock": "בדוק מלאי נמוך",
+  "checkLowStockTooltip": "בדוק מלאי נמוך עכשיו",
+  "logout": "התנתק",
+  "logoutSuccess": "התנתקת בהצלחה!",
+  "login": "התחבר"
+}

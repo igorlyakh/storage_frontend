@@ -1,4 +1,5 @@
 import {
+  ActionIcon,
   Accordion,
   Burger,
   Button,
@@ -7,14 +8,17 @@ import {
   Menu,
   Stack,
   Text,
+  Tooltip,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
+import { PackageSearch } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { useLogoutMutation } from '../../../store/api/api';
 import { tokenSelector, userRoleSelector } from '../../../store/selectors/selectors';
-import { logOut } from '../../../store/userSlice/userSlice';
+import { logOut, triggerLowStockCheck } from '../../../store/userSlice/userSlice';
 
 const NavMenu = ({ title, items, sections, isMobile, closeDrawer }) => {
   const groupedSections = sections || [{ label: null, items }];
@@ -115,6 +119,7 @@ const NavMenu = ({ title, items, sections, isMobile, closeDrawer }) => {
 };
 
 const Navigation = () => {
+  const { t } = useTranslation('nav');
   const token = useSelector(tokenSelector);
   const role = useSelector(userRoleSelector);
   const dispatch = useDispatch();
@@ -125,11 +130,16 @@ const Navigation = () => {
     try {
       await logout().unwrap();
       dispatch(logOut());
-      toast.success('You have successfully logged out!');
+      toast.success(t('logoutSuccess'));
       close();
     } catch {
-      toast.error('Something went wrong! Try again.');
+      toast.error(t('common:feedback.somethingWentWrong'));
     }
+  };
+
+  const handleLowStockCheck = () => {
+    dispatch(triggerLowStockCheck());
+    close();
   };
 
   const renderLinks = isMobile => (
@@ -143,7 +153,7 @@ const Navigation = () => {
         justify={isMobile ? 'flex-start' : 'center'}
         onClick={isMobile ? close : undefined}
       >
-        Home
+        {t('home')}
       </Button>
 
       {['ADMIN', 'WAREHOUSE'].includes(role) && (
@@ -156,16 +166,16 @@ const Navigation = () => {
           justify={isMobile ? 'flex-start' : 'center'}
           onClick={isMobile ? close : undefined}
         >
-          All orders
+          {t('allOrders')}
         </Button>
       )}
 
       {role === 'STORE' && (
         <NavMenu
-          title="Order"
+          title={t('order.title')}
           items={[
-            { label: 'My Orders', to: '/orders' },
-            { label: 'Create Order', to: '/orders/create' },
+            { label: t('order.myOrders'), to: '/orders' },
+            { label: t('order.createOrder'), to: '/orders/create' },
           ]}
           isMobile={isMobile}
           closeDrawer={close}
@@ -174,10 +184,10 @@ const Navigation = () => {
 
       {['ADMIN', 'WAREHOUSE'].includes(role) && (
         <NavMenu
-          title="Products"
+          title={t('productsMenu.title')}
           items={[
-            { label: 'All Products', to: '/products' },
-            { label: 'Create Product', to: '/products/create' },
+            { label: t('productsMenu.allProducts'), to: '/products' },
+            { label: t('productsMenu.createProduct'), to: '/products/create' },
           ]}
           isMobile={isMobile}
           closeDrawer={close}
@@ -194,7 +204,7 @@ const Navigation = () => {
           justify={isMobile ? 'flex-start' : 'center'}
           onClick={isMobile ? close : undefined}
         >
-          Requests
+          {t('requests')}
         </Button>
       )}
 
@@ -208,45 +218,45 @@ const Navigation = () => {
           justify={isMobile ? 'flex-start' : 'center'}
           onClick={isMobile ? close : undefined}
         >
-          Write-off
+          {t('writeOff')}
         </Button>
       )}
 
       {role === 'ADMIN' && (
         <NavMenu
-          title="Management"
+          title={t('management.title')}
           sections={[
             {
-              label: 'Users',
+              label: t('management.users'),
               items: [
-                { label: 'All Users', to: '/users' },
-                { label: 'Create User', to: '/users/create' },
+                { label: t('management.allUsers'), to: '/users' },
+                { label: t('management.createUser'), to: '/users/create' },
               ],
             },
             {
-              label: 'Brands',
+              label: t('management.brands'),
               items: [
-                { label: 'All Brands', to: '/brands' },
-                { label: 'Create Brand', to: '/brands/create' },
+                { label: t('management.allBrands'), to: '/brands' },
+                { label: t('management.createBrand'), to: '/brands/create' },
               ],
             },
             {
-              label: 'Categories',
+              label: t('management.categories'),
               items: [
-                { label: 'All Categories', to: '/categories' },
-                { label: 'Create Category', to: '/categories/create' },
+                { label: t('management.allCategories'), to: '/categories' },
+                { label: t('management.createCategory'), to: '/categories/create' },
               ],
             },
             {
-              label: 'Stores',
+              label: t('management.stores'),
               items: [
-                { label: 'All Stores', to: '/stores' },
-                { label: 'Create Store', to: '/stores/create' },
+                { label: t('management.allStores'), to: '/stores' },
+                { label: t('management.createStore'), to: '/stores/create' },
               ],
             },
             {
-              label: 'Products',
-              items: [{ label: 'Reorder Products', to: '/ordering' }],
+              label: t('management.products'),
+              items: [{ label: t('management.reorderProducts'), to: '/ordering' }],
             },
           ]}
           isMobile={isMobile}
@@ -255,18 +265,41 @@ const Navigation = () => {
       )}
 
       {['ADMIN', 'WAREHOUSE'].includes(role) && (
-        <Button
-          component={Link}
-          to="/statistics"
-          variant="subtle"
-          color={isMobile ? 'dark' : 'gray.0'}
-          fullWidth={isMobile}
-          justify={isMobile ? 'flex-start' : 'center'}
-          onClick={isMobile ? close : undefined}
-        >
-          Statistics
-        </Button>
+        <NavMenu
+          title={t('statistics.title')}
+          items={[
+            { label: t('statistics.orders'), to: '/statistics' },
+            { label: t('statistics.requests'), to: '/statistics/requests' },
+          ]}
+          isMobile={isMobile}
+          closeDrawer={close}
+        />
       )}
+
+      {role === 'ADMIN' &&
+        (isMobile ? (
+          <Button
+            variant="subtle"
+            color="dark"
+            leftSection={<PackageSearch size={16} />}
+            onClick={handleLowStockCheck}
+            fullWidth
+            justify="flex-start"
+          >
+            {t('checkLowStock')}
+          </Button>
+        ) : (
+          <Tooltip label={t('checkLowStockTooltip')}>
+            <ActionIcon
+              variant="subtle"
+              color="gray.0"
+              size="lg"
+              onClick={handleLowStockCheck}
+            >
+              <PackageSearch size={18} />
+            </ActionIcon>
+          </Tooltip>
+        ))}
 
       {token ? (
         <Button
@@ -277,7 +310,7 @@ const Navigation = () => {
           ml={isMobile ? 0 : 'md'}
           mt={isMobile ? 'md' : 0}
         >
-          Logout
+          {t('logout')}
         </Button>
       ) : (
         <Button
@@ -290,7 +323,7 @@ const Navigation = () => {
           ml={isMobile ? 0 : 'md'}
           mt={isMobile ? 'md' : 0}
         >
-          Login
+          {t('login')}
         </Button>
       )}
     </>

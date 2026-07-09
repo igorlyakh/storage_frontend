@@ -1,21 +1,24 @@
 import { LineChart } from '@mantine/charts';
 import { Box, Card, LoadingOverlay, Text, Title } from '@mantine/core';
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 
-const LineChartCard = ({ data, isFetching, chartLabel }) => {
+const LineChartCard = ({ data, isFetching, chartLabel, groupKey = 'storeName' }) => {
+  const { t } = useTranslation('statistics');
+
   const { chartData, series } = useMemo(() => {
     if (!data || data.length === 0) return { chartData: [], series: [] };
 
     const groupedByDate = {};
-    const storeNames = new Set();
+    const groupNames = new Set();
 
     data.forEach(item => {
-      storeNames.add(item.storeName);
+      const name = item[groupKey];
+      groupNames.add(name);
       if (!groupedByDate[item.date]) {
         groupedByDate[item.date] = { date: item.date };
       }
-      groupedByDate[item.date][item.storeName] =
-        (groupedByDate[item.date][item.storeName] || 0) + item.value;
+      groupedByDate[item.date][name] = (groupedByDate[item.date][name] || 0) + item.value;
     });
 
     const colors = [
@@ -27,7 +30,7 @@ const LineChartCard = ({ data, isFetching, chartLabel }) => {
       'red.6',
       'cyan.6',
     ];
-    const generatedSeries = Array.from(storeNames).map((name, index) => ({
+    const generatedSeries = Array.from(groupNames).map((name, index) => ({
       name,
       color: colors[index % colors.length],
     }));
@@ -37,7 +40,7 @@ const LineChartCard = ({ data, isFetching, chartLabel }) => {
     );
 
     return { chartData: sortedData, series: generatedSeries };
-  }, [data]);
+  }, [data, groupKey]);
 
   return (
     <Card
@@ -50,7 +53,7 @@ const LineChartCard = ({ data, isFetching, chartLabel }) => {
         order={4}
         mb="xs"
       >
-        Dynamics over Time
+        {t('chart.dynamicsOverTime')}
       </Title>
       <Text
         c="dimmed"
@@ -90,7 +93,7 @@ const LineChartCard = ({ data, isFetching, chartLabel }) => {
             ta="center"
             mt={100}
           >
-            No data
+            {t('chart.noData')}
           </Text>
         )}
       </Box>

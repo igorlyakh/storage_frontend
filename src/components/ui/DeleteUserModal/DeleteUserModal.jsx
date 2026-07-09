@@ -1,17 +1,19 @@
 import { Button, Group, Modal, Text } from '@mantine/core';
 import toast from 'react-hot-toast';
+import { Trans, useTranslation } from 'react-i18next';
 import { useDeleteUserMutation } from '../../../store/api/api';
 
 const DeleteUserModal = ({ opened, onClose, user }) => {
+  const { t } = useTranslation('users');
   const [deleteUser, { isLoading }] = useDeleteUserMutation();
 
   const handleDelete = async () => {
     try {
       await deleteUser(user.id).unwrap();
-      toast.success('User deleted successfully');
+      toast.success(t('deleteModal.deleted'));
       onClose();
     } catch {
-      toast.error('Failed to delete user');
+      toast.error(t('deleteModal.deleteFailed'));
     }
   };
 
@@ -21,7 +23,7 @@ const DeleteUserModal = ({ opened, onClose, user }) => {
     <Modal
       opened={opened}
       onClose={onClose}
-      title="Confirm Deletion"
+      title={t('common:actions.confirmDeletion')}
       centered
       size={{ base: '95%', sm: 400 }}
       padding={{ base: 'md', sm: 'lg' }}
@@ -30,8 +32,12 @@ const DeleteUserModal = ({ opened, onClose, user }) => {
         size="sm"
         mb="lg"
       >
-        Are you sure you want to delete user <b>{user.username}</b>? This action cannot be
-        undone.
+        <Trans
+          t={t}
+          i18nKey="deleteModal.confirmText"
+          values={{ username: user.username }}
+          components={{ bold: <b /> }}
+        />
       </Text>
       <Group
         justify="flex-end"
@@ -44,7 +50,7 @@ const DeleteUserModal = ({ opened, onClose, user }) => {
           disabled={isLoading}
           w={{ base: '100%', sm: 'auto' }}
         >
-          Cancel
+          {t('common:actions.cancel')}
         </Button>
         <Button
           color="red"
@@ -52,7 +58,7 @@ const DeleteUserModal = ({ opened, onClose, user }) => {
           loading={isLoading}
           w={{ base: '100%', sm: 'auto' }}
         >
-          Delete User
+          {t('deleteModal.deleteUser')}
         </Button>
       </Group>
     </Modal>

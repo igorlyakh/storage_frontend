@@ -1,0 +1,44 @@
+{
+  "management": "Stores Management",
+  "columns": {
+    "name": "Store Name",
+    "brand": "Brand",
+    "noBrand": "No brand",
+    "createdAt": "Created At",
+    "actions": "Actions"
+  },
+  "tooltips": {
+    "edit": "Edit Store",
+    "delete": "Delete Store"
+  },
+  "create": {
+    "title": "Create New Store",
+    "submit": "Create Store",
+    "nameLabel": "Store Name",
+    "namePlaceholder": "e.g. Store-1",
+    "nameRequired": "Store name is required",
+    "nameMinLength": "Name must be at least 3 characters",
+    "brandLabel": "Brand",
+    "loadingBrands": "Loading brands...",
+    "selectBrand": "Select brand",
+    "brandRequired": "Brand is required",
+    "created": "Store created successfully!",
+    "createFailed": "Failed to create store"
+  },
+  "edit": {
+    "title": "Edit store: {{name}}",
+    "nameLabel": "Store Name",
+    "nameRequired": "Store name is required",
+    "brandLabel": "Brand",
+    "brandRequired": "Brand is required",
+    "updated": "Store updated!",
+    "updateFailed": "Failed to update store"
+  },
+  "deleteModal": {
+    "confirmText": "Are you sure you want to delete store <bold>{{name}}</bold>? This will <bold2>permanently delete the entire order history</bold2> of this store. This action cannot be undone.",
+    "delete": "Delete Store",
+    "deleted": "Store \"{{name}}\" deleted",
+    "deleteFailed": "Failed to delete store"
+  },
+  "storeFallback": "Store #{{id}}"
+}

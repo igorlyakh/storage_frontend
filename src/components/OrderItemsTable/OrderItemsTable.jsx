@@ -10,13 +10,16 @@ import {
 import { ChevronDown, ChevronRight, Send } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { useSendOrderMutation } from '../../store/api/api';
 import { userRoleSelector } from '../../store/selectors/selectors';
+import { getApiErrorMessage } from '../../utils/apiError';
 
 import EditableShippedCell from './EditableShippedCell';
 
 const OrderItemsTable = ({ order }) => {
+  const { t } = useTranslation('orders');
   const { id: orderId, items = [], status, customRequest } = order;
 
   const userRole = useSelector(userRoleSelector);
@@ -63,7 +66,7 @@ const OrderItemsTable = ({ order }) => {
       {
         accessorFn: row => row.product.name,
         id: 'name',
-        header: 'Product Name',
+        header: t('table.productName'),
         cell: info => {
           const item = info.row.original;
           const isChecked = checkedItems[item.id] ?? false;
@@ -81,17 +84,17 @@ const OrderItemsTable = ({ order }) => {
       },
       {
         id: 'category',
-        accessorFn: row => row.product.category?.name || 'WITHOUT CATEGORY',
-        header: 'Category',
+        accessorFn: row => row.product.category?.name || t('table.withoutCategory'),
+        header: t('table.category'),
       },
       {
         accessorKey: 'requestedQty',
-        header: 'Requested Quantity',
+        header: t('table.requestedQuantity'),
         cell: info => <Text fw={600}>{info.getValue()}</Text>,
       },
       {
         id: 'shippedQty',
-        header: 'Shipped Quantity',
+        header: t('table.shippedQuantity'),
         cell: ({ row }) => {
           const item = row.original;
           const currentVal = shippedQuantities[item.id] ?? item.requestedQty;
@@ -125,7 +128,7 @@ const OrderItemsTable = ({ order }) => {
     if (canEditAndSend) {
       baseColumns.unshift({
         id: 'select',
-        header: 'Picked',
+        header: t('table.picked'),
         cell: ({ row }) => {
           const item = row.original;
           return (
@@ -141,7 +144,7 @@ const OrderItemsTable = ({ order }) => {
     }
 
     return baseColumns;
-  }, [canEditAndSend, shippedQuantities, checkedItems, hasAccess]);
+  }, [canEditAndSend, shippedQuantities, checkedItems, hasAccess, t]);
 
   const table = useReactTable({
     data: items,
@@ -169,9 +172,9 @@ const OrderItemsTable = ({ order }) => {
 
     try {
       await sendOrder({ orderId, items: payloadItems }).unwrap();
-      toast.success('Order sent successfully!');
+      toast.success(t('table.orderSent'));
     } catch (error) {
-      toast.error(error.data?.message || error.message || 'Failed to send order');
+      toast.error(getApiErrorMessage(t, error, 'table.sendFailed'));
     }
   };
 
@@ -299,7 +302,7 @@ const OrderItemsTable = ({ order }) => {
                             size="md"
                             c="blue.9"
                           >
-                            Other
+                            {t('table.other')}
                           </Text>
                         </Group>
                       </Table.Td>
@@ -339,7 +342,7 @@ const OrderItemsTable = ({ order }) => {
             w={{ base: '100%', sm: 'auto' }}
             style={{ boxShadow: 'var(--mantine-shadow-sm)' }}
           >
-            Send order
+            {t('table.sendOrder')}
           </Button>
         </Group>
       )}

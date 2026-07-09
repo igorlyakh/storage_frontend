@@ -184,11 +184,17 @@ export const api = createApi({
       invalidatesTags: ['Stores'],
     }),
     getWarehouseRequests: builder.query({
-      query: () => '/warehouse/requests',
+      query: ({ status, startDate, endDate } = {}) => ({
+        url: '/warehouse/requests',
+        params: { status, startDate, endDate },
+      }),
       providesTags: ['WarehouseRequests'],
     }),
     getAdminWarehouseRequests: builder.query({
-      query: () => '/warehouse/orders',
+      query: ({ status, startDate, endDate } = {}) => ({
+        url: '/warehouse/orders',
+        params: { status, startDate, endDate },
+      }),
       providesTags: ['WarehouseRequests'],
     }),
     createWarehouseRequest: builder.mutation({
@@ -265,6 +271,36 @@ export const api = createApi({
         };
       },
     }),
+    getRequestsStatisticsData: builder.query({
+      query: ({ startDate, endDate, productId, category }) => {
+        const params = {};
+        if (startDate) params.startDate = startDate;
+        if (endDate) params.endDate = endDate;
+        if (productId) params.productId = productId;
+        if (category) params.category = category;
+
+        return {
+          url: '/statistics/requests-data',
+          params,
+        };
+      },
+      providesTags: ['Statistics', 'WarehouseRequests'],
+    }),
+    exportRequestsExcel: builder.mutation({
+      query: ({ startDate, endDate, productId, category }) => {
+        const params = {};
+        if (startDate) params.startDate = startDate;
+        if (endDate) params.endDate = endDate;
+        if (productId) params.productId = productId;
+        if (category) params.category = category;
+
+        return {
+          url: '/statistics/requests-export',
+          params,
+          responseHandler: response => response.blob(),
+        };
+      },
+    }),
     getAllCategories: builder.query({
       query: () => '/category',
       providesTags: ['Categories'],
@@ -307,6 +343,9 @@ export const api = createApi({
       }),
       providesTags: ['Products'],
     }),
+    updateLanguage: builder.mutation({
+      query: language => ({ url: '/auth/me/language', method: 'PATCH', body: { language } }),
+    }),
   }),
 });
 
@@ -344,6 +383,8 @@ export const {
   useUpdateBrandMutation,
   useGetStatisticsDataQuery,
   useExportExcelMutation,
+  useGetRequestsStatisticsDataQuery,
+  useExportRequestsExcelMutation,
   useGetAllCategoriesQuery,
   useCreateCategoryMutation,
   useUpdateCategoryMutation,
@@ -356,4 +397,5 @@ export const {
   useLazyGetLowStockProductsQuery,
   useReorderCategoriesMutation,
   useReorderProductsMutation,
+  useUpdateLanguageMutation,
 } = api;

@@ -9,11 +9,13 @@ import {
   Title,
 } from '@mantine/core';
 import { Info } from 'lucide-react';
+import { Trans, useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { userRoleSelector } from '../../store/selectors/selectors';
 
 const HomePage = () => {
+  const { t } = useTranslation('common');
   const userRole = useSelector(userRoleSelector);
 
   return (
@@ -41,7 +43,7 @@ const HomePage = () => {
             inherit
             tt="uppercase"
           >
-            Stock Assistant
+            {t('home.title')}
           </Text>
         </Title>
 
@@ -53,9 +55,7 @@ const HomePage = () => {
           mt="md"
           fz={{ base: 'md', sm: 'xl' }}
         >
-          Welcome to the ultimate inventory management solution. This application is
-          specifically designed to ensure seamless stock control at the central warehouse
-          and to provide a simplified, effortless ordering experience for retail stores.
+          {t('home.intro')}
         </Text>
 
         <Paper
@@ -87,7 +87,7 @@ const HomePage = () => {
                 fz="xs"
                 tt="uppercase"
               >
-                Important Information
+                {t('home.importantInfo')}
               </Text>
             </Group>
 
@@ -98,13 +98,13 @@ const HomePage = () => {
               c="blue.9"
               style={{ lineHeight: 1.3 }}
             >
-              Orders are accepted from Sunday to Thursday until{' '}
+              {t('home.cutoffLine')}{' '}
               <Text
                 component="span"
                 inherit
                 c="orange.5"
               >
-                14:30
+                {t('home.cutoffTime')}
               </Text>
             </Text>
 
@@ -114,9 +114,11 @@ const HomePage = () => {
               c="blue.8"
               style={{ lineHeight: 1.4 }}
             >
-              All orders received <b>after 14:30</b> will be processed and shipped the
-              following day. Orders placed on <b>Friday and Saturday</b> will be processed
-              and shipped on <b>Sunday</b>.
+              <Trans
+                t={t}
+                i18nKey="home.cutoffDetails"
+                components={{ b1: <b />, b2: <b />, b3: <b /> }}
+              />
             </Text>
           </Stack>
         </Paper>
@@ -139,22 +141,21 @@ const HomePage = () => {
               size="md"
               c="dark.8"
             >
-              Need assistance?
+              {t('home.needHelp')}
             </Text>
             <Text
               ta="center"
               size="xs"
               c="gray.6"
             >
-              If you experience any issues, have feature requests, or need technical
-              support, our dedicated team is always here to help.
+              {t('home.helpDetails')}
             </Text>
             <Text
               ta="center"
               fw={500}
               fz="xs"
             >
-              Please contact us at:{' '}
+              {t('home.contactUs')}{' '}
               <Text
                 component="a"
                 href="mailto:info@example.com"
@@ -180,7 +181,7 @@ const HomePage = () => {
             color="blue"
             fullWidth={{ base: true, sm: false }}
           >
-            Go to Dashboard
+            {t('home.goToDashboard')}
           </Button>
         </Group>
       </Stack>

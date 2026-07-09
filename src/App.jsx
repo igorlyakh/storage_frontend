@@ -6,6 +6,7 @@ import { NavigationProgress, nprogress } from '@mantine/nprogress';
 
 import Layout from './components/layout/Layout';
 import PersistLogin from './features/auth/PersistLogin';
+import { useSyncLanguage } from './features/language/useSyncLanguage';
 import LowStockNotifier from './features/notifications/LowStockNotifier';
 import { useOrderNotifications } from './features/notifications/useOrderNotifications';
 
@@ -33,6 +34,7 @@ const StoresPage = lazy(() => import('./pages/StoresPage'));
 const BrandsPage = lazy(() => import('./pages/BrandsPage/BrandsPage'));
 const CreateBrandPage = lazy(() => import('./pages/CreateBrandPage/CreateBrandPage'));
 const StatisticPage = lazy(() => import('./pages/StatisticPage/StatisticPage'));
+const RequestsStatisticPage = lazy(() => import('./pages/RequestsStatisticPage'));
 const CategoriesPage = lazy(() => import('./pages/CategoriesPage/CategoriesPage'));
 
 const SuspenseLoader = () => {
@@ -54,7 +56,9 @@ const SuspenseLoader = () => {
 const App = () => {
   const location = useLocation();
 
+  useSyncLanguage();
   useOrderNotifications();
+
 
   return (
     <>
@@ -243,6 +247,15 @@ const App = () => {
                 element={
                   <ProtectedRoutes allowedRoles={['ADMIN', 'WAREHOUSE']}>
                     <StatisticPage />
+                  </ProtectedRoutes>
+                }
+              />
+
+              <Route
+                path="statistics/requests"
+                element={
+                  <ProtectedRoutes allowedRoles={['ADMIN', 'WAREHOUSE']}>
+                    <RequestsStatisticPage />
                   </ProtectedRoutes>
                 }
               />

@@ -1,0 +1,35 @@
+{
+  "management": "ניהול מותגים",
+  "columns": {
+    "name": "שם המותג",
+    "createdAt": "נוצר בתאריך",
+    "actions": "פעולות"
+  },
+  "tooltips": {
+    "edit": "ערוך מותג",
+    "delete": "מחק מותג"
+  },
+  "create": {
+    "title": "צור מותג חדש",
+    "submit": "צור מותג",
+    "nameLabel": "שם המותג",
+    "namePlaceholder": "הזן שם מותג",
+    "nameRequired": "שם המותג נדרש",
+    "minLength": "לפחות 2 תווים",
+    "created": "!המותג \"{{name}}\" נוצר",
+    "createFailed": "יצירת המותג נכשלה"
+  },
+  "edit": {
+    "title": "{{name}} :עריכת מותג",
+    "nameLabel": "שם המותג",
+    "nameRequired": "שם המותג נדרש",
+    "updated": "!המותג עודכן",
+    "updateFailed": "עדכון המותג נכשל"
+  },
+  "deleteModal": {
+    "confirmText": "?<bold>{{name}}</bold> האם אתה בטוח שברצונך למחוק את המותג. פעולה זו אינה הפיכה",
+    "delete": "מחק מותג",
+    "deleted": "המותג \"{{name}}\" נמחק",
+    "deleteFailed": "מחיקת המותג נכשלה"
+  }
+}

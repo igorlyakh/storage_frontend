@@ -1,0 +1,51 @@
+{
+  "pageTitle": "All orders",
+  "filters": {
+    "statuses": "Statuses",
+    "filterByDate": "Filter by date"
+  },
+  "status": {
+    "NEW": "New",
+    "APPROVED": "Approved",
+    "SENT": "Sent",
+    "COMPLETED": "Completed"
+  },
+  "loadFailed": "Failed to load orders!",
+  "listEmpty": "List is empty!",
+  "card": {
+    "createdAt": "Created At:",
+    "productsInOrder": "Products in order:",
+    "details": "Details",
+    "approve": "Approve",
+    "approved": "Approved!",
+    "approveError": "Error!"
+  },
+  "detail": {
+    "details": "Details",
+    "id": "ID: {{id}}",
+    "createdAt": "Created At: {{date}}",
+    "category": "Category: {{category}}",
+    "items": "Items",
+    "editItems": "Edit Items",
+    "addItem": "Add Item",
+    "cancel": "Cancel",
+    "saveChanges": "Save Changes",
+    "send": "Send",
+    "accept": "Accept",
+    "statusUpdated": "Status updated to: {{status}}",
+    "statusUpdateError": "Error updating status!",
+    "itemsUpdated": "Items updated successfully!",
+    "itemsUpdateError": "Error saving items!",
+    "noData": "No data!",
+    "columns": {
+      "article": "Article",
+      "product": "Product",
+      "selectProduct": "Select product",
+      "category": "Category",
+      "categoryNA": "N/A",
+      "pkgType": "Pkg Type",
+      "quantity": "Quantity",
+      "pcs": "pcs."
+    }
+  }
+}

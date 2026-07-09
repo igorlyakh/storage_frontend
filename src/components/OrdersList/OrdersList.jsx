@@ -1,7 +1,10 @@
 import { Center, SimpleGrid, Text } from '@mantine/core';
+import { useTranslation } from 'react-i18next';
 import OrderItem from '../OrderItem';
 
 const OrdersList = ({ data }) => {
+  const { t } = useTranslation('orders');
+
   if (!data || data.length === 0) {
     return (
       <Center h={{ base: 100, sm: 150 }}>
@@ -10,7 +13,7 @@ const OrdersList = ({ data }) => {
           fz={{ base: 'md', sm: 'lg' }}
           fw={500}
         >
-          No orders found
+          {t('noOrdersFound')}
         </Text>
       </Center>
     );
