@@ -27,6 +27,8 @@
     "stores": "חנויות",
     "allStores": "כל החנויות",
     "createStore": "צור חנות",
+    "warehouses": "מחסנים",
+    "allWarehouses": "כל המחסנים",
     "products": "מוצרים",
     "reorderProducts": "סדר מוצרים"
   },

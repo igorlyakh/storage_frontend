@@ -1,4 +1,5 @@
 import {
+  Avatar,
   Badge,
   Box,
   Button,
@@ -11,6 +12,7 @@ import {
   Text,
   TextInput,
   Textarea,
+  Tooltip,
 } from '@mantine/core';
 import { modals } from '@mantine/modals';
 import {
@@ -21,7 +23,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import { ChevronDown, ChevronRight, User } from 'lucide-react';
+import { ChevronDown, ChevronRight, Image as ImageIcon, User } from 'lucide-react';
 import { useCallback, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
@@ -36,6 +38,7 @@ import {
   useGetAllStoresQuery,
 } from '../../store/api/api';
 import { getApiErrorMessage } from '../../utils/apiError';
+import ProductCardModal from '../ProductsTable/ProductCardModal';
 import { ConfirmOrderModal } from '../ui/ConfirmationModal/ConfirmationModal';
 
 const CreateOrderTable = ({ writeOff = false }) => {
@@ -65,8 +68,11 @@ const CreateOrderTable = ({ writeOff = false }) => {
   const [name, setName] = useState('');
   const [customRequest, setCustomRequest] = useState('');
   const [storeId, setStoreId] = useState(null);
+  const [cardProductId, setCardProductId] = useState(null);
 
   const rowData = useMemo(() => products.filter(p => p.isEnabled), [products]);
+
+  const cardProduct = products.find(p => p.id === cardProductId) || null;
 
   const storeOptions = stores.map(store => ({
     value: String(store.id),
@@ -103,12 +109,28 @@ const CreateOrderTable = ({ writeOff = false }) => {
         accessorKey: 'name',
         header: t('create.productName'),
         cell: info => (
-          <Text
-            fw={700}
-            fz={{ base: 14, sm: 18 }}
+          <Group
+            gap="sm"
+            wrap="nowrap"
           >
-            {info.getValue()}
-          </Text>
+            <Tooltip label={t('create.openCard')}>
+              <Avatar
+                src={info.row.original.imageUrl}
+                radius="sm"
+                size={36}
+                style={{ cursor: 'pointer', flexShrink: 0 }}
+                onClick={() => setCardProductId(info.row.original.id)}
+              >
+                <ImageIcon size={16} />
+              </Avatar>
+            </Tooltip>
+            <Text
+              fw={700}
+              fz={{ base: 14, sm: 18 }}
+            >
+              {info.getValue()}
+            </Text>
+          </Group>
         ),
       },
       {
@@ -491,6 +513,11 @@ const CreateOrderTable = ({ writeOff = false }) => {
           {writeOff ? t('create.createWriteOff') : t('create.sendOrder')}
         </Button>
       </Group>
+
+      <ProductCardModal
+        product={cardProduct}
+        onClose={() => setCardProductId(null)}
+      />
     </div>
   );
 };

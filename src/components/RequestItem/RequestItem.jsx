@@ -1,15 +1,22 @@
-import { Badge, Button, Card, Group, Stack, Text } from '@mantine/core';
+import { ActionIcon, Badge, Button, Card, Group, Stack, Text, Tooltip } from '@mantine/core';
+import { modals } from '@mantine/modals';
 import dayjs from 'dayjs';
+import { Trash } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { useUpdateWarehouseRequestStatusMutation } from '../../store/api/api';
+import {
+  useDeleteWarehouseRequestMutation,
+  useUpdateWarehouseRequestStatusMutation,
+} from '../../store/api/api';
 import { userRoleSelector } from '../../store/selectors/selectors';
+import { getApiErrorMessage } from '../../utils/apiError';
 
 const RequestItem = ({ request }) => {
   const { t } = useTranslation('requests');
   const [updateStatus, { isLoading }] = useUpdateWarehouseRequestStatusMutation();
+  const [deleteRequest, { isLoading: isDeleting }] = useDeleteWarehouseRequestMutation();
   const userRole = useSelector(userRoleSelector);
 
   const handleTakeInProgress = async () => {
@@ -20,6 +27,24 @@ const RequestItem = ({ request }) => {
       toast.error(t('card.approveError'));
       console.error(error);
     }
+  };
+
+  const handleDelete = () => {
+    modals.openConfirmModal({
+      title: t('card.deleteTitle'),
+      centered: true,
+      children: <Text size="sm">{t('card.deleteConfirm')}</Text>,
+      labels: { confirm: t('card.deleteAction'), cancel: t('card.deleteCancel') },
+      confirmProps: { color: 'red' },
+      onConfirm: async () => {
+        try {
+          await deleteRequest(request.id).unwrap();
+          toast.success(t('card.deleted'));
+        } catch (error) {
+          toast.error(getApiErrorMessage(t, error, 'card.deleteError'));
+        }
+      },
+    });
   };
 
   const formattedDate = dayjs(request.createdAt).format('DD.MM.YYYY HH:mm:ss');
@@ -101,6 +126,20 @@ const RequestItem = ({ request }) => {
             {request.items?.length || 0}
           </Text>
         </Text>
+        <Text fz={{ base: 'xs', sm: 'sm' }}>
+          <Text
+            span
+            c="dimmed"
+          >
+            {t('card.source')}{' '}
+          </Text>
+          <Text
+            span
+            fw={500}
+          >
+            {request.sourceWarehouse?.name || t('card.externalSupplier')}
+          </Text>
+        </Text>
       </Stack>
 
       <Group
@@ -129,6 +168,20 @@ const RequestItem = ({ request }) => {
           >
             {t('card.approve')}
           </Button>
+        )}
+
+        {userRole === 'ADMIN' && (
+          <Tooltip label={t('card.deleteTitle')}>
+            <ActionIcon
+              variant="light"
+              color="red"
+              size="lg"
+              onClick={handleDelete}
+              loading={isDeleting}
+            >
+              <Trash size={16} />
+            </ActionIcon>
+          </Tooltip>
         )}
       </Group>
     </Card>

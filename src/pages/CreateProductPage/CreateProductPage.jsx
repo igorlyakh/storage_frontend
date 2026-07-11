@@ -8,6 +8,7 @@ import {
   useAddProductMutation,
   useGetAllBrandsQuery,
   useGetAllCategoriesQuery,
+  useGetAllWarehousesQuery,
 } from '../../store/api/api';
 import { adminScopesSelector } from '../../store/selectors/selectors';
 import { getApiErrorMessage } from '../../utils/apiError';
@@ -17,12 +18,21 @@ const CreateProductPage = () => {
   const { data: brands = [], isLoading: isBrandsLoading } = useGetAllBrandsQuery();
   const { data: productCategories = [], isLoading: isCategoriesLoading } =
     useGetAllCategoriesQuery();
+  const { data: warehouses = [], isLoading: isWarehousesLoading } =
+    useGetAllWarehousesQuery();
   const [addProduct, { isLoading: isSubmitting }] = useAddProductMutation();
   const adminScopes = useSelector(adminScopesSelector);
 
   const brandOptions = brands.map(brand => ({
     value: String(brand.id),
     label: brand.name,
+  }));
+
+  const warehouseOptions = warehouses.map(warehouse => ({
+    value: warehouse.id,
+    label: warehouse.isDefault
+      ? `${warehouse.name} (${t('create.defaultWarehouse')})`
+      : warehouse.name,
   }));
 
   const categoriesOptions = productCategories.map(category => ({
@@ -111,6 +121,16 @@ const CreateProductPage = () => {
       placeholder: t('create.initialPackagesPlaceholder'),
       rules: { required: t('create.initialPackagesRequired') },
     },
+    {
+      name: 'warehouseId',
+      type: 'select',
+      label: t('create.warehouseLabel'),
+      placeholder: isWarehousesLoading
+        ? t('create.loadingOptions')
+        : t('create.warehousePlaceholder'),
+      options: warehouseOptions,
+      loading: isWarehousesLoading,
+    },
   ];
 
   const onSubmit = async (data, reset) => {
@@ -124,6 +144,7 @@ const CreateProductPage = () => {
           : Number(data.limitPerOrder),
       initialPackagesCount: Number(data.initialPackagesCount) || 0,
       itemsPerPackage: Number(data.itemsPerPackage) || 0,
+      warehouseId: data.warehouseId || undefined,
     };
 
     try {
@@ -156,6 +177,7 @@ const CreateProductPage = () => {
           packageType: 'PALLET',
           itemsPerPackage: 0,
           initialPackagesCount: 0,
+          warehouseId: '',
         }}
         onSubmit={onSubmit}
         isLoading={isSubmitting}

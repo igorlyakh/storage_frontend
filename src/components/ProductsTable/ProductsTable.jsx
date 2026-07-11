@@ -10,10 +10,12 @@ import toast from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
+import { EXTERNAL_SOURCE } from '../../constants/warehouseSource';
 import {
   useCreateWarehouseRequestMutation,
   useDecreaseProductMutation,
   useGetAllBrandsQuery,
+  useGetAllWarehousesQuery,
   useIncreaseProductMutation,
   useUpdateProductsMutation,
 } from '../../store/api/api';
@@ -22,6 +24,7 @@ import { getApiErrorMessage } from '../../utils/apiError';
 
 import { useProductColumns } from './columns';
 import DeleteProductModal from './DeleteProductModal';
+import ProductCardModal from './ProductCardModal';
 import ProductsGroupedTable from './ProductsGroupedTable';
 import SendRequestBar from './SendRequestBar';
 import StockOperationModal from './StockOperationModal';
@@ -33,6 +36,7 @@ const ProductsTable = ({ data }) => {
   const isAdmin = userRole === 'ADMIN';
 
   const { data: allBrands = [] } = useGetAllBrandsQuery();
+  const { data: warehouses = [] } = useGetAllWarehousesQuery();
 
   const [updateProducts] = useUpdateProductsMutation();
   const [createWarehouseRequest, { isLoading: isSending }] =
@@ -42,12 +46,19 @@ const ProductsTable = ({ data }) => {
   const [decreaseProduct, { isLoading: isDecreasing }] = useDecreaseProductMutation();
 
   const [orderQuantities, setOrderQuantities] = useState({});
+  const [sourceWarehouseId, setSourceWarehouseId] = useState(EXTERNAL_SOURCE);
 
   const [openedDelete, setOpenedDelete] = useState(false);
   const [productToDelete, setProductToDelete] = useState(null);
 
   const [stockOpData, setStockOpData] = useState(null);
   const [stockQuantity, setStockQuantity] = useState(1);
+  const [stockWarehouseId, setStockWarehouseId] = useState(null);
+
+  const [cardProductId, setCardProductId] = useState(null);
+  const cardProduct = (data || []).find(p => p.id === cardProductId) || null;
+
+  const defaultWarehouseId = warehouses.find(w => w.isDefault)?.id || null;
 
   const handleUpdateProduct = useCallback(
     async (product, field, newValue) => {
@@ -80,18 +91,27 @@ const ProductsTable = ({ data }) => {
     }
 
     try {
-      await createWarehouseRequest({ items: payloadItems }).unwrap();
+      await createWarehouseRequest({
+        items: payloadItems,
+        sourceWarehouseId:
+          sourceWarehouseId === EXTERNAL_SOURCE ? undefined : sourceWarehouseId,
+      }).unwrap();
       toast.success(t('warehouse:sendRequestBar.requestSent'));
       setOrderQuantities({});
+      setSourceWarehouseId(EXTERNAL_SOURCE);
     } catch {
       toast.error(t('warehouse:sendRequestBar.sendFailed'));
     }
   };
 
-  const handleOpenStockOp = useCallback((product, type) => {
-    setStockOpData({ product, type });
-    setStockQuantity(1);
-  }, []);
+  const handleOpenStockOp = useCallback(
+    (product, type) => {
+      setStockOpData({ product, type });
+      setStockQuantity(1);
+      setStockWarehouseId(defaultWarehouseId);
+    },
+    [defaultWarehouseId],
+  );
 
   const closeStockOp = () => {
     setStockOpData(null);
@@ -103,7 +123,11 @@ const ProductsTable = ({ data }) => {
     const { product, type } = stockOpData;
 
     try {
-      const payload = { id: product.id, quantity: stockQuantity };
+      const payload = {
+        id: product.id,
+        quantity: stockQuantity,
+        warehouseId: stockWarehouseId || undefined,
+      };
       if (type === 'increase') {
         await increaseProduct(payload).unwrap();
       } else {
@@ -141,6 +165,7 @@ const ProductsTable = ({ data }) => {
         setOpenedDelete(true);
       },
       handleOpenStockOp,
+      openProductCard: product => setCardProductId(product.id),
     }),
     [orderQuantities, handleUpdateProduct, allBrands, handleOpenStockOp],
   );
@@ -169,6 +194,9 @@ const ProductsTable = ({ data }) => {
           totalItemsToOrder={totalItemsToOrder}
           isSending={isSending}
           onSend={handleSendOrder}
+          warehouses={warehouses}
+          sourceWarehouseId={sourceWarehouseId}
+          onSourceChange={setSourceWarehouseId}
         />
       )}
 
@@ -187,6 +215,14 @@ const ProductsTable = ({ data }) => {
         onClose={closeStockOp}
         onConfirm={confirmStockOp}
         isLoading={isIncreasing || isDecreasing}
+        warehouses={warehouses}
+        warehouseId={stockWarehouseId}
+        onWarehouseChange={setStockWarehouseId}
+      />
+
+      <ProductCardModal
+        product={cardProduct}
+        onClose={() => setCardProductId(null)}
       />
     </>
   );

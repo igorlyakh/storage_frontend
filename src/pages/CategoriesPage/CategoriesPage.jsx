@@ -1,7 +1,9 @@
 import {
   ActionIcon,
+  Badge,
   Box,
   Container,
+  Group,
   LoadingOverlay,
   Text,
   Title,
@@ -9,10 +11,11 @@ import {
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import dayjs from 'dayjs';
-import { Pencil } from 'lucide-react';
+import { Pencil, Trash } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import DataTable from '../../components/ui/DataTable';
+import DeleteCategoryModal from '../../components/ui/DeleteCategoryModal';
 import EditCategoryModal from '../../components/ui/EditCategoryModal';
 import { useGetAllCategoriesQuery } from '../../store/api/api';
 
@@ -20,6 +23,7 @@ const CategoriesPage = () => {
   const { t } = useTranslation('categories');
   const { data: categories = [], isLoading } = useGetAllCategoriesQuery();
   const [openedEdit, { open: openEdit, close: closeEdit }] = useDisclosure(false);
+  const [openedDelete, { open: openDelete, close: closeDelete }] = useDisclosure(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
 
   const columns = useMemo(
@@ -28,6 +32,20 @@ const CategoriesPage = () => {
         accessorKey: 'name',
         header: t('columns.name'),
         cell: info => <Text fw={500}>{info.getValue()}</Text>,
+      },
+      {
+        id: 'productsCount',
+        accessorFn: row => row._count?.products ?? 0,
+        header: t('columns.products'),
+        cell: info => (
+          <Badge
+            variant="light"
+            color="blue"
+            size="sm"
+          >
+            {info.getValue()}
+          </Badge>
+        ),
       },
       {
         accessorKey: 'createdAt',
@@ -40,22 +58,36 @@ const CategoriesPage = () => {
         id: 'actions',
         header: t('columns.actions'),
         cell: info => (
-          <Tooltip label={t('tooltips.edit')}>
-            <ActionIcon
-              color="blue"
-              variant="light"
-              onClick={() => {
-                setSelectedCategory(info.row.original);
-                openEdit();
-              }}
-            >
-              <Pencil size={16} />
-            </ActionIcon>
-          </Tooltip>
+          <Group gap="xs">
+            <Tooltip label={t('tooltips.edit')}>
+              <ActionIcon
+                color="blue"
+                variant="light"
+                onClick={() => {
+                  setSelectedCategory(info.row.original);
+                  openEdit();
+                }}
+              >
+                <Pencil size={16} />
+              </ActionIcon>
+            </Tooltip>
+            <Tooltip label={t('tooltips.delete')}>
+              <ActionIcon
+                color="red"
+                variant="light"
+                onClick={() => {
+                  setSelectedCategory(info.row.original);
+                  openDelete();
+                }}
+              >
+                <Trash size={16} />
+              </ActionIcon>
+            </Tooltip>
+          </Group>
         ),
       },
     ],
-    [openEdit, t],
+    [openEdit, openDelete, t],
   );
 
   return (
@@ -89,6 +121,12 @@ const CategoriesPage = () => {
         key={selectedCategory?.id}
         opened={openedEdit}
         onClose={closeEdit}
+        category={selectedCategory}
+      />
+
+      <DeleteCategoryModal
+        opened={openedDelete}
+        onClose={closeDelete}
         category={selectedCategory}
       />
     </Container>

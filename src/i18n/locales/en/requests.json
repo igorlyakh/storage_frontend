@@ -15,15 +15,25 @@
   "card": {
     "createdAt": "Created At:",
     "productsInOrder": "Products in order:",
+    "source": "Request from:",
+    "externalSupplier": "External supplier",
     "details": "Details",
     "approve": "Approve",
     "approved": "Approved!",
-    "approveError": "Error!"
+    "approveError": "Error!",
+    "deleteTitle": "Delete request",
+    "deleteConfirm": "Are you sure you want to delete this request? This cannot be undone.",
+    "deleteAction": "Delete",
+    "deleteCancel": "Cancel",
+    "deleted": "Request deleted!",
+    "deleteError": "Failed to delete request"
   },
   "detail": {
     "details": "Details",
     "id": "ID: {{id}}",
     "createdAt": "Created At: {{date}}",
+    "source": "Request from: {{source}}",
+    "externalSupplier": "External supplier",
     "category": "Category: {{category}}",
     "items": "Items",
     "editItems": "Edit Items",

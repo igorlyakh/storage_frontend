@@ -182,7 +182,7 @@ const Navigation = () => {
         />
       )}
 
-      {['ADMIN', 'WAREHOUSE'].includes(role) && (
+      {role === 'ADMIN' && (
         <NavMenu
           title={t('productsMenu.title')}
           items={[
@@ -192,6 +192,20 @@ const Navigation = () => {
           isMobile={isMobile}
           closeDrawer={close}
         />
+      )}
+
+      {role === 'WAREHOUSE' && (
+        <Button
+          component={Link}
+          to="/products"
+          variant="subtle"
+          color={isMobile ? 'dark' : 'gray.0'}
+          fullWidth={isMobile}
+          justify={isMobile ? 'flex-start' : 'center'}
+          onClick={isMobile ? close : undefined}
+        >
+          {t('productsMenu.allProducts')}
+        </Button>
       )}
 
       {['ADMIN', 'WAREHOUSE'].includes(role) && (
@@ -253,6 +267,10 @@ const Navigation = () => {
                 { label: t('management.allStores'), to: '/stores' },
                 { label: t('management.createStore'), to: '/stores/create' },
               ],
+            },
+            {
+              label: t('management.warehouses'),
+              items: [{ label: t('management.allWarehouses'), to: '/warehouses' }],
             },
             {
               label: t('management.products'),

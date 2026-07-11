@@ -1,4 +1,4 @@
-import { Button, Group, Modal, NumberInput, Stack } from '@mantine/core';
+import { Button, Group, Modal, NumberInput, Select, Stack } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 
 const StockOperationModal = ({
@@ -8,8 +8,16 @@ const StockOperationModal = ({
   onClose,
   onConfirm,
   isLoading,
+  warehouses = [],
+  warehouseId,
+  onWarehouseChange,
 }) => {
   const { t } = useTranslation('warehouse');
+
+  const warehouseOptions = warehouses.map(w => ({
+    value: w.id,
+    label: w.isDefault ? `${w.name} (${t('stockModal.defaultWarehouse')})` : w.name,
+  }));
 
   return (
     <Modal
@@ -28,6 +36,15 @@ const StockOperationModal = ({
       centered
     >
       <Stack>
+        {warehouseOptions.length > 1 && (
+          <Select
+            label={t('stockModal.warehouse')}
+            data={warehouseOptions}
+            value={warehouseId}
+            onChange={onWarehouseChange}
+            allowDeselect={false}
+          />
+        )}
         <NumberInput
           label={t('stockModal.quantity')}
           value={stockQuantity}

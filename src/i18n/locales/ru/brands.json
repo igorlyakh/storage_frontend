@@ -2,6 +2,8 @@
   "management": "Управление брендами",
   "columns": {
     "name": "Название бренда",
+    "stores": "Магазинов",
+    "products": "Товаров",
     "createdAt": "Создан",
     "actions": "Действия"
   },

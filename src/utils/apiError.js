@@ -47,9 +47,6 @@ const PATTERN_MESSAGES = [
   },
 ];
 
-// Backend keeps stable English messages for its API contract; this maps the
-// known ones to the current UI language, falling back to the raw message
-// for anything unrecognized (e.g. new backend errors not yet mapped here).
 export const translateApiMessage = (t, message) => {
   if (!message || typeof message !== 'string') return message;
 

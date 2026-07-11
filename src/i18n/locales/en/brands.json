@@ -2,6 +2,8 @@
   "management": "Brands Management",
   "columns": {
     "name": "Brand Name",
+    "stores": "Stores",
+    "products": "Products",
     "createdAt": "Created At",
     "actions": "Actions"
   },

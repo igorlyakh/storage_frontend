@@ -4,18 +4,66 @@
     "sendRequest": "Отправить заявку",
     "quantityRequired": "Укажите количество хотя бы для одного товара",
     "requestSent": "Заявка успешно отправлена!",
-    "sendFailed": "Не удалось отправить заявку"
+    "sendFailed": "Не удалось отправить заявку",
+    "sourceLabel": "Запросить с",
+    "externalSupplier": "Внешний поставщик"
   },
   "stockModal": {
     "increaseTitle": "Увеличить остаток: {{name}}",
     "decreaseTitle": "Уменьшить остаток: {{name}}",
     "quantity": "Количество",
+    "warehouse": "Склад",
+    "defaultWarehouse": "основной",
     "cancel": "Отмена",
     "confirm": "Подтвердить",
     "increaseSuccess": "Остаток успешно увеличен!",
     "decreaseSuccess": "Остаток успешно уменьшен!",
     "increaseFailed": "Не удалось увеличить остаток",
     "decreaseFailed": "Не удалось уменьшить остаток"
+  },
+  "management": {
+    "pageTitle": "Управление складами",
+    "createPlaceholder": "Название нового склада",
+    "create": "Создать склад",
+    "created": "Склад создан!",
+    "createFailed": "Не удалось создать склад",
+    "nameRequired": "Укажите название!",
+    "defaultBadge": "Основной",
+    "columns": {
+      "name": "Название",
+      "createdAt": "Создан",
+      "actions": "Действия"
+    },
+    "tooltips": {
+      "edit": "Переименовать",
+      "delete": "Удалить",
+      "deleteDisabled": "Основной склад удалить нельзя"
+    },
+    "edit": {
+      "title": "Переименовать склад «{{name}}»",
+      "nameLabel": "Название",
+      "updated": "Склад обновлён!",
+      "updateFailed": "Не удалось обновить склад"
+    },
+    "delete": {
+      "confirmText": "Вы уверены, что хотите удалить склад <bold>{{name}}</bold>? Все его остатки будут удалены. Это действие необратимо.",
+      "delete": "Удалить",
+      "deleted": "Склад «{{name}}» удалён!",
+      "deleteFailed": "Не удалось удалить склад"
+    }
+  },
+  "stockPage": {
+    "title": "Остатки склада: {{name}}",
+    "back": "К списку складов",
+    "hint": "Кликните по количеству, чтобы изменить его. Число упаковок пересчитывается автоматически.",
+    "columns": {
+      "product": "Товар",
+      "category": "Категория",
+      "packages": "Упаковок",
+      "quantity": "Количество"
+    },
+    "updated": "Остаток обновлён!",
+    "updateFailed": "Не удалось обновить остаток"
   },
   "lowStock": {
     "title": "Предупреждение о низком остатке",

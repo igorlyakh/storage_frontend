@@ -4,18 +4,66 @@
     "sendRequest": "Send Request",
     "quantityRequired": "Please specify quantity for at least one product",
     "requestSent": "Request sent successfully!",
-    "sendFailed": "Failed to send request"
+    "sendFailed": "Failed to send request",
+    "sourceLabel": "Request from",
+    "externalSupplier": "External supplier"
   },
   "stockModal": {
     "increaseTitle": "Increase Stock: {{name}}",
     "decreaseTitle": "Decrease Stock: {{name}}",
     "quantity": "Quantity",
+    "warehouse": "Warehouse",
+    "defaultWarehouse": "main",
     "cancel": "Cancel",
     "confirm": "Confirm",
     "increaseSuccess": "Stock increased successfully!",
     "decreaseSuccess": "Stock decreased successfully!",
     "increaseFailed": "Failed to increase stock",
     "decreaseFailed": "Failed to decrease stock"
+  },
+  "management": {
+    "pageTitle": "Warehouses Management",
+    "createPlaceholder": "New warehouse name",
+    "create": "Create Warehouse",
+    "created": "Warehouse created!",
+    "createFailed": "Failed to create warehouse",
+    "nameRequired": "Name is required!",
+    "defaultBadge": "Main",
+    "columns": {
+      "name": "Name",
+      "createdAt": "Created At",
+      "actions": "Actions"
+    },
+    "tooltips": {
+      "edit": "Rename",
+      "delete": "Delete",
+      "deleteDisabled": "The main warehouse cannot be deleted"
+    },
+    "edit": {
+      "title": "Rename warehouse \"{{name}}\"",
+      "nameLabel": "Name",
+      "updated": "Warehouse updated!",
+      "updateFailed": "Failed to update warehouse"
+    },
+    "delete": {
+      "confirmText": "Are you sure you want to delete warehouse <bold>{{name}}</bold>? All its stock records will be deleted. This cannot be undone.",
+      "delete": "Delete",
+      "deleted": "Warehouse \"{{name}}\" deleted!",
+      "deleteFailed": "Failed to delete warehouse"
+    }
+  },
+  "stockPage": {
+    "title": "Warehouse stock: {{name}}",
+    "back": "Back to warehouses",
+    "hint": "Click a quantity to edit it. Package count is recalculated automatically.",
+    "columns": {
+      "product": "Product",
+      "category": "Category",
+      "packages": "Packages",
+      "quantity": "Quantity"
+    },
+    "updated": "Stock updated!",
+    "updateFailed": "Failed to update stock"
   },
   "lowStock": {
     "title": "Low Stock Warning",

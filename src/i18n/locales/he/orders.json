@@ -29,7 +29,13 @@
     "processed": "!ההזמנה נכנסה לטיפול",
     "processError": "שגיאה בטיפול בהזמנה",
     "completed": "!ההזמנה הושלמה בהצלחה",
-    "completeError": "שגיאה בהשלמת ההזמנה"
+    "completeError": "שגיאה בהשלמת ההזמנה",
+    "deleteTitle": "מחק הזמנה",
+    "deleteConfirm": "?האם אתה בטוח שברצונך למחוק את ההזמנה מ-{{store}}? פעולה זו אינה הפיכה",
+    "deleteAction": "מחק",
+    "deleteCancel": "ביטול",
+    "deleted": "!ההזמנה נמחקה",
+    "deleteError": "מחיקת ההזמנה נכשלה"
   },
   "detail": {
     "backToOrders": "חזרה להזמנות",
@@ -57,6 +63,7 @@
     "productName": "שם המוצר",
     "category": "קטגוריה",
     "quantityToOrder": "כמות להזמנה",
+    "openCard": "פתח כרטיס מוצר",
     "limit": "מגבלה",
     "noLimit": "ללא מגבלה",
     "maxLimit": "מקסימום {{limit}}",

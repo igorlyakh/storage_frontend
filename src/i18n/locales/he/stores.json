@@ -5,6 +5,8 @@
     "brand": "מותג",
     "noBrand": "ללא מותג",
     "createdAt": "נוצרה בתאריך",
+    "lastOrder": "הזמנה אחרונה",
+    "noOrders": "אין הזמנות",
     "actions": "פעולות"
   },
   "tooltips": {

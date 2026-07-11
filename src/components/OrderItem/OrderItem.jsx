@@ -1,11 +1,16 @@
-import { Badge, Button, Card, Group, Stack, Text } from '@mantine/core';
+import { ActionIcon, Badge, Button, Card, Group, Stack, Text, Tooltip } from '@mantine/core';
+import { modals } from '@mantine/modals';
 import dayjs from 'dayjs';
-import { ArrowRight, CheckCheck, CheckCircle } from 'lucide-react';
+import { ArrowRight, CheckCheck, CheckCircle, Trash } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
-import { useCompleteOrderMutation, useProcessOrderMutation } from '../../store/api/api';
+import {
+  useCompleteOrderMutation,
+  useDeleteOrderMutation,
+  useProcessOrderMutation,
+} from '../../store/api/api';
 import { userRoleSelector } from '../../store/selectors/selectors';
 import { getApiErrorMessage } from '../../utils/apiError';
 
@@ -33,6 +38,7 @@ const OrderItem = ({ store, status, sended, updated, id }) => {
 
   const [processOrder, { isLoading: isProcessing }] = useProcessOrderMutation();
   const [completeOrder, { isLoading: isCompleting }] = useCompleteOrderMutation();
+  const [deleteOrder, { isLoading: isDeleting }] = useDeleteOrderMutation();
 
   const handleProcess = async () => {
     try {
@@ -41,6 +47,24 @@ const OrderItem = ({ store, status, sended, updated, id }) => {
     } catch (error) {
       toast.error(getApiErrorMessage(t, error, 'card.processError'));
     }
+  };
+
+  const handleDelete = () => {
+    modals.openConfirmModal({
+      title: t('card.deleteTitle'),
+      centered: true,
+      children: <Text size="sm">{t('card.deleteConfirm', { store })}</Text>,
+      labels: { confirm: t('card.deleteAction'), cancel: t('card.deleteCancel') },
+      confirmProps: { color: 'red' },
+      onConfirm: async () => {
+        try {
+          await deleteOrder(id).unwrap();
+          toast.success(t('card.deleted'));
+        } catch (error) {
+          toast.error(getApiErrorMessage(t, error, 'card.deleteError'));
+        }
+      },
+    });
   };
 
   const handleComplete = async () => {
@@ -180,6 +204,20 @@ const OrderItem = ({ store, status, sended, updated, id }) => {
         >
           {t('card.toOrder')}
         </Button>
+
+        {userRole === 'ADMIN' && (
+          <Tooltip label={t('card.deleteTitle')}>
+            <ActionIcon
+              variant="light"
+              color="red"
+              size="sm"
+              onClick={handleDelete}
+              loading={isDeleting}
+            >
+              <Trash size={14} />
+            </ActionIcon>
+          </Tooltip>
+        )}
       </Group>
     </Card>
   );

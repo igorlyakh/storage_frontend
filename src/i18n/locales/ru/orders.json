@@ -29,7 +29,13 @@
     "processed": "Заказ взят в работу!",
     "processError": "Ошибка при обработке заказа",
     "completed": "Заказ успешно завершён!",
-    "completeError": "Ошибка при завершении заказа"
+    "completeError": "Ошибка при завершении заказа",
+    "deleteTitle": "Удалить заказ",
+    "deleteConfirm": "Вы уверены, что хотите удалить заказ от {{store}}? Это действие необратимо.",
+    "deleteAction": "Удалить",
+    "deleteCancel": "Отмена",
+    "deleted": "Заказ удалён!",
+    "deleteError": "Не удалось удалить заказ"
   },
   "detail": {
     "backToOrders": "Назад к заказам",
@@ -57,6 +63,7 @@
     "productName": "Название товара",
     "category": "Категория",
     "quantityToOrder": "Количество к заказу",
+    "openCard": "Открыть карточку товара",
     "limit": "Лимит",
     "noLimit": "Без лимита",
     "maxLimit": "Макс. {{limit}}",

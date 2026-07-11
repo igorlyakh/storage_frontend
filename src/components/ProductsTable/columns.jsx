@@ -1,6 +1,6 @@
-import { ActionIcon, Group, NumberInput, Select, Stack, Switch, Text, Tooltip } from '@mantine/core';
+import { ActionIcon, Avatar, Group, NumberInput, Select, Stack, Switch, Text, Tooltip } from '@mantine/core';
 import dayjs from 'dayjs';
-import { Minus, Plus, Trash } from 'lucide-react';
+import { Image as ImageIcon, Minus, Plus, Trash } from 'lucide-react';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -21,27 +21,43 @@ export const useProductColumns = ({ isAdmin, isWarehouse }) => {
         header: t('columns.productDetails'),
         size: 300,
         cell: ({ row, table, getValue }) => (
-          <Stack
-            gap={0}
-            py={6}
+          <Group
+            gap="sm"
+            wrap="nowrap"
           >
-            <EditableTextCell
-              fw={700}
-              initialValue={getValue()}
-              onUpdate={newVal =>
-                table.options.meta.updateData(row.original, 'name', newVal)
-              }
-            />
-            <EditableTextCell
-              fz={12}
-              fw={500}
-              c="dimmed"
-              initialValue={row.original.article}
-              onUpdate={newVal =>
-                table.options.meta.updateData(row.original, 'article', newVal)
-              }
-            />
-          </Stack>
+            <Tooltip label={t('card.openTooltip')}>
+              <Avatar
+                src={row.original.imageUrl}
+                radius="sm"
+                size={40}
+                style={{ cursor: 'pointer', flexShrink: 0 }}
+                onClick={() => table.options.meta.openProductCard(row.original)}
+              >
+                <ImageIcon size={18} />
+              </Avatar>
+            </Tooltip>
+            <Stack
+              gap={0}
+              py={6}
+            >
+              <EditableTextCell
+                fw={700}
+                initialValue={getValue()}
+                onUpdate={newVal =>
+                  table.options.meta.updateData(row.original, 'name', newVal)
+                }
+              />
+              <EditableTextCell
+                fz={12}
+                fw={500}
+                c="dimmed"
+                initialValue={row.original.article}
+                onUpdate={newVal =>
+                  table.options.meta.updateData(row.original, 'article', newVal)
+                }
+              />
+            </Stack>
+          </Group>
         ),
       },
       {

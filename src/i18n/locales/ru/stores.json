@@ -5,6 +5,8 @@
     "brand": "Бренд",
     "noBrand": "Без бренда",
     "createdAt": "Создан",
+    "lastOrder": "Последний заказ",
+    "noOrders": "Заказов не было",
     "actions": "Действия"
   },
   "tooltips": {

@@ -2,11 +2,19 @@
   "management": "Categories Management",
   "columns": {
     "name": "Category Name",
+    "products": "Products",
     "createdAt": "Created At",
     "actions": "Actions"
   },
   "tooltips": {
-    "edit": "Edit Category"
+    "edit": "Edit Category",
+    "delete": "Delete Category"
+  },
+  "deleteModal": {
+    "confirmText": "Are you sure you want to delete category <bold>{{name}}</bold>? Its products will remain without a category.",
+    "delete": "Delete Category",
+    "deleted": "Category \"{{name}}\" deleted",
+    "deleteFailed": "Failed to delete category"
   },
   "create": {
     "title": "Create New Category",

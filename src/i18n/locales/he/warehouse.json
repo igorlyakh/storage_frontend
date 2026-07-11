@@ -4,18 +4,66 @@
     "sendRequest": "שלח בקשה",
     "quantityRequired": "נא לציין כמות עבור לפחות מוצר אחד",
     "requestSent": "!הבקשה נשלחה בהצלחה",
-    "sendFailed": "שליחת הבקשה נכשלה"
+    "sendFailed": "שליחת הבקשה נכשלה",
+    "sourceLabel": "בקשה מ",
+    "externalSupplier": "ספק חיצוני"
   },
   "stockModal": {
     "increaseTitle": "הגדלת מלאי: {{name}}",
     "decreaseTitle": "הקטנת מלאי: {{name}}",
     "quantity": "כמות",
+    "warehouse": "מחסן",
+    "defaultWarehouse": "ראשי",
     "cancel": "ביטול",
     "confirm": "אישור",
     "increaseSuccess": "!המלאי הוגדל בהצלחה",
     "decreaseSuccess": "!המלאי הוקטן בהצלחה",
     "increaseFailed": "הגדלת המלאי נכשלה",
     "decreaseFailed": "הקטנת המלאי נכשלה"
+  },
+  "management": {
+    "pageTitle": "ניהול מחסנים",
+    "createPlaceholder": "שם המחסן החדש",
+    "create": "צור מחסן",
+    "created": "!המחסן נוצר",
+    "createFailed": "יצירת המחסן נכשלה",
+    "nameRequired": "!נדרש שם",
+    "defaultBadge": "ראשי",
+    "columns": {
+      "name": "שם",
+      "createdAt": "נוצר בתאריך",
+      "actions": "פעולות"
+    },
+    "tooltips": {
+      "edit": "שנה שם",
+      "delete": "מחק",
+      "deleteDisabled": "לא ניתן למחוק את המחסן הראשי"
+    },
+    "edit": {
+      "title": "שינוי שם מחסן \"{{name}}\"",
+      "nameLabel": "שם",
+      "updated": "!המחסן עודכן",
+      "updateFailed": "עדכון המחסן נכשל"
+    },
+    "delete": {
+      "confirmText": "?האם אתה בטוח שברצונך למחוק את המחסן <bold>{{name}}</bold>? כל רשומות המלאי שלו יימחקו. פעולה זו אינה הפיכה",
+      "delete": "מחק",
+      "deleted": "!המחסן \"{{name}}\" נמחק",
+      "deleteFailed": "מחיקת המחסן נכשלה"
+    }
+  },
+  "stockPage": {
+    "title": "מלאי מחסן: {{name}}",
+    "back": "חזרה למחסנים",
+    "hint": "לחץ על כמות כדי לערוך אותה. מספר האריזות מחושב מחדש אוטומטית.",
+    "columns": {
+      "product": "מוצר",
+      "category": "קטגוריה",
+      "packages": "אריזות",
+      "quantity": "כמות"
+    },
+    "updated": "!המלאי עודכן",
+    "updateFailed": "עדכון המלאי נכשל"
   },
   "lowStock": {
     "title": "התראת מלאי נמוך",

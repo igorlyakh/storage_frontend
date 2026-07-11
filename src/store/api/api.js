@@ -3,7 +3,6 @@ import { Mutex } from 'async-mutex';
 import { logOut, updateToken } from '../userSlice/userSlice';
 
 const mutex = new Mutex();
-// const apiUrl = import.meta.env.VITE_API_URL;
 const apiUrl = '/api';
 
 const baseQuery = fetchBaseQuery({
@@ -65,6 +64,7 @@ export const api = createApi({
     'Brands',
     'Statistics',
     'Categories',
+    'Warehouses',
   ],
   endpoints: builder => ({
     getAllOrders: builder.query({
@@ -346,6 +346,62 @@ export const api = createApi({
     updateLanguage: builder.mutation({
       query: language => ({ url: '/auth/me/language', method: 'PATCH', body: { language } }),
     }),
+    getAllWarehouses: builder.query({
+      query: () => '/warehouses',
+      providesTags: ['Warehouses'],
+    }),
+    createWarehouse: builder.mutation({
+      query: data => ({ url: '/warehouses', method: 'POST', body: data }),
+      invalidatesTags: ['Warehouses'],
+    }),
+    updateWarehouse: builder.mutation({
+      query: ({ id, ...data }) => ({
+        url: `/warehouses/${id}`,
+        method: 'PATCH',
+        body: data,
+      }),
+      invalidatesTags: ['Warehouses', 'Products', 'WarehouseRequests'],
+    }),
+    deleteWarehouse: builder.mutation({
+      query: id => ({ url: `/warehouses/${id}`, method: 'DELETE' }),
+      invalidatesTags: ['Warehouses', 'Products', 'WarehouseRequests'],
+    }),
+    uploadProductImage: builder.mutation({
+      query: ({ id, file }) => {
+        const formData = new FormData();
+        formData.append('image', file);
+        return { url: `/product/${id}/image`, method: 'POST', body: formData };
+      },
+      invalidatesTags: ['Products'],
+    }),
+    deleteProductImage: builder.mutation({
+      query: id => ({ url: `/product/${id}/image`, method: 'DELETE' }),
+      invalidatesTags: ['Products'],
+    }),
+    getProductMonthlyOrdered: builder.query({
+      query: id => `/product/${id}/monthly-ordered`,
+      providesTags: ['Orders', 'Products'],
+    }),
+    deleteCategory: builder.mutation({
+      query: id => ({ url: `/category/${id}`, method: 'DELETE' }),
+      invalidatesTags: ['Categories', 'Products'],
+    }),
+    deleteOrder: builder.mutation({
+      query: id => ({ url: `/orders/${id}`, method: 'DELETE' }),
+      invalidatesTags: ['Orders', 'Statistics'],
+    }),
+    deleteWarehouseRequest: builder.mutation({
+      query: id => ({ url: `/warehouse/${id}`, method: 'DELETE' }),
+      invalidatesTags: ['WarehouseRequests', 'Statistics'],
+    }),
+    getWarehouseStocks: builder.query({
+      query: id => `/warehouses/${id}/stocks`,
+      providesTags: ['Warehouses', 'Products'],
+    }),
+    setProductStock: builder.mutation({
+      query: data => ({ url: '/warehouse/set', method: 'PATCH', body: data }),
+      invalidatesTags: ['Products', 'Warehouses'],
+    }),
   }),
 });
 
@@ -398,4 +454,16 @@ export const {
   useReorderCategoriesMutation,
   useReorderProductsMutation,
   useUpdateLanguageMutation,
+  useGetAllWarehousesQuery,
+  useCreateWarehouseMutation,
+  useUpdateWarehouseMutation,
+  useDeleteWarehouseMutation,
+  useUploadProductImageMutation,
+  useDeleteProductImageMutation,
+  useGetProductMonthlyOrderedQuery,
+  useDeleteCategoryMutation,
+  useDeleteOrderMutation,
+  useDeleteWarehouseRequestMutation,
+  useGetWarehouseStocksQuery,
+  useSetProductStockMutation,
 } = api;

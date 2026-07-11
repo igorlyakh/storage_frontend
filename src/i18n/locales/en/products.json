@@ -21,6 +21,22 @@
     "addBrands": "Add brands...",
     "selectBrands": "Select brands..."
   },
+  "card": {
+    "openTooltip": "Open product card",
+    "noPhoto": "No photo yet",
+    "uploadPhoto": "Upload photo",
+    "replacePhoto": "Replace photo",
+    "deletePhoto": "Delete photo",
+    "photoUploaded": "Photo uploaded!",
+    "photoUploadFailed": "Failed to upload photo",
+    "photoDeleted": "Photo deleted!",
+    "photoDeleteFailed": "Failed to delete photo",
+    "orderedThisMonth": "Ordered this month",
+    "stockByWarehouse": "Stock by warehouse",
+    "warehouse": "Warehouse",
+    "defaultWarehouse": "main",
+    "total": "Total"
+  },
   "create": {
     "title": "Add New Product",
     "submit": "Create Product",
@@ -47,6 +63,9 @@
     "itemsPerPackagePlaceholder": "E.g., 24",
     "itemsPerPackageRequired": "Items per package is required!",
     "initialPackagesLabel": "Initial Packages Count",
+    "warehouseLabel": "Warehouse for initial stock",
+    "warehousePlaceholder": "Main warehouse (default)",
+    "defaultWarehouse": "main",
     "initialPackagesPlaceholder": "E.g., 5",
     "initialPackagesRequired": "Packages count is required!",
     "added": "Product added!",

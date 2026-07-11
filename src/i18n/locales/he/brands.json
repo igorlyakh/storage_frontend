@@ -2,6 +2,8 @@
   "management": "ניהול מותגים",
   "columns": {
     "name": "שם המותג",
+    "stores": "חנויות",
+    "products": "מוצרים",
     "createdAt": "נוצר בתאריך",
     "actions": "פעולות"
   },

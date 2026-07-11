@@ -27,6 +27,8 @@
     "stores": "Stores",
     "allStores": "All Stores",
     "createStore": "Create Store",
+    "warehouses": "Warehouses",
+    "allWarehouses": "All Warehouses",
     "products": "Products",
     "reorderProducts": "Reorder Products"
   },

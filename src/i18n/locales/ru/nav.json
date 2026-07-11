@@ -27,6 +27,8 @@
     "stores": "Магазины",
     "allStores": "Все магазины",
     "createStore": "Создать магазин",
+    "warehouses": "Склады",
+    "allWarehouses": "Все склады",
     "products": "Товары",
     "reorderProducts": "Порядок товаров"
   },

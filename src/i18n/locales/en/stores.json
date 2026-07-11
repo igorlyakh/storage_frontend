@@ -5,6 +5,8 @@
     "brand": "Brand",
     "noBrand": "No brand",
     "createdAt": "Created At",
+    "lastOrder": "Last Order",
+    "noOrders": "No orders",
     "actions": "Actions"
   },
   "tooltips": {

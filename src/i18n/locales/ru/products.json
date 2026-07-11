@@ -21,6 +21,22 @@
     "addBrands": "Добавить бренды...",
     "selectBrands": "Выберите бренды..."
   },
+  "card": {
+    "openTooltip": "Открыть карточку товара",
+    "noPhoto": "Фото ещё нет",
+    "uploadPhoto": "Загрузить фото",
+    "replacePhoto": "Заменить фото",
+    "deletePhoto": "Удалить фото",
+    "photoUploaded": "Фото загружено!",
+    "photoUploadFailed": "Не удалось загрузить фото",
+    "photoDeleted": "Фото удалено!",
+    "photoDeleteFailed": "Не удалось удалить фото",
+    "orderedThisMonth": "Заказано в этом месяце",
+    "stockByWarehouse": "Остатки по складам",
+    "warehouse": "Склад",
+    "defaultWarehouse": "основной",
+    "total": "Итого"
+  },
   "create": {
     "title": "Добавить новый товар",
     "submit": "Создать товар",
@@ -47,6 +63,9 @@
     "itemsPerPackagePlaceholder": "Например, 24",
     "itemsPerPackageRequired": "Количество в упаковке обязательно!",
     "initialPackagesLabel": "Начальное количество упаковок",
+    "warehouseLabel": "Склад для начального остатка",
+    "warehousePlaceholder": "Основной склад (по умолчанию)",
+    "defaultWarehouse": "основной",
     "initialPackagesPlaceholder": "Например, 5",
     "initialPackagesRequired": "Количество упаковок обязательно!",
     "added": "Товар добавлен!",

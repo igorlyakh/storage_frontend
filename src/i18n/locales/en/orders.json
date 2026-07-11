@@ -29,7 +29,13 @@
     "processed": "Order processed!",
     "processError": "Error processing order",
     "completed": "Order successfully completed!",
-    "completeError": "Error completing order"
+    "completeError": "Error completing order",
+    "deleteTitle": "Delete order",
+    "deleteConfirm": "Are you sure you want to delete the order from {{store}}? This cannot be undone.",
+    "deleteAction": "Delete",
+    "deleteCancel": "Cancel",
+    "deleted": "Order deleted!",
+    "deleteError": "Failed to delete order"
   },
   "detail": {
     "backToOrders": "Back to Orders",
@@ -57,6 +63,7 @@
     "productName": "Product Name",
     "category": "Category",
     "quantityToOrder": "Quantity to Order",
+    "openCard": "Open product card",
     "limit": "Limit",
     "noLimit": "No limit",
     "maxLimit": "Max {{limit}}",

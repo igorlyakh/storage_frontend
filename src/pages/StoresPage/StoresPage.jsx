@@ -66,6 +66,23 @@ const StoresPage = () => {
         ),
       },
       {
+        accessorKey: 'lastOrderAt',
+        header: t('columns.lastOrder'),
+        cell: info => {
+          const value = info.getValue();
+          return value ? (
+            <Text size="sm">{dayjs(value).format('DD.MM.YY HH:mm')}</Text>
+          ) : (
+            <Text
+              size="xs"
+              c="dimmed"
+            >
+              {t('columns.noOrders')}
+            </Text>
+          );
+        },
+      },
+      {
         id: 'actions',
         header: t('columns.actions'),
         cell: info => {

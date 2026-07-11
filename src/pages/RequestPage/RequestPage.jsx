@@ -362,6 +362,11 @@ const RequestPage = () => {
                 date: dayjs(data.createdAt).format('DD.MM.YYYY HH:mm'),
               })}
             </Text>
+            <Text size="sm">
+              {t('detail.source', {
+                source: data.sourceWarehouse?.name || t('detail.externalSupplier'),
+              })}
+            </Text>
           </Box>
 
           <Stack

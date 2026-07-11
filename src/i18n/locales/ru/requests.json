@@ -15,15 +15,25 @@
   "card": {
     "createdAt": "Создана:",
     "productsInOrder": "Товаров в заявке:",
+    "source": "Запрошено с:",
+    "externalSupplier": "Внешний поставщик",
     "details": "Подробнее",
     "approve": "Одобрить",
     "approved": "Одобрено!",
-    "approveError": "Ошибка!"
+    "approveError": "Ошибка!",
+    "deleteTitle": "Удалить заявку",
+    "deleteConfirm": "Вы уверены, что хотите удалить эту заявку? Это действие необратимо.",
+    "deleteAction": "Удалить",
+    "deleteCancel": "Отмена",
+    "deleted": "Заявка удалена!",
+    "deleteError": "Не удалось удалить заявку"
   },
   "detail": {
     "details": "Подробности",
     "id": "ID: {{id}}",
     "createdAt": "Создана: {{date}}",
+    "source": "Запрошено с: {{source}}",
+    "externalSupplier": "Внешний поставщик",
     "category": "Категория: {{category}}",
     "items": "Товары",
     "editItems": "Редактировать товары",

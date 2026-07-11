@@ -1,5 +1,6 @@
 import {
   ActionIcon,
+  Badge,
   Box,
   Container,
   Group,
@@ -31,6 +32,34 @@ const BrandsPage = () => {
         accessorKey: 'name',
         header: t('columns.name'),
         cell: info => <Text fw={500}>{info.getValue()}</Text>,
+      },
+      {
+        id: 'storesCount',
+        accessorFn: row => row._count?.stores ?? 0,
+        header: t('columns.stores'),
+        cell: info => (
+          <Badge
+            variant="light"
+            color="teal"
+            size="sm"
+          >
+            {info.getValue()}
+          </Badge>
+        ),
+      },
+      {
+        id: 'productsCount',
+        accessorFn: row => row._count?.products ?? 0,
+        header: t('columns.products'),
+        cell: info => (
+          <Badge
+            variant="light"
+            color="blue"
+            size="sm"
+          >
+            {info.getValue()}
+          </Badge>
+        ),
       },
       {
         accessorKey: 'createdAt',

@@ -36,9 +36,7 @@ const LowStockNotifier = () => {
             toast.success(t('lowStock.none'));
           }
         })
-        .catch(() => {
-          // non-critical, ignore
-        });
+        .catch(() => {});
     },
     [fetchLowStockProducts, t],
   );

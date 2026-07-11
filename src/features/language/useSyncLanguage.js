@@ -3,9 +3,6 @@ import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { getLanguageDirection } from '../../i18n/languages';
 
-// Keeps Mantine's direction context and <html dir/lang> in sync with i18next,
-// and lets the account's saved language (from login/getMe) win over the
-// guest/localStorage choice once the user is authenticated.
 export const useSyncLanguage = () => {
   const { i18n } = useTranslation();
   const { setDirection } = useDirection();

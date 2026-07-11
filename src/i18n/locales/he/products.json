@@ -21,6 +21,22 @@
     "addBrands": "הוסף מותגים...",
     "selectBrands": "בחר מותגים..."
   },
+  "card": {
+    "openTooltip": "פתח כרטיס מוצר",
+    "noPhoto": "אין תמונה עדיין",
+    "uploadPhoto": "העלה תמונה",
+    "replacePhoto": "החלף תמונה",
+    "deletePhoto": "מחק תמונה",
+    "photoUploaded": "!התמונה הועלתה",
+    "photoUploadFailed": "העלאת התמונה נכשלה",
+    "photoDeleted": "!התמונה נמחקה",
+    "photoDeleteFailed": "מחיקת התמונה נכשלה",
+    "orderedThisMonth": "הוזמן החודש",
+    "stockByWarehouse": "מלאי לפי מחסן",
+    "warehouse": "מחסן",
+    "defaultWarehouse": "ראשי",
+    "total": "סה\"כ"
+  },
   "create": {
     "title": "הוספת מוצר חדש",
     "submit": "צור מוצר",
@@ -47,6 +63,9 @@
     "itemsPerPackagePlaceholder": "לדוגמה, 24",
     "itemsPerPackageRequired": "כמות באריזה נדרשת!",
     "initialPackagesLabel": "כמות אריזות התחלתית",
+    "warehouseLabel": "מחסן למלאי התחלתי",
+    "warehousePlaceholder": "מחסן ראשי (ברירת מחדל)",
+    "defaultWarehouse": "ראשי",
     "initialPackagesPlaceholder": "לדוגמה, 5",
     "initialPackagesRequired": "כמות אריזות נדרשת!",
     "added": "!המוצר נוסף",
