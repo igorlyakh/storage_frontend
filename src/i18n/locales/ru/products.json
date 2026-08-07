@@ -35,7 +35,15 @@
     "stockByWarehouse": "Остатки по складам",
     "warehouse": "Склад",
     "defaultWarehouse": "основной",
-    "total": "Итого"
+    "total": "Итого",
+    "orderRecipientLabel": "Кому идёт заказ",
+    "recipientWarehouse": "Склад",
+    "recipientAdmin": "Админ",
+    "recipientScopeLabel": "Раздел админа",
+    "substituteLabel": "Подменный товар",
+    "substituteHint": "Автоматически включается, когда этот товар закончится",
+    "substitutePlaceholder": "Без замены",
+    "substituteNone": "Не задан"
   },
   "create": {
     "title": "Добавить новый товар",

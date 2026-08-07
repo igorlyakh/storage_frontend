@@ -35,7 +35,15 @@
     "stockByWarehouse": "Stock by warehouse",
     "warehouse": "Warehouse",
     "defaultWarehouse": "main",
-    "total": "Total"
+    "total": "Total",
+    "orderRecipientLabel": "Order goes to",
+    "recipientWarehouse": "Warehouse",
+    "recipientAdmin": "Admin",
+    "recipientScopeLabel": "Admin scope",
+    "substituteLabel": "Substitute product",
+    "substituteHint": "Turns on automatically when this product runs out",
+    "substitutePlaceholder": "No substitute",
+    "substituteNone": "Not set"
   },
   "create": {
     "title": "Add New Product",

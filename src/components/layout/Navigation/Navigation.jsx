@@ -276,6 +276,10 @@ const Navigation = () => {
               label: t('management.products'),
               items: [{ label: t('management.reorderProducts'), to: '/ordering' }],
             },
+            {
+              label: t('management.settings'),
+              items: [{ label: t('management.appSettings'), to: '/settings' }],
+            },
           ]}
           isMobile={isMobile}
           closeDrawer={close}

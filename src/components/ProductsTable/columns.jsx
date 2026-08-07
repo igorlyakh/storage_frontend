@@ -42,6 +42,11 @@ export const useProductColumns = ({ isAdmin, isWarehouse }) => {
             >
               <EditableTextCell
                 fw={700}
+                c={
+                  (row.original.substituteFor?.length ?? 0) > 0
+                    ? 'var(--mantine-color-orange-8)'
+                    : 'dark'
+                }
                 initialValue={getValue()}
                 onUpdate={newVal =>
                   table.options.meta.updateData(row.original, 'name', newVal)

@@ -65,6 +65,7 @@ export const api = createApi({
     'Statistics',
     'Categories',
     'Warehouses',
+    'Settings',
   ],
   endpoints: builder => ({
     getAllOrders: builder.query({
@@ -89,6 +90,22 @@ export const api = createApi({
     completeOrder: builder.mutation({
       query: orderId => ({ url: '/orders/complete', method: 'PATCH', body: { orderId } }),
       invalidatesTags: ['Orders'],
+    }),
+    rejectOrder: builder.mutation({
+      query: ({ orderId, reason }) => ({
+        url: '/orders/reject',
+        method: 'PATCH',
+        body: { orderId, reason },
+      }),
+      invalidatesTags: ['Orders'],
+    }),
+    getSettings: builder.query({
+      query: () => '/settings',
+      providesTags: ['Settings'],
+    }),
+    updateSettings: builder.mutation({
+      query: data => ({ url: '/settings', method: 'PATCH', body: data }),
+      invalidatesTags: ['Settings'],
     }),
     login: builder.mutation({
       query: data => ({ url: '/auth/login', method: 'POST', body: data }),
@@ -426,6 +443,9 @@ export const {
   useProcessOrderMutation,
   useSendOrderMutation,
   useCompleteOrderMutation,
+  useRejectOrderMutation,
+  useGetSettingsQuery,
+  useUpdateSettingsMutation,
   useGetWarehouseRequestsQuery,
   useGetAdminWarehouseRequestsQuery,
   useCreateWarehouseRequestMutation,

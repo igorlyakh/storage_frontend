@@ -12,11 +12,34 @@ import { Info } from 'lucide-react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { useGetSettingsQuery } from '../../store/api/api';
 import { userRoleSelector } from '../../store/selectors/selectors';
+
+const DEFAULTS = {
+  orderDayFrom: 0,
+  orderDayTo: 4,
+  orderCutoffTime: '14:30',
+  supportEmail: 'info@example.com',
+};
+
+const getOffDays = (from, to) => {
+  const offDays = [];
+  for (let shift = 1; shift <= 6; shift += 1) {
+    const day = (to + shift) % 7;
+    if (day === from) break;
+    offDays.push(day);
+  }
+  return offDays;
+};
 
 const HomePage = () => {
   const { t } = useTranslation('common');
   const userRole = useSelector(userRoleSelector);
+  const { data } = useGetSettingsQuery();
+
+  const settings = data || DEFAULTS;
+  const dayName = day => t(`days.${day}`);
+  const offDays = getOffDays(settings.orderDayFrom, settings.orderDayTo);
 
   return (
     <Container
@@ -98,13 +121,16 @@ const HomePage = () => {
               c="blue.9"
               style={{ lineHeight: 1.3 }}
             >
-              {t('home.cutoffLine')}{' '}
+              {t('home.cutoffLine', {
+                fromDay: dayName(settings.orderDayFrom),
+                toDay: dayName(settings.orderDayTo),
+              })}{' '}
               <Text
                 component="span"
                 inherit
                 c="orange.5"
               >
-                {t('home.cutoffTime')}
+                {settings.orderCutoffTime}
               </Text>
             </Text>
 
@@ -116,10 +142,29 @@ const HomePage = () => {
             >
               <Trans
                 t={t}
-                i18nKey="home.cutoffDetails"
-                components={{ b1: <b />, b2: <b />, b3: <b /> }}
+                i18nKey="home.cutoffAfter"
+                values={{ time: settings.orderCutoffTime }}
+                components={{ b1: <b /> }}
               />
             </Text>
+            {offDays.length > 0 && (
+              <Text
+                ta="center"
+                size="xs"
+                c="blue.8"
+                style={{ lineHeight: 1.4 }}
+              >
+                <Trans
+                  t={t}
+                  i18nKey="home.cutoffOffDays"
+                  values={{
+                    offDays: offDays.map(dayName).join(', '),
+                    nextDay: dayName(settings.orderDayFrom),
+                  }}
+                  components={{ b2: <b />, b3: <b /> }}
+                />
+              </Text>
+            )}
           </Stack>
         </Paper>
 
@@ -158,12 +203,12 @@ const HomePage = () => {
               {t('home.contactUs')}{' '}
               <Text
                 component="a"
-                href="mailto:info@example.com"
+                href={`mailto:${settings.supportEmail}`}
                 c="blue.6"
                 inherit
                 style={{ textDecoration: 'none' }}
               >
-                info@example.com
+                {settings.supportEmail}
               </Text>
             </Text>
           </Stack>

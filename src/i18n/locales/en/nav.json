@@ -30,7 +30,9 @@
     "warehouses": "Warehouses",
     "allWarehouses": "All Warehouses",
     "products": "Products",
-    "reorderProducts": "Reorder Products"
+    "reorderProducts": "Reorder Products",
+    "settings": "Settings",
+    "appSettings": "Application Settings"
   },
   "statistics": {
     "title": "Statistics",

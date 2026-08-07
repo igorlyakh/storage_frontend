@@ -18,7 +18,7 @@ import { useSearchParams } from 'react-router-dom';
 import OrdersList from '../../components/OrdersList/OrdersList';
 import { useGetMyOrdersQuery } from '../../store/api/api';
 
-const DEFAULT_STATUSES = ['NEW', 'IN_PROGRESS', 'SENT', 'BACKORDER'];
+const DEFAULT_STATUSES = ['NEW', 'IN_PROGRESS', 'SENT', 'BACKORDER', 'REJECTED'];
 
 const FilterPopover = ({ label, options, values, onChange }) => {
   const { t } = useTranslation('orders');
@@ -139,6 +139,7 @@ const MyOrdersPage = () => {
     { value: 'SENT', label: t('status.SENT') },
     { value: 'COMPLETED', label: t('status.COMPLETED') },
     { value: 'BACKORDER', label: t('status.BACKORDER') },
+    { value: 'REJECTED', label: t('status.REJECTED') },
   ];
 
   const { data, isFetching } = useGetMyOrdersQuery(
@@ -195,7 +196,7 @@ const MyOrdersPage = () => {
 
       <Box
         pos="relative"
-        minHeight={200}
+        mih={200}
       >
         <LoadingOverlay
           visible={isFetching}

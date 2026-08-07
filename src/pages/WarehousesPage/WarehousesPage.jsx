@@ -140,7 +140,7 @@ const WarehousesPage = () => {
     >
       <Box
         pos="relative"
-        minHeight={200}
+        mih={200}
       >
         <LoadingOverlay
           visible={isLoading}

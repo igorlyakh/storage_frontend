@@ -7,7 +7,8 @@ const NotFoundPage = () => {
 
   return (
     <Center
-      minHeight="100vh"
+      mih="100vh"
+      w="100%"
       bg="gray.0"
       p={{ base: 'md', sm: 'xl' }}
     >
@@ -44,7 +45,7 @@ const NotFoundPage = () => {
 
           <Text
             c="dimmed"
-            size={{ base: 'sm', sm: 'lg' }}
+            fz={{ base: 'sm', sm: 'lg' }}
             ta="center"
             maw={540}
             style={{ zIndex: 1 }}

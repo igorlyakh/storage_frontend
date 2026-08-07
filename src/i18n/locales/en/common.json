@@ -84,15 +84,26 @@
     "notYourScope": "This is not your scope: {{category}}",
     "noPermission": "You do not have permission: {{scope}}",
     "storeNotFoundWithId": "Store with id {{id}} not found!",
-    "userNotFoundWithId": "User with id: {{id}} not found!"
+    "userNotFoundWithId": "User with id: {{id}} not found!",
+    "substituteSelf": "A product cannot be its own substitute",
+    "substituteNotFound": "Substitute product not found!"
+  },
+  "days": {
+    "0": "Sunday",
+    "1": "Monday",
+    "2": "Tuesday",
+    "3": "Wednesday",
+    "4": "Thursday",
+    "5": "Friday",
+    "6": "Saturday"
   },
   "home": {
     "title": "Stock Assistant",
     "intro": "Welcome to the ultimate inventory management solution. This application is specifically designed to ensure seamless stock control at the central warehouse and to provide a simplified, effortless ordering experience for retail stores.",
     "importantInfo": "Important Information",
-    "cutoffLine": "Orders are accepted from Sunday to Thursday until",
-    "cutoffTime": "14:30",
-    "cutoffDetails": "All orders received <b1>after 14:30</b1> will be processed and shipped the following day. Orders placed on <b2>Friday and Saturday</b2> will be processed and shipped on <b3>Sunday</b3>.",
+    "cutoffLine": "Orders are accepted from {{fromDay}} to {{toDay}} until",
+    "cutoffAfter": "All orders received <b1>after {{time}}</b1> will be processed and shipped the following day.",
+    "cutoffOffDays": "Orders placed on <b2>{{offDays}}</b2> will be processed and shipped on <b3>{{nextDay}}</b3>.",
     "needHelp": "Need assistance?",
     "helpDetails": "If you experience any issues, have feature requests, or need technical support, our dedicated team is always here to help.",
     "contactUs": "Please contact us at:",

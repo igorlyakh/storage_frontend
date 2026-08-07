@@ -4,7 +4,8 @@
     "role": "תפקיד",
     "store": "חנות",
     "logistics": "לוגיסטיקה",
-    "actions": "פעולות"
+    "actions": "פעולות",
+    "scopes": "הרשאות"
   },
   "tooltips": {
     "editUser": "ערוך משתמש",
@@ -51,5 +52,6 @@
     "updated": "!הסיסמה עודכנה",
     "updateFailed": "עדכון הסיסמה נכשל"
   },
-  "storeFallback": "{{id}} 'חנות מס"
+  "storeFallback": "{{id}} 'חנות מס",
+  "management": "ניהול משתמשים"
 }

@@ -7,7 +7,8 @@
     "createdAt": "Created At",
     "lastOrder": "Last Order",
     "noOrders": "No orders",
-    "actions": "Actions"
+    "actions": "Actions",
+    "users": "Users"
   },
   "tooltips": {
     "edit": "Edit Store",

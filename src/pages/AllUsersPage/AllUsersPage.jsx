@@ -6,6 +6,7 @@ import {
   Group,
   LoadingOverlay,
   Text,
+  Title,
   Tooltip,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
@@ -69,7 +70,61 @@ const UsersPage = () => {
       {
         accessorKey: 'store.name',
         header: t('columns.store'),
-        cell: info => <Text>{info.getValue() || t('columns.logistics')}</Text>,
+        cell: info => {
+          const storeName = info.getValue();
+          return storeName ? (
+            <Badge
+              variant="light"
+              color="yellow"
+              size="md"
+              radius="sm"
+            >
+              {storeName}
+            </Badge>
+          ) : (
+            <Badge
+              variant="outline"
+              color="gray"
+              size="md"
+              radius="sm"
+            >
+              {t('columns.logistics')}
+            </Badge>
+          );
+        },
+      },
+      {
+        id: 'scopes',
+        accessorFn: row => row.adminScopes || [],
+        header: t('columns.scopes'),
+        enableSorting: false,
+        cell: info => {
+          const scopes = info.getValue();
+          if (!scopes?.length) {
+            return (
+              <Text
+                size="xs"
+                c="dimmed"
+              >
+                —
+              </Text>
+            );
+          }
+          return (
+            <Group gap={4}>
+              {scopes.map(scope => (
+                <Badge
+                  key={scope}
+                  variant="light"
+                  color="pink"
+                  size="sm"
+                >
+                  {scope}
+                </Badge>
+              ))}
+            </Group>
+          );
+        },
       },
       {
         id: 'actions',
@@ -131,12 +186,19 @@ const UsersPage = () => {
     >
       <Box
         pos="relative"
-        minHeight={200}
+        mih={200}
       >
         <LoadingOverlay
           visible={isLoading}
           overlayProps={{ blur: 2 }}
         />
+
+        <Title
+          order={2}
+          mb={10}
+        >
+          {t('management')}
+        </Title>
 
         <DataTable
           data={users}

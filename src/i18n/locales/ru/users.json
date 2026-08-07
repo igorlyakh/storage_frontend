@@ -4,7 +4,8 @@
     "role": "Роль",
     "store": "Магазин",
     "logistics": "ЛОГИСТИКА",
-    "actions": "Действия"
+    "actions": "Действия",
+    "scopes": "Разделы"
   },
   "tooltips": {
     "editUser": "Редактировать пользователя",
@@ -51,5 +52,6 @@
     "updated": "Пароль обновлён!",
     "updateFailed": "Не удалось обновить пароль"
   },
-  "storeFallback": "Магазин №{{id}}"
+  "storeFallback": "Магазин №{{id}}",
+  "management": "Управление пользователями"
 }

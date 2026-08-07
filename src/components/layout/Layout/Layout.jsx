@@ -1,9 +1,20 @@
 import { Box } from '@mantine/core';
-import { Outlet } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { Outlet, useLocation } from 'react-router-dom';
+import { useGetSettingsQuery } from '../../../store/api/api';
+import { userRoleSelector } from '../../../store/selectors/selectors';
 import Container from '../../ui/Container';
+import MaintenanceStub from '../../MaintenanceStub';
 import Header from '../Header';
 
 const Layout = () => {
+  const { data: settings } = useGetSettingsQuery();
+  const userRole = useSelector(userRoleSelector);
+  const location = useLocation();
+
+  const showMaintenanceStub =
+    settings?.maintenanceMode && userRole !== 'ADMIN' && location.pathname !== '/login';
+
   return (
     <Box
       bg="gray.0"
@@ -15,9 +26,7 @@ const Layout = () => {
         flex={1}
         py={{ base: 'md', sm: 'xl', md: 'xxl' }}
       >
-        <Container>
-          <Outlet />
-        </Container>
+        <Container>{showMaintenanceStub ? <MaintenanceStub settings={settings} /> : <Outlet />}</Container>
       </Box>
     </Box>
   );

@@ -11,13 +11,14 @@ import {
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import dayjs from 'dayjs';
-import { Pencil, Trash } from 'lucide-react';
+import { Package, Pencil, Store, Trash } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import DataTable from '../../components/ui/DataTable';
 import DeleteBrandModal from '../../components/ui/DeleteBrandModal';
 import EditBrandModal from '../../components/ui/EditBrandModal';
 import { useGetAllBrandsQuery } from '../../store/api/api';
+import getBrandColor from '../../utils/getBrandColor';
 
 const BrandsPage = () => {
   const { t } = useTranslation('brands');
@@ -31,7 +32,16 @@ const BrandsPage = () => {
       {
         accessorKey: 'name',
         header: t('columns.name'),
-        cell: info => <Text fw={500}>{info.getValue()}</Text>,
+        cell: info => (
+          <Badge
+            variant="light"
+            color={getBrandColor(info.getValue())}
+            size="lg"
+            radius="sm"
+          >
+            {info.getValue()}
+          </Badge>
+        ),
       },
       {
         id: 'storesCount',
@@ -41,7 +51,8 @@ const BrandsPage = () => {
           <Badge
             variant="light"
             color="teal"
-            size="sm"
+            size="md"
+            leftSection={<Store size={12} />}
           >
             {info.getValue()}
           </Badge>
@@ -55,7 +66,8 @@ const BrandsPage = () => {
           <Badge
             variant="light"
             color="blue"
-            size="sm"
+            size="md"
+            leftSection={<Package size={12} />}
           >
             {info.getValue()}
           </Badge>
@@ -65,7 +77,12 @@ const BrandsPage = () => {
         accessorKey: 'createdAt',
         header: t('columns.createdAt'),
         cell: info => (
-          <Text size="sm">{dayjs(info.getValue()).format('DD.MM.YY HH:mm')}</Text>
+          <Text
+            size="sm"
+            c="dimmed"
+          >
+            {dayjs(info.getValue()).format('DD.MM.YY HH:mm')}
+          </Text>
         ),
       },
       {
@@ -111,7 +128,7 @@ const BrandsPage = () => {
     >
       <Box
         pos="relative"
-        minHeight={200}
+        mih={200}
       >
         <LoadingOverlay
           visible={isLoading}

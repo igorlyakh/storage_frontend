@@ -1,7 +1,19 @@
-import { ActionIcon, Badge, Button, Card, Group, Stack, Text, Tooltip } from '@mantine/core';
+import {
+  ActionIcon,
+  Badge,
+  Button,
+  Card,
+  Group,
+  Modal,
+  Stack,
+  Text,
+  Textarea,
+  Tooltip,
+} from '@mantine/core';
 import { modals } from '@mantine/modals';
 import dayjs from 'dayjs';
-import { ArrowRight, CheckCheck, CheckCircle, Trash } from 'lucide-react';
+import { ArrowRight, Ban, CheckCheck, CheckCircle, Trash } from 'lucide-react';
+import { useState } from 'react';
 import toast from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -10,6 +22,7 @@ import {
   useCompleteOrderMutation,
   useDeleteOrderMutation,
   useProcessOrderMutation,
+  useRejectOrderMutation,
 } from '../../store/api/api';
 import { userRoleSelector } from '../../store/selectors/selectors';
 import { getApiErrorMessage } from '../../utils/apiError';
@@ -26,12 +39,14 @@ const getStatusColor = status => {
       return 'green';
     case 'BACKORDER':
       return 'purple';
+    case 'REJECTED':
+      return 'red';
     default:
       return 'gray';
   }
 };
 
-const OrderItem = ({ store, status, sended, updated, id }) => {
+const OrderItem = ({ store, status, sended, updated, rejectionReason, recipientScope, id }) => {
   const { t } = useTranslation('orders');
   const location = useLocation();
   const userRole = useSelector(userRoleSelector);
@@ -39,6 +54,10 @@ const OrderItem = ({ store, status, sended, updated, id }) => {
   const [processOrder, { isLoading: isProcessing }] = useProcessOrderMutation();
   const [completeOrder, { isLoading: isCompleting }] = useCompleteOrderMutation();
   const [deleteOrder, { isLoading: isDeleting }] = useDeleteOrderMutation();
+  const [rejectOrder, { isLoading: isRejecting }] = useRejectOrderMutation();
+
+  const [rejectOpened, setRejectOpened] = useState(false);
+  const [rejectReason, setRejectReason] = useState('');
 
   const handleProcess = async () => {
     try {
@@ -76,6 +95,25 @@ const OrderItem = ({ store, status, sended, updated, id }) => {
     }
   };
 
+  const handleReject = async () => {
+    if (!rejectReason.trim()) {
+      toast.error(t('card.rejectReasonRequired'));
+      return;
+    }
+    try {
+      await rejectOrder({ orderId: id, reason: rejectReason.trim() }).unwrap();
+      toast.success(t('card.rejected'));
+      setRejectOpened(false);
+      setRejectReason('');
+    } catch (error) {
+      toast.error(getApiErrorMessage(t, error, 'card.rejectError'));
+    }
+  };
+
+  const canReject =
+    ['ADMIN', 'WAREHOUSE'].includes(userRole) &&
+    ['NEW', 'IN_PROGRESS', 'BACKORDER'].includes(status);
+
   const hasActionBtn =
     (status === 'NEW' && ['ADMIN', 'WAREHOUSE'].includes(userRole)) || status === 'SENT';
 
@@ -107,12 +145,23 @@ const OrderItem = ({ store, status, sended, updated, id }) => {
           </Text>
           {store}
         </Text>
-        <Badge
-          color={getStatusColor(status)}
-          size="sm"
-        >
-          {t(`status.${status}`, status.replace('_', ' '))}
-        </Badge>
+        <Group gap={6}>
+          {recipientScope && (
+            <Badge
+              variant="light"
+              color="pink"
+              size="sm"
+            >
+              {recipientScope}
+            </Badge>
+          )}
+          <Badge
+            color={getStatusColor(status)}
+            size="sm"
+          >
+            {t(`status.${status}`, status.replace('_', ' '))}
+          </Badge>
+        </Group>
       </Group>
 
       <Stack
@@ -148,6 +197,21 @@ const OrderItem = ({ store, status, sended, updated, id }) => {
             >
               {dayjs(updated).format('DD.MM.YYYY HH:mm')}
             </Text>
+          </Text>
+        )}
+        {status === 'REJECTED' && rejectionReason && (
+          <Text
+            fz={{ base: 'xs', sm: 'sm' }}
+            lineClamp={2}
+          >
+            <Text
+              span
+              c="red.7"
+              fw={600}
+            >
+              {t('card.rejectionReason')}{' '}
+            </Text>
+            <Text span>{rejectionReason}</Text>
           </Text>
         )}
       </Stack>
@@ -205,6 +269,19 @@ const OrderItem = ({ store, status, sended, updated, id }) => {
           {t('card.toOrder')}
         </Button>
 
+        {canReject && (
+          <Tooltip label={t('card.rejectTitle')}>
+            <ActionIcon
+              variant="light"
+              color="orange"
+              size="sm"
+              onClick={() => setRejectOpened(true)}
+            >
+              <Ban size={14} />
+            </ActionIcon>
+          </Tooltip>
+        )}
+
         {userRole === 'ADMIN' && (
           <Tooltip label={t('card.deleteTitle')}>
             <ActionIcon
@@ -219,6 +296,43 @@ const OrderItem = ({ store, status, sended, updated, id }) => {
           </Tooltip>
         )}
       </Group>
+
+      <Modal
+        opened={rejectOpened}
+        onClose={() => setRejectOpened(false)}
+        title={t('card.rejectTitle')}
+        centered
+      >
+        <Stack gap="md">
+          <Textarea
+            label={t('card.rejectReasonLabel')}
+            placeholder={t('card.rejectReasonPlaceholder')}
+            autosize
+            minRows={3}
+            maxLength={500}
+            data-autofocus
+            value={rejectReason}
+            onChange={event => setRejectReason(event.currentTarget.value)}
+          />
+          <Group justify="flex-end">
+            <Button
+              variant="default"
+              onClick={() => setRejectOpened(false)}
+            >
+              {t('card.deleteCancel')}
+            </Button>
+            <Button
+              color="red"
+              leftSection={<Ban size={16} />}
+              loading={isRejecting}
+              disabled={!rejectReason.trim()}
+              onClick={handleReject}
+            >
+              {t('card.rejectAction')}
+            </Button>
+          </Group>
+        </Stack>
+      </Modal>
     </Card>
   );
 };

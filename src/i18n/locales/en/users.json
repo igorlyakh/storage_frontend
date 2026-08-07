@@ -4,7 +4,8 @@
     "role": "Role",
     "store": "Store",
     "logistics": "LOGISTICS",
-    "actions": "Actions"
+    "actions": "Actions",
+    "scopes": "Scopes"
   },
   "tooltips": {
     "editUser": "Edit User",
@@ -51,5 +52,6 @@
     "updated": "Password updated!",
     "updateFailed": "Failed to update password"
   },
-  "storeFallback": "Store #{{id}}"
+  "storeFallback": "Store #{{id}}",
+  "management": "Users Management"
 }

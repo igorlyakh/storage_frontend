@@ -35,7 +35,15 @@
     "stockByWarehouse": "מלאי לפי מחסן",
     "warehouse": "מחסן",
     "defaultWarehouse": "ראשי",
-    "total": "סה\"כ"
+    "total": "סה\"כ",
+    "orderRecipientLabel": "למי מיועדת ההזמנה",
+    "recipientWarehouse": "מחסן",
+    "recipientAdmin": "מנהל",
+    "recipientScopeLabel": "הרשאת מנהל",
+    "substituteLabel": "מוצר חלופי",
+    "substituteHint": "נדלק אוטומטית כאשר מוצר זה אוזל",
+    "substitutePlaceholder": "ללא חלופה",
+    "substituteNone": "לא הוגדר"
   },
   "create": {
     "title": "הוספת מוצר חדש",

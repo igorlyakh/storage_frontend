@@ -1,0 +1,29 @@
+{
+  "pageTitle": "Application Settings",
+  "save": "Save changes",
+  "saved": "Settings saved!",
+  "saveFailed": "Failed to save settings",
+  "homeCard": {
+    "title": "Home page banner",
+    "description": "Order schedule and support contact shown to everyone on the home page",
+    "dayFrom": "Orders accepted from",
+    "dayTo": "Orders accepted until",
+    "cutoffTime": "Order cutoff time",
+    "supportEmail": "Support email"
+  },
+  "maintenanceCard": {
+    "title": "Maintenance mode",
+    "description": "When enabled, everyone except administrators sees a stub page",
+    "enable": "Enable maintenance mode",
+    "enabledWarning": "Maintenance mode is ON — only administrators can use the application",
+    "email": "Email for orders",
+    "message": "Stub page text",
+    "messagePlaceholder": "Leave empty to use the default text",
+    "defaultMessageLabel": "Default text:"
+  },
+  "maintenance": {
+    "title": "Scheduled maintenance",
+    "defaultMessage": "The application is temporarily unavailable due to scheduled maintenance. During this time, please send all your orders by email.",
+    "sendOrdersTo": "Send your orders to:"
+  }
+}

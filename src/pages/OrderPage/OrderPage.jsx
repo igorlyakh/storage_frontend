@@ -1,4 +1,5 @@
 import {
+  Alert,
   Badge,
   Button,
   Center,
@@ -10,7 +11,7 @@ import {
   ThemeIcon,
   Title,
 } from '@mantine/core';
-import { ArrowLeft, User } from 'lucide-react';
+import { ArrowLeft, Ban, User } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import OrderItemsTable from '../../components/OrderItemsTable/OrderItemsTable';
@@ -62,7 +63,36 @@ const OrderPage = () => {
             >
               {order?.store?.name}
             </Badge>
+            {order?.status && (
+              <Badge
+                color={order.status === 'REJECTED' ? 'red' : 'blue'}
+                variant="light"
+                size="md"
+              >
+                {t(`status.${order.status}`, order.status.replace('_', ' '))}
+              </Badge>
+            )}
+            {order?.recipientRole === 'ADMIN' && order?.recipientScope && (
+              <Badge
+                variant="light"
+                color="pink"
+                size="md"
+              >
+                {order.recipientScope}
+              </Badge>
+            )}
           </Group>
+
+          {order?.status === 'REJECTED' && order?.rejectionReason && (
+            <Alert
+              color="red"
+              icon={<Ban size={18} />}
+              title={t('detail.rejectionReason')}
+              radius="md"
+            >
+              {order.rejectionReason}
+            </Alert>
+          )}
 
           {order?.name && (
             <Group

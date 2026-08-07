@@ -30,7 +30,9 @@
     "warehouses": "Склады",
     "allWarehouses": "Все склады",
     "products": "Товары",
-    "reorderProducts": "Порядок товаров"
+    "reorderProducts": "Порядок товаров",
+    "settings": "Настройки",
+    "appSettings": "Настройки приложения"
   },
   "statistics": {
     "title": "Статистика",

@@ -15,7 +15,8 @@
     "IN_PROGRESS": "In progress",
     "SENT": "Sent",
     "COMPLETED": "Completed",
-    "BACKORDER": "Backorder"
+    "BACKORDER": "Backorder",
+    "REJECTED": "Rejected"
   },
   "noOrdersFound": "No orders found",
   "storeFallback": "Store #{{id}}",
@@ -35,12 +36,22 @@
     "deleteAction": "Delete",
     "deleteCancel": "Cancel",
     "deleted": "Order deleted!",
-    "deleteError": "Failed to delete order"
+    "deleteError": "Failed to delete order",
+    "reject": "Reject",
+    "rejectTitle": "Reject order",
+    "rejectReasonLabel": "Rejection reason",
+    "rejectReasonPlaceholder": "Explain why this order is rejected...",
+    "rejectReasonRequired": "Please provide a rejection reason",
+    "rejectAction": "Reject order",
+    "rejected": "Order rejected",
+    "rejectError": "Failed to reject order",
+    "rejectionReason": "Reason:"
   },
   "detail": {
     "backToOrders": "Back to Orders",
     "orderDetails": "Order Details",
-    "orderedBy": "Ordered by"
+    "orderedBy": "Ordered by",
+    "rejectionReason": "Rejection reason"
   },
   "table": {
     "productName": "Product Name",
@@ -82,7 +93,8 @@
     "storeRequired": "Please select a store",
     "writeOffReasonRequired": "Please specify a reason for the write-off",
     "specifyQuantity": "Please specify quantity or write a custom request",
-    "limitExceeded": "Limit exceeded for \"{{name}}\". Maximum allowed is {{limit}}."
+    "limitExceeded": "Limit exceeded for \"{{name}}\". Maximum allowed is {{limit}}.",
+    "substituteBadge": "Substitute"
   },
   "writeOffTitle": "Warehouse Write-off",
   "confirmModal": {

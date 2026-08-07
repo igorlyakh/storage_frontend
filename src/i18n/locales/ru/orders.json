@@ -15,7 +15,8 @@
     "IN_PROGRESS": "В работе",
     "SENT": "Отправлен",
     "COMPLETED": "Завершён",
-    "BACKORDER": "Ожидание товара"
+    "BACKORDER": "Ожидание товара",
+    "REJECTED": "Отклонён"
   },
   "noOrdersFound": "Заказы не найдены",
   "storeFallback": "Магазин №{{id}}",
@@ -35,12 +36,22 @@
     "deleteAction": "Удалить",
     "deleteCancel": "Отмена",
     "deleted": "Заказ удалён!",
-    "deleteError": "Не удалось удалить заказ"
+    "deleteError": "Не удалось удалить заказ",
+    "reject": "Отклонить",
+    "rejectTitle": "Отклонить заказ",
+    "rejectReasonLabel": "Причина отклонения",
+    "rejectReasonPlaceholder": "Опишите, почему заказ отклонён...",
+    "rejectReasonRequired": "Укажите причину отклонения",
+    "rejectAction": "Отклонить заказ",
+    "rejected": "Заказ отклонён",
+    "rejectError": "Не удалось отклонить заказ",
+    "rejectionReason": "Причина:"
   },
   "detail": {
     "backToOrders": "Назад к заказам",
     "orderDetails": "Детали заказа",
-    "orderedBy": "Заказал(а)"
+    "orderedBy": "Заказал(а)",
+    "rejectionReason": "Причина отклонения"
   },
   "table": {
     "productName": "Название товара",
@@ -82,7 +93,8 @@
     "storeRequired": "Пожалуйста, выберите магазин",
     "writeOffReasonRequired": "Пожалуйста, укажите причину списания",
     "specifyQuantity": "Укажите количество или опишите произвольный запрос",
-    "limitExceeded": "Превышен лимит для «{{name}}». Максимум: {{limit}}."
+    "limitExceeded": "Превышен лимит для «{{name}}». Максимум: {{limit}}.",
+    "substituteBadge": "Замена"
   },
   "writeOffTitle": "Списание со склада",
   "confirmModal": {

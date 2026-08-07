@@ -30,7 +30,9 @@
     "warehouses": "מחסנים",
     "allWarehouses": "כל המחסנים",
     "products": "מוצרים",
-    "reorderProducts": "סדר מוצרים"
+    "reorderProducts": "סדר מוצרים",
+    "settings": "הגדרות",
+    "appSettings": "הגדרות האפליקציה"
   },
   "statistics": {
     "title": "סטטיסטיקה",

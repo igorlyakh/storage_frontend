@@ -31,6 +31,8 @@ const OrdersList = ({ data }) => {
           status={order.status}
           sended={order.createdAt}
           updated={order.updatedAt}
+          rejectionReason={order.rejectionReason}
+          recipientScope={order.recipientRole === 'ADMIN' ? order.recipientScope : null}
           id={order.id}
         />
       ))}

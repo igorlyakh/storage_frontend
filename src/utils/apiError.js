@@ -25,6 +25,8 @@ const EXACT_MESSAGES = {
   'Not enough item in stock': 'notEnoughItemInStock',
   'Article must be 9 characters long': 'articleLength',
   'Minimum password length is 6 characters!': 'passwordMinLength',
+  'Product cannot be its own substitute': 'substituteSelf',
+  'Substitute product not found!': 'substituteNotFound',
 };
 
 const PATTERN_MESSAGES = [

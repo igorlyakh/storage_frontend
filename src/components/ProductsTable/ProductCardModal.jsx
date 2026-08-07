@@ -6,6 +6,7 @@ import {
   Group,
   Image,
   Modal,
+  Select,
   Stack,
   Table,
   Text,
@@ -15,10 +16,13 @@ import { useState } from 'react';
 import toast from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
+import { productTags } from '../../constants/productTags';
 import {
   useDeleteProductImageMutation,
+  useGetAllProductsQuery,
   useGetAllWarehousesQuery,
   useGetProductMonthlyOrderedQuery,
+  useUpdateProductsMutation,
   useUploadProductImageMutation,
 } from '../../store/api/api';
 import { userRoleSelector } from '../../store/selectors/selectors';
@@ -28,6 +32,7 @@ const ProductCardModal = ({ product, onClose }) => {
   const { t } = useTranslation('products');
   const userRole = useSelector(userRoleSelector);
   const canManage = ['ADMIN', 'WAREHOUSE'].includes(userRole);
+  const isAdmin = userRole === 'ADMIN';
 
   const { data: warehouses = [] } = useGetAllWarehousesQuery(undefined, {
     skip: !product || !canManage,
@@ -35,11 +40,48 @@ const ProductCardModal = ({ product, onClose }) => {
   const { data: monthlyOrdered } = useGetProductMonthlyOrderedQuery(product?.id, {
     skip: !product || !canManage,
   });
+  const { data: allProducts = [] } = useGetAllProductsQuery(undefined, {
+    skip: !product || !isAdmin,
+  });
   const [uploadImage, { isLoading: isUploading }] = useUploadProductImageMutation();
   const [deleteImage, { isLoading: isDeletingImage }] = useDeleteProductImageMutation();
+  const [updateProduct, { isLoading: isUpdatingRecipient }] = useUpdateProductsMutation();
   const [fullView, setFullView] = useState(false);
 
   if (!product) return null;
+
+  const orderRecipient = product.orderRecipient || 'WAREHOUSE';
+
+  const recipientOptions = [
+    { value: 'WAREHOUSE', label: t('card.recipientWarehouse') },
+    { value: 'ADMIN', label: t('card.recipientAdmin') },
+  ];
+
+  const scopeOptions = productTags.map(tag => ({ value: tag, label: tag }));
+
+  const substituteOptions = allProducts
+    .filter(p => p.id !== product.id)
+    .map(p => ({ value: p.id, label: `${p.article} — ${p.name}` }));
+
+  const handleRecipientUpdate = async (field, value) => {
+    if (!value || value === product[field]) return;
+    try {
+      await updateProduct({ ...product, [field]: value }).unwrap();
+      toast.success(t('updated'));
+    } catch (error) {
+      toast.error(getApiErrorMessage(t, error, 'updateFailed'));
+    }
+  };
+
+  const handleSubstituteUpdate = async value => {
+    if ((value || null) === (product.substituteId || null)) return;
+    try {
+      await updateProduct({ ...product, substituteId: value || null }).unwrap();
+      toast.success(t('updated'));
+    } catch (error) {
+      toast.error(getApiErrorMessage(t, error, 'updateFailed'));
+    }
+  };
 
   const stocksByWarehouse = new Map(
     (product.stocks || []).map(stock => [stock.warehouse?.id, stock]),
@@ -177,6 +219,106 @@ const ProductCardModal = ({ product, onClose }) => {
               >
                 {monthlyOrdered?.requested ?? 0} {t('columns.pcsUnit')}
               </Badge>
+            </Group>
+
+            <Group
+              justify="space-between"
+              wrap="nowrap"
+            >
+              <Text size="sm">{t('card.orderRecipientLabel')}</Text>
+              {isAdmin ? (
+                <Group
+                  gap="xs"
+                  wrap="nowrap"
+                >
+                  <Select
+                    data={recipientOptions}
+                    value={orderRecipient}
+                    onChange={value => handleRecipientUpdate('orderRecipient', value)}
+                    disabled={isUpdatingRecipient}
+                    allowDeselect={false}
+                    size="xs"
+                    w={130}
+                  />
+                  {orderRecipient === 'ADMIN' && (
+                    <Select
+                      data={scopeOptions}
+                      value={product.tag}
+                      onChange={value => handleRecipientUpdate('tag', value)}
+                      disabled={isUpdatingRecipient}
+                      allowDeselect={false}
+                      size="xs"
+                      w={150}
+                    />
+                  )}
+                </Group>
+              ) : (
+                <Group gap="xs">
+                  <Badge
+                    variant="light"
+                    color={orderRecipient === 'WAREHOUSE' ? 'cyan' : 'red'}
+                    size="lg"
+                  >
+                    {orderRecipient === 'WAREHOUSE'
+                      ? t('card.recipientWarehouse')
+                      : t('card.recipientAdmin')}
+                  </Badge>
+                  {orderRecipient === 'ADMIN' && (
+                    <Badge
+                      variant="light"
+                      color="pink"
+                      size="lg"
+                    >
+                      {product.tag}
+                    </Badge>
+                  )}
+                </Group>
+              )}
+            </Group>
+
+            <Group
+              justify="space-between"
+              wrap="nowrap"
+              align="flex-start"
+            >
+              <div>
+                <Text size="sm">{t('card.substituteLabel')}</Text>
+                <Text
+                  size="xs"
+                  c="dimmed"
+                  maw={220}
+                >
+                  {t('card.substituteHint')}
+                </Text>
+              </div>
+              {isAdmin ? (
+                <Select
+                  data={substituteOptions}
+                  value={product.substituteId || null}
+                  onChange={handleSubstituteUpdate}
+                  placeholder={t('card.substitutePlaceholder')}
+                  disabled={isUpdatingRecipient}
+                  clearable
+                  searchable
+                  size="xs"
+                  w={210}
+                />
+              ) : product.substitute ? (
+                <Badge
+                  variant="light"
+                  color="orange"
+                  size="lg"
+                >
+                  {product.substitute.name}
+                </Badge>
+              ) : (
+                <Text
+                  size="xs"
+                  c="dimmed"
+                >
+                  {t('card.substituteNone')}
+                </Text>
+              )}
             </Group>
 
             <div>

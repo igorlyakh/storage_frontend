@@ -15,7 +15,8 @@
     "IN_PROGRESS": "בטיפול",
     "SENT": "נשלח",
     "COMPLETED": "הושלם",
-    "BACKORDER": "בהמתנה למלאי"
+    "BACKORDER": "בהמתנה למלאי",
+    "REJECTED": "נדחתה"
   },
   "noOrdersFound": "לא נמצאו הזמנות",
   "storeFallback": "חנות מס' {{id}}",
@@ -35,12 +36,22 @@
     "deleteAction": "מחק",
     "deleteCancel": "ביטול",
     "deleted": "!ההזמנה נמחקה",
-    "deleteError": "מחיקת ההזמנה נכשלה"
+    "deleteError": "מחיקת ההזמנה נכשלה",
+    "reject": "דחה",
+    "rejectTitle": "דחיית הזמנה",
+    "rejectReasonLabel": "סיבת הדחייה",
+    "rejectReasonPlaceholder": "...הסבר מדוע ההזמנה נדחתה",
+    "rejectReasonRequired": "אנא ציין את סיבת הדחייה",
+    "rejectAction": "דחה הזמנה",
+    "rejected": "ההזמנה נדחתה",
+    "rejectError": "דחיית ההזמנה נכשלה",
+    "rejectionReason": ":סיבה"
   },
   "detail": {
     "backToOrders": "חזרה להזמנות",
     "orderDetails": "פרטי הזמנה",
-    "orderedBy": "הוזמן על ידי"
+    "orderedBy": "הוזמן על ידי",
+    "rejectionReason": "סיבת הדחייה"
   },
   "table": {
     "productName": "שם המוצר",
@@ -82,7 +93,8 @@
     "storeRequired": "נא לבחור חנות",
     "writeOffReasonRequired": "נא לציין סיבה למחיקת המלאי",
     "specifyQuantity": "נא לציין כמות או לכתוב בקשה מותאמת אישית",
-    "limitExceeded": ".חריגה מהמגבלה עבור \"{{name}}\". המקסימום המותר הוא {{limit}}"
+    "limitExceeded": ".חריגה מהמגבלה עבור \"{{name}}\". המקסימום המותר הוא {{limit}}",
+    "substituteBadge": "חלופה"
   },
   "writeOffTitle": "מחיקת מלאי מהמחסן",
   "confirmModal": {

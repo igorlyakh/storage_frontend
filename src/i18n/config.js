@@ -10,6 +10,7 @@ import enNav from './locales/en/nav.json';
 import enNotFound from './locales/en/notFound.json';
 import enOrders from './locales/en/orders.json';
 import enProducts from './locales/en/products.json';
+import enSettings from './locales/en/settings.json';
 import enRequests from './locales/en/requests.json';
 import enStatistics from './locales/en/statistics.json';
 import enStores from './locales/en/stores.json';
@@ -25,6 +26,7 @@ import heNav from './locales/he/nav.json';
 import heNotFound from './locales/he/notFound.json';
 import heOrders from './locales/he/orders.json';
 import heProducts from './locales/he/products.json';
+import heSettings from './locales/he/settings.json';
 import heRequests from './locales/he/requests.json';
 import heStatistics from './locales/he/statistics.json';
 import heStores from './locales/he/stores.json';
@@ -40,6 +42,7 @@ import ruNav from './locales/ru/nav.json';
 import ruNotFound from './locales/ru/notFound.json';
 import ruOrders from './locales/ru/orders.json';
 import ruProducts from './locales/ru/products.json';
+import ruSettings from './locales/ru/settings.json';
 import ruRequests from './locales/ru/requests.json';
 import ruStatistics from './locales/ru/statistics.json';
 import ruStores from './locales/ru/stores.json';
@@ -65,6 +68,7 @@ const resources = {
     categories: enCategories,
     stores: enStores,
     statistics: enStatistics,
+    settings: enSettings,
     validation: enValidation,
     notFound: enNotFound,
   },
@@ -81,6 +85,7 @@ const resources = {
     categories: ruCategories,
     stores: ruStores,
     statistics: ruStatistics,
+    settings: ruSettings,
     validation: ruValidation,
     notFound: ruNotFound,
   },
@@ -97,6 +102,7 @@ const resources = {
     categories: heCategories,
     stores: heStores,
     statistics: heStatistics,
+    settings: heSettings,
     validation: heValidation,
     notFound: heNotFound,
   },

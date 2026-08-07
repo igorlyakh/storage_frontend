@@ -58,6 +58,7 @@ const AllOrdersPage = () => {
     { value: 'SENT', label: t('status.SENT') },
     { value: 'COMPLETED', label: t('status.COMPLETED') },
     { value: 'BACKORDER', label: t('status.BACKORDER') },
+    { value: 'REJECTED', label: t('status.REJECTED') },
   ];
 
   const { data, isFetching } = useGetAllOrdersQuery(
@@ -131,7 +132,7 @@ const AllOrdersPage = () => {
 
       <Box
         pos="relative"
-        minHeight={200}
+        mih={200}
       >
         <LoadingOverlay
           visible={isFetching}

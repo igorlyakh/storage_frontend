@@ -108,30 +108,43 @@ const CreateOrderTable = ({ writeOff = false }) => {
       {
         accessorKey: 'name',
         header: t('create.productName'),
-        cell: info => (
-          <Group
-            gap="sm"
-            wrap="nowrap"
-          >
-            <Tooltip label={t('create.openCard')}>
-              <Avatar
-                src={info.row.original.imageUrl}
-                radius="sm"
-                size={36}
-                style={{ cursor: 'pointer', flexShrink: 0 }}
-                onClick={() => setCardProductId(info.row.original.id)}
-              >
-                <ImageIcon size={16} />
-              </Avatar>
-            </Tooltip>
-            <Text
-              fw={700}
-              fz={{ base: 14, sm: 18 }}
+        cell: info => {
+          const isSubstitute = (info.row.original.substituteFor?.length ?? 0) > 0;
+          return (
+            <Group
+              gap="sm"
+              wrap="nowrap"
             >
-              {info.getValue()}
-            </Text>
-          </Group>
-        ),
+              <Tooltip label={t('create.openCard')}>
+                <Avatar
+                  src={info.row.original.imageUrl}
+                  radius="sm"
+                  size={36}
+                  style={{ cursor: 'pointer', flexShrink: 0 }}
+                  onClick={() => setCardProductId(info.row.original.id)}
+                >
+                  <ImageIcon size={16} />
+                </Avatar>
+              </Tooltip>
+              <Text
+                fw={700}
+                fz={{ base: 14, sm: 18 }}
+                c={isSubstitute ? 'orange.8' : undefined}
+              >
+                {info.getValue()}
+              </Text>
+              {isSubstitute && (
+                <Badge
+                  color="orange"
+                  variant="light"
+                  size="sm"
+                >
+                  {t('create.substituteBadge')}
+                </Badge>
+              )}
+            </Group>
+          );
+        },
       },
       {
         id: 'category',
@@ -346,7 +359,7 @@ const CreateOrderTable = ({ writeOff = false }) => {
 
       <Box
         pos="relative"
-        minHeight={200}
+        mih={200}
       >
         <LoadingOverlay
           visible={isProductsLoading}

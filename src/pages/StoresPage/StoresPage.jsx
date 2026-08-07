@@ -11,7 +11,7 @@ import {
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import dayjs from 'dayjs';
-import { Pencil, Trash } from 'lucide-react';
+import { Pencil, Trash, Users } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import DataTable from '../../components/ui/DataTable';
@@ -33,7 +33,7 @@ const StoresPage = () => {
       {
         accessorKey: 'name',
         header: t('columns.name'),
-        cell: info => <Text fw={500}>{info.getValue()}</Text>,
+        cell: info => <Text fw={600}>{info.getValue()}</Text>,
       },
       {
         accessorKey: 'brand.name',
@@ -43,26 +43,49 @@ const StoresPage = () => {
           return brandName ? (
             <Badge
               variant="light"
-              size="sm"
+              size="md"
+              radius="sm"
               color={getBrandColor(brandName)}
             >
               {brandName}
             </Badge>
           ) : (
-            <Text
-              size="xs"
-              c="dimmed"
+            <Badge
+              variant="outline"
+              color="gray"
+              size="md"
+              radius="sm"
             >
               {t('columns.noBrand')}
-            </Text>
+            </Badge>
           );
         },
+      },
+      {
+        id: 'usersCount',
+        accessorFn: row => row._count?.users ?? 0,
+        header: t('columns.users'),
+        cell: info => (
+          <Badge
+            variant="light"
+            color="grape"
+            size="md"
+            leftSection={<Users size={12} />}
+          >
+            {info.getValue()}
+          </Badge>
+        ),
       },
       {
         accessorKey: 'createdAt',
         header: t('columns.createdAt'),
         cell: info => (
-          <Text size="sm">{dayjs(info.getValue()).format('DD.MM.YY HH:mm')}</Text>
+          <Text
+            size="sm"
+            c="dimmed"
+          >
+            {dayjs(info.getValue()).format('DD.MM.YY HH:mm')}
+          </Text>
         ),
       },
       {
@@ -128,7 +151,7 @@ const StoresPage = () => {
     >
       <Box
         pos="relative"
-        minHeight={200}
+        mih={200}
       >
         <LoadingOverlay
           visible={isLoading}

@@ -11,7 +11,7 @@ import {
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import dayjs from 'dayjs';
-import { Pencil, Trash } from 'lucide-react';
+import { Package, Pencil, Trash } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import DataTable from '../../components/ui/DataTable';
@@ -31,7 +31,16 @@ const CategoriesPage = () => {
       {
         accessorKey: 'name',
         header: t('columns.name'),
-        cell: info => <Text fw={500}>{info.getValue()}</Text>,
+        cell: info => (
+          <Badge
+            variant="light"
+            color="indigo"
+            size="lg"
+            radius="sm"
+          >
+            {info.getValue()}
+          </Badge>
+        ),
       },
       {
         id: 'productsCount',
@@ -41,7 +50,8 @@ const CategoriesPage = () => {
           <Badge
             variant="light"
             color="blue"
-            size="sm"
+            size="md"
+            leftSection={<Package size={12} />}
           >
             {info.getValue()}
           </Badge>
@@ -51,7 +61,12 @@ const CategoriesPage = () => {
         accessorKey: 'createdAt',
         header: t('columns.createdAt'),
         cell: info => (
-          <Text size="sm">{dayjs(info.getValue()).format('DD.MM.YY HH:mm')}</Text>
+          <Text
+            size="sm"
+            c="dimmed"
+          >
+            {dayjs(info.getValue()).format('DD.MM.YY HH:mm')}
+          </Text>
         ),
       },
       {
@@ -97,7 +112,7 @@ const CategoriesPage = () => {
     >
       <Box
         pos="relative"
-        minHeight={200}
+        mih={200}
       >
         <LoadingOverlay
           visible={isLoading}

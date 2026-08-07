@@ -27,7 +27,7 @@ const OrderItemsTable = ({ order }) => {
 
   const hasAccess = userRole === 'ADMIN' || userRole === 'WAREHOUSE';
 
-  const isCompletedOrSent = ['SEND', 'SENT', 'COMPLETE', 'COMPLETED'].includes(
+  const isCompletedOrSent = ['SEND', 'SENT', 'COMPLETE', 'COMPLETED', 'REJECTED'].includes(
     status?.toUpperCase(),
   );
 

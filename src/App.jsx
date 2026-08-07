@@ -38,6 +38,7 @@ const RequestsStatisticPage = lazy(() => import('./pages/RequestsStatisticPage')
 const CategoriesPage = lazy(() => import('./pages/CategoriesPage/CategoriesPage'));
 const WarehousesPage = lazy(() => import('./pages/WarehousesPage'));
 const WarehouseStockPage = lazy(() => import('./pages/WarehouseStockPage'));
+const AdminSettingsPage = lazy(() => import('./pages/AdminSettingsPage'));
 
 const SuspenseLoader = () => {
   useEffect(() => {
@@ -285,6 +286,15 @@ const App = () => {
                 element={
                   <ProtectedRoutes allowedRoles={['ADMIN']}>
                     <OrderingPage />
+                  </ProtectedRoutes>
+                }
+              />
+
+              <Route
+                path="settings"
+                element={
+                  <ProtectedRoutes allowedRoles={['ADMIN']}>
+                    <AdminSettingsPage />
                   </ProtectedRoutes>
                 }
               />
