@@ -2,11 +2,11 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://storage-backend-mauve.vercel.app/api/:path*"
+      "destination": "https://storage-backend-git-feature-warehous-062e33-igorlyakhs-projects.vercel.app/api/:path*"
     },
     {
       "source": "/uploads/:path*",
-      "destination": "https://storage-backend-mauve.vercel.app/uploads/:path*"
+      "destination": "https://storage-backend-git-feature-warehous-062e33-igorlyakhs-projects.vercel.app/uploads/:path*"
     },
     {
       "source": "/(.*)",
