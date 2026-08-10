@@ -38,8 +38,8 @@ const SuppliersPage = () => {
         header: t('columns.contactPerson'),
       },
       {
-        accessorKey: 'phone',
-        header: t('columns.phone'),
+        accessorKey: 'email',
+        header: t('columns.email'),
       },
       {
         accessorKey: 'notes',

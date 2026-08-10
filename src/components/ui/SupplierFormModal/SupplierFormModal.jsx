@@ -1,4 +1,5 @@
-import { Modal } from '@mantine/core';
+import { Button, Group, Modal, Stack, Textarea, TextInput } from '@mantine/core';
+import { useState } from 'react';
 import toast from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
 import {
@@ -6,7 +7,8 @@ import {
   useUpdateSupplierMutation,
 } from '../../../store/api/api';
 import { getApiErrorMessage } from '../../../utils/apiError';
-import DynamicForm from '../DynamicForm';
+
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const SupplierFormModal = ({ opened, onClose, supplier }) => {
   const { t } = useTranslation('suppliers');
@@ -14,46 +16,52 @@ const SupplierFormModal = ({ opened, onClose, supplier }) => {
   const [updateSupplier, { isLoading: isUpdating }] = useUpdateSupplierMutation();
 
   const isEdit = !!supplier;
+  const isLoading = isCreating || isUpdating;
 
-  const fields = [
-    {
-      name: 'name',
-      type: 'text',
-      label: t('form.nameLabel'),
-      placeholder: t('form.namePlaceholder'),
-      rules: { required: t('form.nameRequired') },
-    },
-    {
-      name: 'contactPerson',
-      type: 'text',
-      label: t('form.contactPersonLabel'),
-      placeholder: t('form.contactPersonPlaceholder'),
-    },
-    {
-      name: 'phone',
-      type: 'text',
-      label: t('form.phoneLabel'),
-      placeholder: t('form.phonePlaceholder'),
-    },
-    {
-      name: 'notes',
-      type: 'text',
-      label: t('form.notesLabel'),
-      placeholder: t('form.notesPlaceholder'),
-    },
-  ];
+  const [name, setName] = useState(supplier?.name || '');
+  const [contactPerson, setContactPerson] = useState(supplier?.contactPerson || '');
+  const [email, setEmail] = useState(supplier?.email || '');
+  const [notes, setNotes] = useState(supplier?.notes || '');
+  const [errors, setErrors] = useState({});
 
-  const onSubmit = async (data, reset) => {
+  const handleClose = () => {
+    setErrors({});
+    onClose();
+  };
+
+  const handleSubmit = async () => {
+    const nextErrors = {};
+    if (!name.trim()) {
+      nextErrors.name = t('form.nameRequired');
+    }
+    if (email.trim() && !EMAIL_PATTERN.test(email.trim())) {
+      nextErrors.email = t('form.emailInvalid');
+    }
+    if (Object.keys(nextErrors).length) {
+      setErrors(nextErrors);
+      return;
+    }
+
+    const payload = {
+      name: name.trim(),
+      contactPerson: contactPerson.trim() || null,
+      email: email.trim() || null,
+      notes: notes.trim() || null,
+    };
+
     try {
       if (isEdit) {
-        await updateSupplier({ id: supplier.id, ...data }).unwrap();
+        await updateSupplier({ id: supplier.id, ...payload }).unwrap();
         toast.success(t('form.updated'));
       } else {
-        await createSupplier(data).unwrap();
+        await createSupplier(payload).unwrap();
         toast.success(t('form.created'));
-        reset();
+        setName('');
+        setContactPerson('');
+        setEmail('');
+        setNotes('');
       }
-      onClose();
+      handleClose();
     } catch (error) {
       toast.error(
         getApiErrorMessage(t, error, isEdit ? 'form.updateFailed' : 'form.createFailed'),
@@ -64,28 +72,63 @@ const SupplierFormModal = ({ opened, onClose, supplier }) => {
   return (
     <Modal
       opened={opened}
-      onClose={onClose}
+      onClose={handleClose}
       title={isEdit ? t('form.editTitle') : t('form.createTitle')}
       centered
-      size={{ base: '95%', sm: 500 }}
-      padding={0}
+      size={{ base: '95%', sm: 480 }}
+      padding={{ base: 'md', sm: 'lg' }}
     >
-      <DynamicForm
-        key={supplier?.id || 'create'}
-        title=""
-        submitLabel={isEdit ? t('form.saveChanges') : t('form.submit')}
-        fields={fields}
-        gridCols={1}
-        paperWidth="100%"
-        defaultValues={{
-          name: supplier?.name || '',
-          contactPerson: supplier?.contactPerson || '',
-          phone: supplier?.phone || '',
-          notes: supplier?.notes || '',
-        }}
-        onSubmit={onSubmit}
-        isLoading={isCreating || isUpdating}
-      />
+      <Stack gap={{ base: 'sm', sm: 'md' }}>
+        <TextInput
+          label={t('form.nameLabel')}
+          placeholder={t('form.namePlaceholder')}
+          withAsterisk
+          value={name}
+          onChange={event => setName(event.currentTarget.value)}
+          error={errors.name}
+          data-autofocus
+        />
+        <TextInput
+          label={t('form.contactPersonLabel')}
+          placeholder={t('form.contactPersonPlaceholder')}
+          value={contactPerson}
+          onChange={event => setContactPerson(event.currentTarget.value)}
+        />
+        <TextInput
+          type="email"
+          label={t('form.emailLabel')}
+          placeholder={t('form.emailPlaceholder')}
+          value={email}
+          onChange={event => setEmail(event.currentTarget.value)}
+          error={errors.email}
+        />
+        <Textarea
+          label={t('form.notesLabel')}
+          placeholder={t('form.notesPlaceholder')}
+          autosize
+          minRows={2}
+          maxRows={5}
+          value={notes}
+          onChange={event => setNotes(event.currentTarget.value)}
+        />
+
+        <Group justify="flex-end">
+          <Button
+            variant="light"
+            color="gray"
+            onClick={handleClose}
+            disabled={isLoading}
+          >
+            {t('common:actions.cancel')}
+          </Button>
+          <Button
+            onClick={handleSubmit}
+            loading={isLoading}
+          >
+            {isEdit ? t('form.saveChanges') : t('form.submit')}
+          </Button>
+        </Group>
+      </Stack>
     </Modal>
   );
 };

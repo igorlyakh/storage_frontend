@@ -4,7 +4,7 @@
   "columns": {
     "name": "שם",
     "contactPerson": "איש קשר",
-    "phone": "טלפון",
+    "email": "אימייל",
     "notes": "הערות",
     "actions": "פעולות"
   },
@@ -22,8 +22,9 @@
     "nameRequired": "נדרש שם",
     "contactPersonLabel": "איש קשר",
     "contactPersonPlaceholder": "איש קשר",
-    "phoneLabel": "טלפון",
-    "phonePlaceholder": "מספר טלפון",
+    "emailLabel": "אימייל",
+    "emailPlaceholder": "אימייל ליצירת קשר",
+    "emailInvalid": "נא להזין כתובת אימייל תקינה",
     "notesLabel": "הערות",
     "notesPlaceholder": "הערות",
     "created": "!הספק נוצר",

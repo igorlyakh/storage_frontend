@@ -4,7 +4,7 @@
   "columns": {
     "name": "Name",
     "contactPerson": "Contact Person",
-    "phone": "Phone",
+    "email": "Email",
     "notes": "Notes",
     "actions": "Actions"
   },
@@ -22,8 +22,9 @@
     "nameRequired": "Name is required",
     "contactPersonLabel": "Contact Person",
     "contactPersonPlaceholder": "Contact person",
-    "phoneLabel": "Phone",
-    "phonePlaceholder": "Phone number",
+    "emailLabel": "Email",
+    "emailPlaceholder": "Contact email",
+    "emailInvalid": "Enter a valid email address",
     "notesLabel": "Notes",
     "notesPlaceholder": "Notes",
     "created": "Supplier created!",

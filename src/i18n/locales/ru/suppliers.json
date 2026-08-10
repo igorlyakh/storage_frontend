@@ -4,7 +4,7 @@
   "columns": {
     "name": "Название",
     "contactPerson": "Контактное лицо",
-    "phone": "Телефон",
+    "email": "Email",
     "notes": "Заметки",
     "actions": "Действия"
   },
@@ -22,8 +22,9 @@
     "nameRequired": "Укажите название",
     "contactPersonLabel": "Контактное лицо",
     "contactPersonPlaceholder": "Контактное лицо",
-    "phoneLabel": "Телефон",
-    "phonePlaceholder": "Номер телефона",
+    "emailLabel": "Email",
+    "emailPlaceholder": "Email для связи",
+    "emailInvalid": "Введите корректный email",
     "notesLabel": "Заметки",
     "notesPlaceholder": "Заметки",
     "created": "Поставщик создан!",
