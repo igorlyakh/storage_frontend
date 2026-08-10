@@ -1,0 +1,40 @@
+{
+  "pageTitle": "Suppliers",
+  "create": "Add Supplier",
+  "columns": {
+    "name": "Name",
+    "contactPerson": "Contact Person",
+    "phone": "Phone",
+    "notes": "Notes",
+    "actions": "Actions"
+  },
+  "tooltips": {
+    "edit": "Edit",
+    "delete": "Delete"
+  },
+  "form": {
+    "createTitle": "Add Supplier",
+    "editTitle": "Edit Supplier",
+    "submit": "Add Supplier",
+    "saveChanges": "Save Changes",
+    "nameLabel": "Name",
+    "namePlaceholder": "Supplier name",
+    "nameRequired": "Name is required",
+    "contactPersonLabel": "Contact Person",
+    "contactPersonPlaceholder": "Contact person",
+    "phoneLabel": "Phone",
+    "phonePlaceholder": "Phone number",
+    "notesLabel": "Notes",
+    "notesPlaceholder": "Notes",
+    "created": "Supplier created!",
+    "createFailed": "Failed to create supplier",
+    "updated": "Supplier updated!",
+    "updateFailed": "Failed to update supplier"
+  },
+  "delete": {
+    "confirmText": "Are you sure you want to delete supplier <bold>{{name}}</bold>? This action cannot be undone.",
+    "delete": "Delete Supplier",
+    "deleted": "Supplier deleted successfully",
+    "deleteFailed": "Failed to delete supplier"
+  }
+}

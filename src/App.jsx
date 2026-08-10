@@ -39,6 +39,14 @@ const CategoriesPage = lazy(() => import('./pages/CategoriesPage/CategoriesPage'
 const WarehousesPage = lazy(() => import('./pages/WarehousesPage'));
 const WarehouseStockPage = lazy(() => import('./pages/WarehouseStockPage'));
 const AdminSettingsPage = lazy(() => import('./pages/AdminSettingsPage'));
+const SuppliersPage = lazy(() => import('./pages/SuppliersPage'));
+const CreateReturnPage = lazy(() => import('./pages/CreateReturnPage'));
+const MyReturnsPage = lazy(() => import('./pages/MyReturnsPage'));
+const ReturnsPage = lazy(() => import('./pages/ReturnsPage'));
+const ReturnPage = lazy(() => import('./pages/ReturnPage'));
+const ReturnPrintPage = lazy(() => import('./pages/ReturnPrintPage'));
+const DriverReturnsPage = lazy(() => import('./pages/DriverReturnsPage'));
+const WarehouseReturnsPage = lazy(() => import('./pages/WarehouseReturnsPage'));
 
 const SuspenseLoader = () => {
   useEffect(() => {
@@ -298,7 +306,79 @@ const App = () => {
                   </ProtectedRoutes>
                 }
               />
+
+              <Route
+                path="suppliers"
+                element={
+                  <ProtectedRoutes allowedRoles={['ADMIN']}>
+                    <SuppliersPage />
+                  </ProtectedRoutes>
+                }
+              />
+
+              <Route
+                path="returns"
+                element={
+                  <ProtectedRoutes allowedRoles={['STORE']}>
+                    <MyReturnsPage />
+                  </ProtectedRoutes>
+                }
+              />
+
+              <Route
+                path="returns/create"
+                element={
+                  <ProtectedRoutes allowedRoles={['STORE']}>
+                    <CreateReturnPage />
+                  </ProtectedRoutes>
+                }
+              />
+
+              <Route
+                path="returns/all"
+                element={
+                  <ProtectedRoutes allowedRoles={['ADMIN']}>
+                    <ReturnsPage />
+                  </ProtectedRoutes>
+                }
+              />
+
+              <Route
+                path="returns/driver"
+                element={
+                  <ProtectedRoutes allowedRoles={['DRIVER']}>
+                    <DriverReturnsPage />
+                  </ProtectedRoutes>
+                }
+              />
+
+              <Route
+                path="returns/warehouse"
+                element={
+                  <ProtectedRoutes allowedRoles={['WAREHOUSE']}>
+                    <WarehouseReturnsPage />
+                  </ProtectedRoutes>
+                }
+              />
+
+              <Route
+                path="returns/:id"
+                element={
+                  <ProtectedRoutes allowedRoles={['STORE', 'ADMIN', 'DRIVER', 'WAREHOUSE']}>
+                    <ReturnPage />
+                  </ProtectedRoutes>
+                }
+              />
             </Route>
+
+            <Route
+              path="returns/:id/print"
+              element={
+                <ProtectedRoutes allowedRoles={['STORE', 'ADMIN']}>
+                  <ReturnPrintPage />
+                </ProtectedRoutes>
+              }
+            />
 
             <Route
               path="*"

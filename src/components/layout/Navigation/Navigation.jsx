@@ -182,6 +182,18 @@ const Navigation = () => {
         />
       )}
 
+      {role === 'STORE' && (
+        <NavMenu
+          title={t('returnsMenu.title')}
+          items={[
+            { label: t('returnsMenu.myReturns'), to: '/returns' },
+            { label: t('returnsMenu.createReturn'), to: '/returns/create' },
+          ]}
+          isMobile={isMobile}
+          closeDrawer={close}
+        />
+      )}
+
       {role === 'ADMIN' && (
         <NavMenu
           title={t('productsMenu.title')}
@@ -205,6 +217,34 @@ const Navigation = () => {
           onClick={isMobile ? close : undefined}
         >
           {t('productsMenu.allProducts')}
+        </Button>
+      )}
+
+      {role === 'WAREHOUSE' && (
+        <Button
+          component={Link}
+          to="/returns/warehouse"
+          variant="subtle"
+          color={isMobile ? 'dark' : 'gray.0'}
+          fullWidth={isMobile}
+          justify={isMobile ? 'flex-start' : 'center'}
+          onClick={isMobile ? close : undefined}
+        >
+          {t('returnsMenu.warehouseReturns')}
+        </Button>
+      )}
+
+      {role === 'DRIVER' && (
+        <Button
+          component={Link}
+          to="/returns/driver"
+          variant="subtle"
+          color={isMobile ? 'dark' : 'gray.0'}
+          fullWidth={isMobile}
+          justify={isMobile ? 'flex-start' : 'center'}
+          onClick={isMobile ? close : undefined}
+        >
+          {t('returnsMenu.driverReturns')}
         </Button>
       )}
 
@@ -271,6 +311,14 @@ const Navigation = () => {
             {
               label: t('management.warehouses'),
               items: [{ label: t('management.allWarehouses'), to: '/warehouses' }],
+            },
+            {
+              label: t('management.suppliers'),
+              items: [{ label: t('management.allSuppliers'), to: '/suppliers' }],
+            },
+            {
+              label: t('returnsMenu.title'),
+              items: [{ label: t('returnsMenu.allReturns'), to: '/returns/all' }],
             },
             {
               label: t('management.products'),

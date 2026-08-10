@@ -1,0 +1,86 @@
+{
+  "status": {
+    "PENDING": "Ожидает подтверждения",
+    "APPROVED": "Подтверждён",
+    "REJECTED": "Отклонён",
+    "IN_TRANSIT": "В пути",
+    "COMPLETED": "Завершён"
+  },
+  "create": {
+    "title": "Оформить возврат",
+    "columns": {
+      "product": "Товар",
+      "quantity": "Количество",
+      "photo": "Фото"
+    },
+    "productPlaceholder": "-- Выберите товар --",
+    "addPhoto": "Добавить фото",
+    "replacePhoto": "Заменить фото",
+    "addItem": "Добавить товар",
+    "itemsCount_one": "{{count}} товар",
+    "itemsCount_few": "{{count}} товара",
+    "itemsCount_many": "{{count}} товаров",
+    "itemsCount_other": "{{count}} товаров",
+    "submit": "Отправить возврат",
+    "productRequired": "Выберите товар для каждой позиции",
+    "quantityRequired": "Укажите корректное количество для каждой позиции",
+    "photoRequired": "Прикрепите фото для каждой позиции",
+    "photoUploadFailed": "Не удалось загрузить фото",
+    "created": "Возврат отправлен на подтверждение!",
+    "createFailed": "Не удалось отправить возврат"
+  },
+  "list": {
+    "columns": {
+      "date": "Дата",
+      "items": "Товаров",
+      "status": "Статус",
+      "store": "Магазин"
+    },
+    "viewDetails": "Подробнее",
+    "myTitle": "Мои возвраты",
+    "createReturn": "Оформить возврат",
+    "adminTitle": "Возвраты"
+  },
+  "detail": {
+    "title": "Детали возврата",
+    "printQr": "Распечатать QR",
+    "rejectionReason": "Причина отклонения",
+    "columns": {
+      "photo": "Фото",
+      "product": "Товар",
+      "quantity": "Количество"
+    },
+    "approve": "Подтвердить",
+    "reject": "Отклонить",
+    "approved": "Возврат подтверждён!",
+    "approveFailed": "Не удалось подтвердить возврат",
+    "rejected": "Возврат отклонён",
+    "rejectFailed": "Не удалось отклонить возврат",
+    "rejectReasonRequired": "Укажите причину отклонения",
+    "rejectReasonLabel": "Причина отклонения",
+    "rejectReasonPlaceholder": "Объясните, почему возврат отклоняется"
+  },
+  "print": {
+    "title": "QR-код возврата",
+    "printButton": "Печать"
+  },
+  "driver": {
+    "title": "Возвраты к получению",
+    "scanButton": "Сканировать QR",
+    "markReceived": "Отметить получение",
+    "pickedUp": "Возврат получен!",
+    "pickupFailed": "Не удалось отметить получение возврата"
+  },
+  "warehouse": {
+    "title": "Возвраты к закрытию",
+    "scanButton": "Сканировать QR",
+    "markClosed": "Закрыть возврат",
+    "closed": "Возврат закрыт, остаток обновлён!",
+    "closeFailed": "Не удалось закрыть возврат"
+  },
+  "scanner": {
+    "title": "Сканировать QR-код",
+    "hint": "Наведите камеру на QR-код возврата",
+    "cameraError": "Не удалось получить доступ к камере"
+  }
+}

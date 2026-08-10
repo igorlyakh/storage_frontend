@@ -60,10 +60,22 @@
       "product": "Товар",
       "category": "Категория",
       "packages": "Упаковок",
-      "quantity": "Количество"
+      "quantity": "Количество",
+      "actions": "Действия"
     },
     "updated": "Остаток обновлён!",
     "updateFailed": "Не удалось обновить остаток"
+  },
+  "transferModal": {
+    "tooltip": "Перевести на другой склад",
+    "title": "Перевод: {{name}}",
+    "available": "Доступно: {{count}}",
+    "destinationLabel": "Склад назначения",
+    "destinationPlaceholder": "-- Выберите склад --",
+    "destinationRequired": "Выберите склад назначения",
+    "quantityRequired": "Укажите корректное количество",
+    "transferred": "Товар успешно переведён!",
+    "transferFailed": "Не удалось перевести товар"
   },
   "lowStock": {
     "title": "Предупреждение о низком остатке",

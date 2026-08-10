@@ -60,10 +60,22 @@
       "product": "Product",
       "category": "Category",
       "packages": "Packages",
-      "quantity": "Quantity"
+      "quantity": "Quantity",
+      "actions": "Actions"
     },
     "updated": "Stock updated!",
     "updateFailed": "Failed to update stock"
+  },
+  "transferModal": {
+    "tooltip": "Transfer to another warehouse",
+    "title": "Transfer: {{name}}",
+    "available": "Available: {{count}}",
+    "destinationLabel": "Destination warehouse",
+    "destinationPlaceholder": "-- Choose warehouse --",
+    "destinationRequired": "Please choose a destination warehouse",
+    "quantityRequired": "Please enter a valid quantity",
+    "transferred": "Stock transferred successfully!",
+    "transferFailed": "Failed to transfer stock"
   },
   "lowStock": {
     "title": "Low Stock Warning",

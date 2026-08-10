@@ -1,4 +1,5 @@
 import {
+  ActionIcon,
   Anchor,
   Avatar,
   Badge,
@@ -8,15 +9,19 @@ import {
   LoadingOverlay,
   Text,
   Title,
+  Tooltip,
 } from '@mantine/core';
-import { ArrowLeft, Image as ImageIcon } from 'lucide-react';
-import { useCallback, useMemo } from 'react';
+import { useDisclosure } from '@mantine/hooks';
+import { ArrowLeft, ArrowLeftRight, Image as ImageIcon } from 'lucide-react';
+import { useCallback, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router-dom';
 import { EditableNumberCell } from '../../components/ProductsTable/EditableCells';
 import DataTable from '../../components/ui/DataTable';
+import TransferStockModal from '../../components/ui/TransferStockModal';
 import {
+  useGetAllWarehousesQuery,
   useGetWarehouseStocksQuery,
   useSetProductStockMutation,
 } from '../../store/api/api';
@@ -26,7 +31,11 @@ const WarehouseStockPage = () => {
   const { t } = useTranslation('warehouse');
   const { id } = useParams();
   const { data, isLoading } = useGetWarehouseStocksQuery(id);
+  const { data: warehouses = [] } = useGetAllWarehousesQuery();
   const [setProductStock] = useSetProductStockMutation();
+  const [openedTransfer, { open: openTransfer, close: closeTransfer }] =
+    useDisclosure(false);
+  const [transferProduct, setTransferProduct] = useState(null);
 
   const warehouse = data?.warehouse;
   const products = data?.products || [];
@@ -108,8 +117,31 @@ const WarehouseStockPage = () => {
           </Box>
         ),
       },
+      ...(warehouses.length > 1
+        ? [
+            {
+              id: 'actions',
+              header: t('stockPage.columns.actions'),
+              cell: info => (
+                <Tooltip label={t('transferModal.tooltip')}>
+                  <ActionIcon
+                    variant="light"
+                    color="blue"
+                    disabled={!info.row.original.quantity}
+                    onClick={() => {
+                      setTransferProduct(info.row.original);
+                      openTransfer();
+                    }}
+                  >
+                    <ArrowLeftRight size={16} />
+                  </ActionIcon>
+                </Tooltip>
+              ),
+            },
+          ]
+        : []),
     ],
-    [t, handleSetQuantity],
+    [t, handleSetQuantity, warehouses.length, openTransfer],
   );
 
   return (
@@ -166,6 +198,15 @@ const WarehouseStockPage = () => {
           columns={columns}
         />
       </Box>
+
+      <TransferStockModal
+        key={transferProduct?.id}
+        opened={openedTransfer}
+        onClose={closeTransfer}
+        product={transferProduct}
+        fromWarehouseId={id}
+        warehouses={warehouses}
+      />
     </Container>
   );
 };

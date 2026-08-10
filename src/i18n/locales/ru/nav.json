@@ -13,6 +13,14 @@
   },
   "requests": "Заявки",
   "writeOff": "Списание",
+  "returnsMenu": {
+    "title": "Возвраты",
+    "myReturns": "Мои возвраты",
+    "createReturn": "Оформить возврат",
+    "allReturns": "Все возвраты",
+    "driverReturns": "Возвраты",
+    "warehouseReturns": "Возвраты"
+  },
   "management": {
     "title": "Управление",
     "users": "Пользователи",
@@ -29,6 +37,8 @@
     "createStore": "Создать магазин",
     "warehouses": "Склады",
     "allWarehouses": "Все склады",
+    "suppliers": "Поставщики",
+    "allSuppliers": "Все поставщики",
     "products": "Товары",
     "reorderProducts": "Порядок товаров",
     "settings": "Настройки",

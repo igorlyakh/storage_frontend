@@ -66,6 +66,8 @@ export const api = createApi({
     'Categories',
     'Warehouses',
     'Settings',
+    'Suppliers',
+    'Returns',
   ],
   endpoints: builder => ({
     getAllOrders: builder.query({
@@ -419,6 +421,84 @@ export const api = createApi({
       query: data => ({ url: '/warehouse/set', method: 'PATCH', body: data }),
       invalidatesTags: ['Products', 'Warehouses'],
     }),
+    transferStock: builder.mutation({
+      query: data => ({ url: '/warehouse/transfer', method: 'PATCH', body: data }),
+      invalidatesTags: ['Products', 'Warehouses'],
+    }),
+    getAllSuppliers: builder.query({
+      query: () => '/suppliers',
+      providesTags: ['Suppliers'],
+    }),
+    createSupplier: builder.mutation({
+      query: data => ({ url: '/suppliers', method: 'POST', body: data }),
+      invalidatesTags: ['Suppliers'],
+    }),
+    updateSupplier: builder.mutation({
+      query: ({ id, ...data }) => ({
+        url: `/suppliers/${id}`,
+        method: 'PATCH',
+        body: data,
+      }),
+      invalidatesTags: ['Suppliers'],
+    }),
+    deleteSupplier: builder.mutation({
+      query: id => ({ url: `/suppliers/${id}`, method: 'DELETE' }),
+      invalidatesTags: ['Suppliers'],
+    }),
+    uploadReturnPhoto: builder.mutation({
+      query: file => {
+        const formData = new FormData();
+        formData.append('photo', file);
+        return { url: '/returns/photo', method: 'POST', body: formData };
+      },
+    }),
+    createReturn: builder.mutation({
+      query: data => ({ url: '/returns', method: 'POST', body: data }),
+      invalidatesTags: ['Returns'],
+    }),
+    getMyReturns: builder.query({
+      query: ({ status } = {}) => ({ url: '/returns', params: { status } }),
+      providesTags: ['Returns'],
+    }),
+    getAllReturns: builder.query({
+      query: ({ status, storeIds, startDate, endDate } = {}) => ({
+        url: '/returns/all',
+        params: { status, storeIds, startDate, endDate },
+      }),
+      providesTags: ['Returns'],
+    }),
+    getDriverReturns: builder.query({
+      query: () => '/returns/driver',
+      providesTags: ['Returns'],
+    }),
+    getWarehouseReturns: builder.query({
+      query: () => '/returns/warehouse',
+      providesTags: ['Returns'],
+    }),
+    getReturnById: builder.query({
+      query: id => `/returns/${id}`,
+      providesTags: ['Returns'],
+    }),
+    approveReturn: builder.mutation({
+      query: id => ({ url: `/returns/${id}/approve`, method: 'PATCH' }),
+      invalidatesTags: ['Returns'],
+    }),
+    rejectReturn: builder.mutation({
+      query: ({ id, reason }) => ({
+        url: `/returns/${id}/reject`,
+        method: 'PATCH',
+        body: { reason },
+      }),
+      invalidatesTags: ['Returns'],
+    }),
+    pickupReturn: builder.mutation({
+      query: id => ({ url: `/returns/${id}/pickup`, method: 'PATCH' }),
+      invalidatesTags: ['Returns'],
+    }),
+    closeReturn: builder.mutation({
+      query: id => ({ url: `/returns/${id}/close`, method: 'PATCH' }),
+      invalidatesTags: ['Returns', 'Products', 'Warehouses'],
+    }),
   }),
 });
 
@@ -486,4 +566,20 @@ export const {
   useDeleteWarehouseRequestMutation,
   useGetWarehouseStocksQuery,
   useSetProductStockMutation,
+  useTransferStockMutation,
+  useGetAllSuppliersQuery,
+  useCreateSupplierMutation,
+  useUpdateSupplierMutation,
+  useDeleteSupplierMutation,
+  useUploadReturnPhotoMutation,
+  useCreateReturnMutation,
+  useGetMyReturnsQuery,
+  useGetAllReturnsQuery,
+  useGetDriverReturnsQuery,
+  useGetWarehouseReturnsQuery,
+  useGetReturnByIdQuery,
+  useApproveReturnMutation,
+  useRejectReturnMutation,
+  usePickupReturnMutation,
+  useCloseReturnMutation,
 } = api;
