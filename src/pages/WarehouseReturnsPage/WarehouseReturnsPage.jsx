@@ -1,10 +1,11 @@
-import { Box, Button, Container, Group, LoadingOverlay, Text, Title } from '@mantine/core';
+import { Anchor, Box, Button, Container, Group, LoadingOverlay, Text, Title } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import dayjs from 'dayjs';
 import { ScanLine } from 'lucide-react';
 import { useMemo } from 'react';
 import toast from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 import DataTable from '../../components/ui/DataTable';
 import QrScannerModal from '../../components/ui/QrScannerModal';
 import { useCloseReturnMutation, useGetWarehouseReturnsQuery } from '../../store/api/api';
@@ -56,13 +57,25 @@ const WarehouseReturnsPage = () => {
         id: 'actions',
         header: '',
         cell: info => (
-          <Button
-            size="xs"
-            loading={isClosing}
-            onClick={() => handleClose(info.row.original.id)}
+          <Group
+            gap="sm"
+            wrap="nowrap"
           >
-            {t('warehouse.markClosed')}
-          </Button>
+            <Anchor
+              component={Link}
+              to={`/returns/${info.row.original.id}`}
+              size="sm"
+            >
+              {t('list.viewDetails')}
+            </Anchor>
+            <Button
+              size="xs"
+              loading={isClosing}
+              onClick={() => handleClose(info.row.original.id)}
+            >
+              {t('warehouse.markClosed')}
+            </Button>
+          </Group>
         ),
       },
     ],

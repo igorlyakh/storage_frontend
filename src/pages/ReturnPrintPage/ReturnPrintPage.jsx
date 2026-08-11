@@ -54,7 +54,7 @@ const ReturnPrintPage = () => {
               key={item.id}
               size="sm"
             >
-              {item.product?.name} — {item.quantity}
+              {item.product?.name || item.customName} — {item.quantity}
             </Text>
           ))}
         </Stack>

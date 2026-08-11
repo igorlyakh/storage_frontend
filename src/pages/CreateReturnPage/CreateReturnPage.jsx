@@ -1,5 +1,6 @@
 import {
   ActionIcon,
+  Anchor,
   Avatar,
   Button,
   Container,
@@ -11,6 +12,7 @@ import {
   Stack,
   Table,
   Text,
+  TextInput,
   Title,
 } from '@mantine/core';
 import { Image as ImageIcon, Plus, Trash, Upload } from 'lucide-react';
@@ -28,7 +30,9 @@ import { getApiErrorMessage } from '../../utils/apiError';
 let nextKey = 0;
 const emptyItem = () => ({
   key: nextKey++,
+  isCustom: false,
   productId: null,
+  customName: '',
   quantity: 1,
   photoUrl: null,
   uploading: false,
@@ -52,6 +56,16 @@ const CreateReturnPage = () => {
     setItems(current => current.map(item => (item.key === key ? { ...item, ...patch } : item)));
   };
 
+  const toggleCustom = key => {
+    setItems(current =>
+      current.map(item =>
+        item.key === key
+          ? { ...item, isCustom: !item.isCustom, productId: null, customName: '' }
+          : item,
+      ),
+    );
+  };
+
   const addItem = () => setItems(current => [...current, emptyItem()]);
 
   const removeItem = key =>
@@ -70,7 +84,7 @@ const CreateReturnPage = () => {
   };
 
   const handleSubmit = async () => {
-    if (items.some(item => !item.productId)) {
+    if (items.some(item => (item.isCustom ? !item.customName.trim() : !item.productId))) {
       return toast.error(t('create.productRequired'));
     }
     if (items.some(item => !item.quantity || item.quantity < 1)) {
@@ -82,11 +96,11 @@ const CreateReturnPage = () => {
 
     try {
       await createReturn({
-        items: items.map(({ productId, quantity, photoUrl }) => ({
-          productId,
-          quantity,
-          photoUrl,
-        })),
+        items: items.map(({ isCustom, productId, customName, quantity, photoUrl }) =>
+          isCustom
+            ? { customName: customName.trim(), quantity, photoUrl }
+            : { productId, quantity, photoUrl },
+        ),
       }).unwrap();
       toast.success(t('create.created'));
       navigate('/returns');
@@ -126,13 +140,33 @@ const CreateReturnPage = () => {
               {items.map(item => (
                 <Table.Tr key={item.key}>
                   <Table.Td miw={220}>
-                    <Select
-                      placeholder={t('create.productPlaceholder')}
-                      data={productOptions}
-                      value={item.productId}
-                      onChange={value => updateItem(item.key, { productId: value })}
-                      searchable
-                    />
+                    <Stack gap={4}>
+                      {item.isCustom ? (
+                        <TextInput
+                          placeholder={t('create.customNamePlaceholder')}
+                          value={item.customName}
+                          onChange={event =>
+                            updateItem(item.key, { customName: event.currentTarget.value })
+                          }
+                        />
+                      ) : (
+                        <Select
+                          placeholder={t('create.productPlaceholder')}
+                          data={productOptions}
+                          value={item.productId}
+                          onChange={value => updateItem(item.key, { productId: value })}
+                          searchable
+                        />
+                      )}
+                      <Anchor
+                        size="xs"
+                        onClick={() => toggleCustom(item.key)}
+                      >
+                        {item.isCustom
+                          ? t('create.chooseFromCatalog')
+                          : t('create.addCustomItem')}
+                      </Anchor>
+                    </Stack>
                   </Table.Td>
                   <Table.Td w={120}>
                     <NumberInput

@@ -14,6 +14,9 @@
       "photo": "Photo"
     },
     "productPlaceholder": "-- Choose product --",
+    "customNamePlaceholder": "Describe the item",
+    "addCustomItem": "+ Item not in the catalog",
+    "chooseFromCatalog": "Choose from catalog instead",
     "addPhoto": "Add photo",
     "replacePhoto": "Replace photo",
     "addItem": "Add item",
@@ -48,6 +51,7 @@
       "product": "Product",
       "quantity": "Quantity"
     },
+    "customItem": "Not in catalog",
     "approve": "Approve",
     "reject": "Reject",
     "approved": "Return approved!",

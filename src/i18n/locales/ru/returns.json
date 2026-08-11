@@ -14,6 +14,9 @@
       "photo": "Фото"
     },
     "productPlaceholder": "-- Выберите товар --",
+    "customNamePlaceholder": "Опишите товар",
+    "addCustomItem": "+ Товара нет в каталоге",
+    "chooseFromCatalog": "Выбрать из каталога",
     "addPhoto": "Добавить фото",
     "replacePhoto": "Заменить фото",
     "addItem": "Добавить товар",
@@ -50,6 +53,7 @@
       "product": "Товар",
       "quantity": "Количество"
     },
+    "customItem": "Нет в каталоге",
     "approve": "Подтвердить",
     "reject": "Отклонить",
     "approved": "Возврат подтверждён!",

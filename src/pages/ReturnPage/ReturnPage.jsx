@@ -22,6 +22,7 @@ import toast from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
+import PhotoLightbox from '../../components/ui/PhotoLightbox';
 import ReturnStatusBadge from '../../components/ui/ReturnStatusBadge';
 import {
   useApproveReturnMutation,
@@ -41,6 +42,7 @@ const ReturnPage = () => {
 
   const [rejectOpened, { open: openReject, close: closeReject }] = useDisclosure(false);
   const [rejectReason, setRejectReason] = useState('');
+  const [lightboxSrc, setLightboxSrc] = useState(null);
 
   const handleApprove = async () => {
     try {
@@ -143,6 +145,8 @@ const ReturnPage = () => {
                       h={56}
                       radius="sm"
                       fit="cover"
+                      style={{ cursor: 'zoom-in' }}
+                      onClick={() => setLightboxSrc(item.photoUrl)}
                     />
                   ) : (
                     <Avatar radius="sm">
@@ -150,7 +154,19 @@ const ReturnPage = () => {
                     </Avatar>
                   )}
                 </Table.Td>
-                <Table.Td>{item.product?.name}</Table.Td>
+                <Table.Td>
+                  {item.product?.name || item.customName}
+                  {!item.productId && (
+                    <Badge
+                      ml="xs"
+                      size="xs"
+                      variant="light"
+                      color="grape"
+                    >
+                      {t('detail.customItem')}
+                    </Badge>
+                  )}
+                </Table.Td>
                 <Table.Td>{item.quantity}</Table.Td>
               </Table.Tr>
             ))}
@@ -216,6 +232,11 @@ const ReturnPage = () => {
           </Group>
         </Stack>
       </Modal>
+
+      <PhotoLightbox
+        src={lightboxSrc}
+        onClose={() => setLightboxSrc(null)}
+      />
     </Container>
   );
 };

@@ -14,6 +14,9 @@
       "photo": "תמונה"
     },
     "productPlaceholder": "-- בחר מוצר --",
+    "customNamePlaceholder": "תאר את הפריט",
+    "addCustomItem": "+ פריט שאינו בקטלוג",
+    "chooseFromCatalog": "בחר מהקטלוג במקום זאת",
     "addPhoto": "הוסף תמונה",
     "replacePhoto": "החלף תמונה",
     "addItem": "הוסף פריט",
@@ -48,6 +51,7 @@
       "product": "מוצר",
       "quantity": "כמות"
     },
+    "customItem": "לא בקטלוג",
     "approve": "אשר",
     "reject": "דחה",
     "approved": "!ההחזרה אושרה",
