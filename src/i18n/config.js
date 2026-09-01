@@ -12,8 +12,10 @@ import enOrders from './locales/en/orders.json';
 import enProducts from './locales/en/products.json';
 import enSettings from './locales/en/settings.json';
 import enRequests from './locales/en/requests.json';
+import enReturns from './locales/en/returns.json';
 import enStatistics from './locales/en/statistics.json';
 import enStores from './locales/en/stores.json';
+import enSuppliers from './locales/en/suppliers.json';
 import enUsers from './locales/en/users.json';
 import enValidation from './locales/en/validation.json';
 import enWarehouse from './locales/en/warehouse.json';
@@ -28,8 +30,10 @@ import heOrders from './locales/he/orders.json';
 import heProducts from './locales/he/products.json';
 import heSettings from './locales/he/settings.json';
 import heRequests from './locales/he/requests.json';
+import heReturns from './locales/he/returns.json';
 import heStatistics from './locales/he/statistics.json';
 import heStores from './locales/he/stores.json';
+import heSuppliers from './locales/he/suppliers.json';
 import heUsers from './locales/he/users.json';
 import heValidation from './locales/he/validation.json';
 import heWarehouse from './locales/he/warehouse.json';
@@ -44,8 +48,10 @@ import ruOrders from './locales/ru/orders.json';
 import ruProducts from './locales/ru/products.json';
 import ruSettings from './locales/ru/settings.json';
 import ruRequests from './locales/ru/requests.json';
+import ruReturns from './locales/ru/returns.json';
 import ruStatistics from './locales/ru/statistics.json';
 import ruStores from './locales/ru/stores.json';
+import ruSuppliers from './locales/ru/suppliers.json';
 import ruUsers from './locales/ru/users.json';
 import ruValidation from './locales/ru/validation.json';
 import ruWarehouse from './locales/ru/warehouse.json';
@@ -63,10 +69,12 @@ const resources = {
     products: enProducts,
     warehouse: enWarehouse,
     requests: enRequests,
+    returns: enReturns,
     users: enUsers,
     brands: enBrands,
     categories: enCategories,
     stores: enStores,
+    suppliers: enSuppliers,
     statistics: enStatistics,
     settings: enSettings,
     validation: enValidation,
@@ -80,10 +88,12 @@ const resources = {
     products: ruProducts,
     warehouse: ruWarehouse,
     requests: ruRequests,
+    returns: ruReturns,
     users: ruUsers,
     brands: ruBrands,
     categories: ruCategories,
     stores: ruStores,
+    suppliers: ruSuppliers,
     statistics: ruStatistics,
     settings: ruSettings,
     validation: ruValidation,
@@ -97,10 +107,12 @@ const resources = {
     products: heProducts,
     warehouse: heWarehouse,
     requests: heRequests,
+    returns: heReturns,
     users: heUsers,
     brands: heBrands,
     categories: heCategories,
     stores: heStores,
+    suppliers: heSuppliers,
     statistics: heStatistics,
     settings: heSettings,
     validation: heValidation,

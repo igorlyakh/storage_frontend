@@ -1,0 +1,41 @@
+{
+  "pageTitle": "Поставщики",
+  "create": "Добавить поставщика",
+  "columns": {
+    "name": "Название",
+    "contactPerson": "Контактное лицо",
+    "email": "Email",
+    "notes": "Заметки",
+    "actions": "Действия"
+  },
+  "tooltips": {
+    "edit": "Редактировать",
+    "delete": "Удалить"
+  },
+  "form": {
+    "createTitle": "Добавить поставщика",
+    "editTitle": "Редактировать поставщика",
+    "submit": "Добавить поставщика",
+    "saveChanges": "Сохранить изменения",
+    "nameLabel": "Название",
+    "namePlaceholder": "Название поставщика",
+    "nameRequired": "Укажите название",
+    "contactPersonLabel": "Контактное лицо",
+    "contactPersonPlaceholder": "Контактное лицо",
+    "emailLabel": "Email",
+    "emailPlaceholder": "Email для связи",
+    "emailInvalid": "Введите корректный email",
+    "notesLabel": "Заметки",
+    "notesPlaceholder": "Заметки",
+    "created": "Поставщик создан!",
+    "createFailed": "Не удалось создать поставщика",
+    "updated": "Поставщик обновлён!",
+    "updateFailed": "Не удалось обновить поставщика"
+  },
+  "delete": {
+    "confirmText": "Вы уверены, что хотите удалить поставщика <bold>{{name}}</bold>? Это действие необратимо.",
+    "delete": "Удалить поставщика",
+    "deleted": "Поставщик успешно удалён",
+    "deleteFailed": "Не удалось удалить поставщика"
+  }
+}

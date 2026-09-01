@@ -13,6 +13,14 @@
   },
   "requests": "Requests",
   "writeOff": "Write-off",
+  "returnsMenu": {
+    "title": "Returns",
+    "myReturns": "My Returns",
+    "createReturn": "Create Return",
+    "allReturns": "All Returns",
+    "driverReturns": "Returns",
+    "warehouseReturns": "Returns"
+  },
   "management": {
     "title": "Management",
     "users": "Users",
@@ -29,6 +37,8 @@
     "createStore": "Create Store",
     "warehouses": "Warehouses",
     "allWarehouses": "All Warehouses",
+    "suppliers": "Suppliers",
+    "allSuppliers": "All Suppliers",
     "products": "Products",
     "reorderProducts": "Reorder Products",
     "settings": "Settings",

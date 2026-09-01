@@ -42,6 +42,7 @@ const CreateUserPage = () => {
         { value: 'ADMIN', label: 'ADMIN' },
         { value: 'WAREHOUSE', label: 'WAREHOUSE' },
         { value: 'STORE', label: 'STORE' },
+        { value: 'DRIVER', label: 'DRIVER' },
       ],
     },
     {

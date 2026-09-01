@@ -1,0 +1,88 @@
+{
+  "status": {
+    "PENDING": "Pending approval",
+    "APPROVED": "Approved",
+    "REJECTED": "Rejected",
+    "IN_TRANSIT": "In transit",
+    "COMPLETED": "Completed"
+  },
+  "create": {
+    "title": "Create Return",
+    "columns": {
+      "product": "Product",
+      "quantity": "Quantity",
+      "photo": "Photo"
+    },
+    "productPlaceholder": "-- Choose product --",
+    "customNamePlaceholder": "Describe the item",
+    "addCustomItem": "+ Item not in the catalog",
+    "chooseFromCatalog": "Choose from catalog instead",
+    "addPhoto": "Add photo",
+    "replacePhoto": "Replace photo",
+    "addItem": "Add item",
+    "itemsCount": "{{count}} item",
+    "itemsCount_other": "{{count}} items",
+    "submit": "Submit Return",
+    "productRequired": "Please choose a product for every item",
+    "quantityRequired": "Please enter a valid quantity for every item",
+    "photoRequired": "Please attach a photo for every item",
+    "photoUploadFailed": "Failed to upload photo",
+    "created": "Return submitted for approval!",
+    "createFailed": "Failed to submit return"
+  },
+  "list": {
+    "columns": {
+      "date": "Date",
+      "items": "Items",
+      "status": "Status",
+      "store": "Store"
+    },
+    "viewDetails": "View details",
+    "myTitle": "My Returns",
+    "createReturn": "Create Return",
+    "adminTitle": "Returns"
+  },
+  "detail": {
+    "title": "Return Details",
+    "printQr": "Print QR",
+    "rejectionReason": "Rejection reason",
+    "columns": {
+      "photo": "Photo",
+      "product": "Product",
+      "quantity": "Quantity"
+    },
+    "customItem": "Not in catalog",
+    "approve": "Approve",
+    "reject": "Reject",
+    "approved": "Return approved!",
+    "approveFailed": "Failed to approve return",
+    "rejected": "Return rejected",
+    "rejectFailed": "Failed to reject return",
+    "rejectReasonRequired": "Please enter a rejection reason",
+    "rejectReasonLabel": "Rejection reason",
+    "rejectReasonPlaceholder": "Explain why this return is rejected"
+  },
+  "print": {
+    "title": "Return QR Code",
+    "printButton": "Print"
+  },
+  "driver": {
+    "title": "Returns to pick up",
+    "scanButton": "Scan QR",
+    "markReceived": "Mark received",
+    "pickedUp": "Return picked up!",
+    "pickupFailed": "Failed to pick up return"
+  },
+  "warehouse": {
+    "title": "Returns to close",
+    "scanButton": "Scan QR",
+    "markClosed": "Mark closed",
+    "closed": "Return closed, stock updated!",
+    "closeFailed": "Failed to close return"
+  },
+  "scanner": {
+    "title": "Scan QR code",
+    "hint": "Point the camera at the return's QR code",
+    "cameraError": "Could not access the camera"
+  }
+}

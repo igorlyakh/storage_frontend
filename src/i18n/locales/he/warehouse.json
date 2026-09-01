@@ -60,10 +60,22 @@
       "product": "מוצר",
       "category": "קטגוריה",
       "packages": "אריזות",
-      "quantity": "כמות"
+      "quantity": "כמות",
+      "actions": "פעולות"
     },
     "updated": "!המלאי עודכן",
     "updateFailed": "עדכון המלאי נכשל"
+  },
+  "transferModal": {
+    "tooltip": "העברה למחסן אחר",
+    "title": "העברה: {{name}}",
+    "available": "זמין: {{count}}",
+    "destinationLabel": "מחסן יעד",
+    "destinationPlaceholder": "-- בחר מחסן --",
+    "destinationRequired": "נא לבחור מחסן יעד",
+    "quantityRequired": "נא להזין כמות תקינה",
+    "transferred": "!הפריט הועבר בהצלחה",
+    "transferFailed": "העברת הפריט נכשלה"
   },
   "lowStock": {
     "title": "התראת מלאי נמוך",

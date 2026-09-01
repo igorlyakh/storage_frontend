@@ -22,7 +22,8 @@ import { useGetAllUsersQuery } from '../../store/api/api';
 const roleSortOrder = {
   ADMIN: 1,
   WAREHOUSE: 2,
-  STORE: 3,
+  DRIVER: 3,
+  STORE: 4,
 };
 
 const UsersPage = () => {
@@ -56,6 +57,7 @@ const UsersPage = () => {
           let color = 'blue';
           if (val === 'ADMIN') color = 'red';
           if (val === 'WAREHOUSE') color = 'orange';
+          if (val === 'DRIVER') color = 'grape';
 
           return (
             <Badge

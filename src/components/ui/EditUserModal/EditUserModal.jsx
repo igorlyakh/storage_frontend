@@ -34,6 +34,7 @@ const EditUserModal = ({ opened, onClose, user }) => {
         { value: 'ADMIN', label: 'ADMIN' },
         { value: 'WAREHOUSE', label: 'WAREHOUSE' },
         { value: 'STORE', label: 'STORE' },
+        { value: 'DRIVER', label: 'DRIVER' },
       ],
     },
     {

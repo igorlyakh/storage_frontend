@@ -1,0 +1,41 @@
+{
+  "pageTitle": "ספקים",
+  "create": "הוסף ספק",
+  "columns": {
+    "name": "שם",
+    "contactPerson": "איש קשר",
+    "email": "אימייל",
+    "notes": "הערות",
+    "actions": "פעולות"
+  },
+  "tooltips": {
+    "edit": "ערוך",
+    "delete": "מחק"
+  },
+  "form": {
+    "createTitle": "הוסף ספק",
+    "editTitle": "עריכת ספק",
+    "submit": "הוסף ספק",
+    "saveChanges": "שמור שינויים",
+    "nameLabel": "שם",
+    "namePlaceholder": "שם הספק",
+    "nameRequired": "נדרש שם",
+    "contactPersonLabel": "איש קשר",
+    "contactPersonPlaceholder": "איש קשר",
+    "emailLabel": "אימייל",
+    "emailPlaceholder": "אימייל ליצירת קשר",
+    "emailInvalid": "נא להזין כתובת אימייל תקינה",
+    "notesLabel": "הערות",
+    "notesPlaceholder": "הערות",
+    "created": "!הספק נוצר",
+    "createFailed": "יצירת הספק נכשלה",
+    "updated": "!הספק עודכן",
+    "updateFailed": "עדכון הספק נכשל"
+  },
+  "delete": {
+    "confirmText": "?האם אתה בטוח שברצונך למחוק את הספק <bold>{{name}}</bold>? פעולה זו אינה הפיכה",
+    "delete": "מחק ספק",
+    "deleted": "הספק נמחק בהצלחה",
+    "deleteFailed": "מחיקת הספק נכשלה"
+  }
+}

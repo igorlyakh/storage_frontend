@@ -1,7 +1,8 @@
 {
   "name": "store_front",
   "private": true,
-  "version": "0.0.0",
+  "version": "2.0.0",
+  "license": "UNLICENSED",
   "type": "module",
   "scripts": {
     "dev": "vite --mode dev",
@@ -41,10 +42,12 @@
     "embla-carousel": "^8.5.2",
     "embla-carousel-react": "^8.5.2",
     "file-saver": "^2.0.5",
+    "html5-qrcode": "^2.3.8",
     "i18next": "23.16.8",
     "i18next-browser-languagedetector": "^8.2.1",
     "lucide-react": "^0.563.0",
     "modern-normalize": "^3.0.1",
+    "qrcode.react": "^4.2.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-hook-form": "^7.71.1",

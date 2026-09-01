@@ -13,6 +13,14 @@
   },
   "requests": "בקשות",
   "writeOff": "מחיקת מלאי",
+  "returnsMenu": {
+    "title": "החזרות",
+    "myReturns": "ההחזרות שלי",
+    "createReturn": "צור החזרה",
+    "allReturns": "כל ההחזרות",
+    "driverReturns": "החזרות",
+    "warehouseReturns": "החזרות"
+  },
   "management": {
     "title": "ניהול",
     "users": "משתמשים",
@@ -29,6 +37,8 @@
     "createStore": "צור חנות",
     "warehouses": "מחסנים",
     "allWarehouses": "כל המחסנים",
+    "suppliers": "ספקים",
+    "allSuppliers": "כל הספקים",
     "products": "מוצרים",
     "reorderProducts": "סדר מוצרים",
     "settings": "הגדרות",

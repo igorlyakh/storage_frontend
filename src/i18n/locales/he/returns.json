@@ -1,0 +1,88 @@
+{
+  "status": {
+    "PENDING": "ממתין לאישור",
+    "APPROVED": "אושר",
+    "REJECTED": "נדחה",
+    "IN_TRANSIT": "בדרך",
+    "COMPLETED": "הושלם"
+  },
+  "create": {
+    "title": "יצירת החזרה",
+    "columns": {
+      "product": "מוצר",
+      "quantity": "כמות",
+      "photo": "תמונה"
+    },
+    "productPlaceholder": "-- בחר מוצר --",
+    "customNamePlaceholder": "תאר את הפריט",
+    "addCustomItem": "+ פריט שאינו בקטלוג",
+    "chooseFromCatalog": "בחר מהקטלוג במקום זאת",
+    "addPhoto": "הוסף תמונה",
+    "replacePhoto": "החלף תמונה",
+    "addItem": "הוסף פריט",
+    "itemsCount": "{{count}} פריט",
+    "itemsCount_other": "{{count}} פריטים",
+    "submit": "שלח החזרה",
+    "productRequired": "יש לבחור מוצר עבור כל פריט",
+    "quantityRequired": "יש להזין כמות תקינה עבור כל פריט",
+    "photoRequired": "יש לצרף תמונה עבור כל פריט",
+    "photoUploadFailed": "העלאת התמונה נכשלה",
+    "created": "!ההחזרה נשלחה לאישור",
+    "createFailed": "שליחת ההחזרה נכשלה"
+  },
+  "list": {
+    "columns": {
+      "date": "תאריך",
+      "items": "פריטים",
+      "status": "סטטוס",
+      "store": "חנות"
+    },
+    "viewDetails": "פרטים נוספים",
+    "myTitle": "ההחזרות שלי",
+    "createReturn": "צור החזרה",
+    "adminTitle": "החזרות"
+  },
+  "detail": {
+    "title": "פרטי ההחזרה",
+    "printQr": "הדפס QR",
+    "rejectionReason": "סיבת הדחייה",
+    "columns": {
+      "photo": "תמונה",
+      "product": "מוצר",
+      "quantity": "כמות"
+    },
+    "customItem": "לא בקטלוג",
+    "approve": "אשר",
+    "reject": "דחה",
+    "approved": "!ההחזרה אושרה",
+    "approveFailed": "אישור ההחזרה נכשל",
+    "rejected": "ההחזרה נדחתה",
+    "rejectFailed": "דחיית ההחזרה נכשלה",
+    "rejectReasonRequired": "נא להזין סיבת דחייה",
+    "rejectReasonLabel": "סיבת הדחייה",
+    "rejectReasonPlaceholder": "הסבר מדוע ההחזרה נדחית"
+  },
+  "print": {
+    "title": "קוד QR של ההחזרה",
+    "printButton": "הדפס"
+  },
+  "driver": {
+    "title": "החזרות לאיסוף",
+    "scanButton": "סרוק QR",
+    "markReceived": "סמן כהתקבל",
+    "pickedUp": "!ההחזרה נאספה",
+    "pickupFailed": "סימון האיסוף נכשל"
+  },
+  "warehouse": {
+    "title": "החזרות לסגירה",
+    "scanButton": "סרוק QR",
+    "markClosed": "סגור החזרה",
+    "closed": "!ההחזרה נסגרה, המלאי עודכן",
+    "closeFailed": "סגירת ההחזרה נכשלה"
+  },
+  "scanner": {
+    "title": "סריקת קוד QR",
+    "hint": "כוון את המצלמה לקוד ה-QR של ההחזרה",
+    "cameraError": "לא ניתן היה לגשת למצלמה"
+  }
+}
